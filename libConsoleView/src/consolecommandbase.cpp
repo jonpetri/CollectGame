@@ -15,10 +15,36 @@ ConsoleCommandBase::ConsoleCommandBase()
 
 
 
+
+
 //-----------------------------------------------------------------------------------------------------------------------
 // ConsoleCommandBase :: Getters
 //-----------------------------------------------------------------------------------------------------------------------
+/**
+ * Retrieve the list of the command's terms, separated by a '-'
+ * @return The list of the command's terms, separated by a '-'
+ */
+std::string ConsoleCommandBase::commandTermsString()
+{
+    std::string sRet;
 
+    for (auto const & sCommandTerm : m_commandTerms)
+    {
+        sRet += (sCommandTerm + "-");
+    }
+    // remove of the last "-"
+    sRet.pop_back();
+    return sRet;
+}
+
+/**
+ * Retrieve command's description
+ * @return Command's description
+ */
+std::string ConsoleCommandBase::description()
+{
+    return m_sDescription;
+}
 
 //-----------------------------------------------------------------------------------------------------------------------
 // ConsoleCommandBase :: Setters
@@ -78,8 +104,10 @@ bool ConsoleCommandBase::isMatchingUserEntryTotally(const std::string &sUserEntr
  */
 bool ConsoleCommandBase::isMatchingUserEntryFirstArgument(const std::string &sUserEntry)
 {
+    std::string sCommandTermPlusSpace;
     for (auto const & sCommandTerm : m_commandTerms)
     {
+        sCommandTermPlusSpace = sCommandTerm + " "; // in order to check if the argument is separated with a space
         if ( sUserEntry.find(sCommandTerm) == 0)
         {
             m_sUserEntryMemo = sUserEntry;

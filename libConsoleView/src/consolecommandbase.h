@@ -20,6 +20,8 @@ public:
     virtual ~ConsoleCommandBase() = 0;
 
     // Getters:
+    std::string commandTermsString();
+    std::string description();
 
     // Setters:
 
