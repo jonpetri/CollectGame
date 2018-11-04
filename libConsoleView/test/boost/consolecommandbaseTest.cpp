@@ -127,7 +127,9 @@ BOOST_AUTO_TEST_CASE(isMatchingUserEntryFirstArgument)
     BOOST_CHECK_EQUAL(c.isMatchingUserEntryFirstArgument("TEST"), false);
     BOOST_CHECK_EQUAL(c.isMatchingUserEntryFirstArgument("TESTTROP"), false);
     BOOST_CHECK_EQUAL(c.isMatchingUserEntryFirstArgument("TEST OK"), true);
+    BOOST_CHECK_EQUAL(c.commandsParameter(), "OK");
     BOOST_CHECK_EQUAL(c.isMatchingUserEntryFirstArgument("INV TEST OK"), false);
+    BOOST_CHECK_EQUAL(c.commandsParameter(), "");
 
     c.addCommandTerm("TEST2");
     BOOST_CHECK_EQUAL(c.isMatchingUserEntryFirstArgument("TE"), false);
@@ -136,8 +138,11 @@ BOOST_AUTO_TEST_CASE(isMatchingUserEntryFirstArgument)
     BOOST_CHECK_EQUAL(c.isMatchingUserEntryFirstArgument("TEST"), false);
     BOOST_CHECK_EQUAL(c.isMatchingUserEntryFirstArgument("TEST2"), false);
     BOOST_CHECK_EQUAL(c.isMatchingUserEntryFirstArgument("TEST OK"), true);
+    BOOST_CHECK_EQUAL(c.commandsParameter(), "OK");
     BOOST_CHECK_EQUAL(c.isMatchingUserEntryFirstArgument("TEST2 OK"), true);
+    BOOST_CHECK_EQUAL(c.commandsParameter(), "OK");
     BOOST_CHECK_EQUAL(c.isMatchingUserEntryFirstArgument("INV TEST OK"), false);
+    BOOST_CHECK_EQUAL(c.commandsParameter(), "");
     BOOST_CHECK_EQUAL(c.isMatchingUserEntryFirstArgument("INV TEST2 OK"), false);
 }
 

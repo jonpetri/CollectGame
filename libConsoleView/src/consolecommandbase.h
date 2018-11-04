@@ -14,7 +14,6 @@
 // Includes:
 #include <string>
 #include <vector>
-#include <memory>
 #include <boost/signals2.hpp>
 
 
@@ -28,7 +27,7 @@ public:
     // Getters:
     std::string commandTermsString();
     std::string description();
-
+    std::string commandsParameter();
     // Setters:
 
     // Signals
@@ -56,6 +55,8 @@ private:
     std::string m_sDescription;                 ///< Command's purpose description text, displayed in the menu
     std::vector<std::string> m_commandTerms;    ///< list of strings usable by the user to call the command
     std::string m_sUserEntryMemo;               ///< Last User's entry memo, in case it contains parameters
+    std::string m_sUserEntryParameter;          ///< Last User's entry's parameter, if any
+
 
 };
 

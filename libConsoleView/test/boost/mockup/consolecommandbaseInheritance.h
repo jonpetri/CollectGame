@@ -14,16 +14,13 @@
 class ConsoleCommandBaseInheritance : public ConsoleCommandBase
 {
 public:
-    ConsoleCommandBaseInheritance();
-
-    ~ConsoleCommandBaseInheritance()override;
-
     // Getters:
 
     // Setters:
 
     // Methods:
-    virtual void execute() override;
+    virtual void execute() override{ this->setDescription("OK");}
+
 
 private:
     // Methods:

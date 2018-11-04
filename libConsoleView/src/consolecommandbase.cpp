@@ -13,6 +13,7 @@ ConsoleCommandBase::ConsoleCommandBase()
     , m_sDescription("")
     , m_commandTerms(0)
     , m_sUserEntryMemo("")
+    , m_sUserEntryParameter("")
 
 {
 
@@ -104,9 +105,13 @@ bool ConsoleCommandBase::isMatchingUserEntryTotally(const std::string &sUserEntr
         if (sCommandTerm == sUserEntry)
         {
             m_sUserEntryMemo = sUserEntry;
+            m_sUserEntryParameter = "";
             return true;
         }
     }
+
+    m_sUserEntryParameter = "";
+    m_sUserEntryMemo = "";
     return false;
 }
 
@@ -125,10 +130,20 @@ bool ConsoleCommandBase::isMatchingUserEntryFirstArgument(const std::string &sUs
         if ( sUserEntry.find(sCommandTermPlusSpace) == 0)
         {
             m_sUserEntryMemo = sUserEntry;
+            m_sUserEntryParameter = sUserEntry.substr(sCommandTerm.length()+1);
             return true;
         }
     }
+
+    m_sUserEntryParameter = "";
+    m_sUserEntryMemo = "";
     return false;
+}
+
+
+std::string ConsoleCommandBase::commandsParameter()
+{
+    return m_sUserEntryParameter;
 }
 
 
