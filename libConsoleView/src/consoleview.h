@@ -35,7 +35,7 @@ public:
     void addCommand(const std::shared_ptr<ConsoleCommandBase> & newCommand);
     void removeCommand(const std::shared_ptr<ConsoleCommandBase> & cmd);
     void run();
-    void executeCommand(const std::string & sUserEntry);
+    void executeCommand(std::string sUserEntry);
     void displayMenu();
     void printText(const std::string & sText);
     void displayModelView();

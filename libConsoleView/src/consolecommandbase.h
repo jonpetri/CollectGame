@@ -4,7 +4,7 @@
 /**
  * CLASS: ConsoleCommandBase
  * ConsoleCommandBase is an abstract class.
- * Once heritated the child class contains a code corresponding to a specific action, in the .execute() method.
+ * Once inherited, the child class contains a code corresponding to a specific action, in the .execute() method.
  * It also contains the argument/commands to be entered bay the user to call the command.
  * Its different signals are to be connected to a view.
  */
@@ -33,7 +33,7 @@ public:
 
     // Signals
     boost::signals2::signal<void ()> modelModified;
-    boost::signals2::signal<void (std::string)> sendMessageToUser;
+    boost::signals2::signal<void (const std::string &)> sendMessageToUser;
     boost::signals2::signal<void ()> displayAssociatedHelpToUser;
     boost::signals2::signal<void ()> quitAssociatedViews;
 

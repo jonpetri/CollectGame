@@ -6,11 +6,11 @@
 // ConsoleCommandBase :: Constructors / Destructors
 //-----------------------------------------------------------------------------------------------------------------------
 ConsoleCommandBase::ConsoleCommandBase()
-    : /*modelModified()
+    : modelModified()
     , sendMessageToUser()
     , displayAssociatedHelpToUser()
     , quitAssociatedViews()
-    , */m_sDescription("")
+    , m_sDescription("")
     , m_commandTerms(0)
     , m_sUserEntryMemo("")
 
@@ -34,14 +34,15 @@ ConsoleCommandBase::~ConsoleCommandBase()
  */
 std::string ConsoleCommandBase::commandTermsString()
 {
-    std::string sRet;
+    std::string sRet("");
 
     for (auto const & sCommandTerm : m_commandTerms)
     {
-        sRet += (sCommandTerm + "-");
+        sRet += (sCommandTerm + "/");
     }
     // remove of the last "-"
-    sRet.pop_back();
+    if (sRet.size() != 0)
+        sRet.pop_back();
     return sRet;
 }
 
@@ -83,8 +84,11 @@ void ConsoleCommandBase::setDescription(const std::string &sDescription)
  */
 void ConsoleCommandBase::addCommandTerm(std::string sTerm)
 {
-    transform(sTerm.begin(), sTerm.end(),sTerm.begin(), ::toupper);
-    m_commandTerms.push_back(sTerm);
+    if (sTerm.size() != 0)
+    {
+        transform(sTerm.begin(), sTerm.end(),sTerm.begin(), ::toupper);
+        m_commandTerms.push_back(sTerm);
+    }
 }
 
 /**
@@ -118,7 +122,7 @@ bool ConsoleCommandBase::isMatchingUserEntryFirstArgument(const std::string &sUs
     for (auto const & sCommandTerm : m_commandTerms)
     {
         sCommandTermPlusSpace = sCommandTerm + " "; // in order to check if the argument is separated with a space
-        if ( sUserEntry.find(sCommandTerm) == 0)
+        if ( sUserEntry.find(sCommandTermPlusSpace) == 0)
         {
             m_sUserEntryMemo = sUserEntry;
             return true;

@@ -131,8 +131,10 @@ void ConsoleView::run()
  * Execute the command corresponding to user's entry.
  * @param [in] sUserEntry
  */
-void ConsoleView::executeCommand(const std::string &sUserEntry)
+void ConsoleView::executeCommand(std::string sUserEntry)
 {
+    transform(sUserEntry.begin(), sUserEntry.end(),sUserEntry.begin(), ::toupper);
+
     // First, research of a command matching completely with sUserEntry
     for (auto&& command : m_commands)
     {

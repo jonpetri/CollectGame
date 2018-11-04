@@ -24,9 +24,9 @@ if (NOT Boost_UNIT_TEST_FRAMEWORK_FOUND)
 else ()
 
     # unit test building is optional:
-    option(Project_Build_Unit_Test_executable "Build the Boost Unit Test executable" ${Boost_UNIT_TEST_FRAMEWORK_FOUND})
+    option(libConsoleView_Build_boost_Unit_Test "Build the Boost Unit Test executable" ${Boost_UNIT_TEST_FRAMEWORK_FOUND})
 
-    if(Project_Build_Unit_Test_executable)
+    if(libConsoleView_Build_boost_Unit_Test)
 
         message(STATUS "Boost Include: ${Boost_INCLUDE_DIR}")
         message(STATUS "Boost Library dirs: ${Boost_LIBRARY_DIRS}")
@@ -78,12 +78,19 @@ else ()
         target_sources(${sBoostUnitTestTargetName} PUBLIC ${sTestedSources})
 
         get_target_property(sTestedIncludes ${sTestedTargetName} INCLUDE_DIRECTORIES)
+        MESSAGE(STATUS  "sTestedIncludes = ${sTestedIncludes}")
         include_directories (${sTestedIncludes})
 
         # Definition of exe files output directory
-        get_target_property(sTestedBinDir ${sTestedTargetName} RUNTIME_OUTPUT_DIRECTORY)
+        if( CMAKE_BUILD_TYPE MATCHES Release )
+            set(sTestedBinDir ${CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE})
+        else()
+            set(sTestedBinDir ${CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG})
+        endif()
+        #get_target_property(sTestedBinDir ${sTestedTargetName} LIBRARY_OUTPUT_DIRECTORY)
         set(sTestBinDir "${sTestedBinDir}/../test")
-        file(MAKE_DIRECTORY sTestBinDir)
+        MESSAGE(STATUS  "sTestBinDir = ${sTestBinDir}")
+        file(MAKE_DIRECTORY ${sTestBinDir})
         set_target_properties(${sBoostUnitTestTargetName} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${sTestBinDir})
 
 
