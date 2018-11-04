@@ -127,4 +127,10 @@ endif()
 
 
     MESSAGE(STATUS " ")
-
+##
+# DEMO exe build
+#
+    set(sDemoExeTarget "Demo")
+    add_executable(${sDemoExeTarget} )
+    target_include_directories(${sDemoExeTarget} PUBLIC ${sUnitTestIncludeDir})
+    target_sources(${sDemoExeTarget} PUBLIC ${sUnitTestSourceFiles})

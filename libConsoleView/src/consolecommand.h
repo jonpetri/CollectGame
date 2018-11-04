@@ -49,6 +49,7 @@ protected:
 //-----------------------------------------------------------------------------------------------------------------------
 template<class M>
 ConsoleCommand<M>::ConsoleCommand()
+    : m_model{nullptr}
 {
 
 }
@@ -70,7 +71,7 @@ ConsoleCommand<M>::~ConsoleCommand()
 template<class M>
 void ConsoleCommand<M>::setModel(const std::shared_ptr<M> & modelHead)
 {
-    m_modelHead = modelHead;
+    m_model = modelHead;
 }
 
 //-----------------------------------------------------------------------------------------------------------------------

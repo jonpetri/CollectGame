@@ -32,7 +32,7 @@ public:
     // Methods:
     virtual void execute() override
     {
-        this->sendMessageToUser("Model's value is: " + m_modelHead->value() + "\n");
+        this->sendMessageToUser("Model's value is: " + m_model->value() + "\n");
     }
 
 

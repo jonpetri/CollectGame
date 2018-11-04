@@ -56,7 +56,14 @@ std::string ConsoleCommandBase::description()
     return m_sDescription;
 }
 
-
+/**
+ * Retrieve the second part of the command line, if any.
+ * @return The parameter par of the command line.
+ */
+std::string ConsoleCommandBase::commandsParameter()
+{
+    return m_sUserEntryParameter;
+}
 
 //-----------------------------------------------------------------------------------------------------------------------
 // ConsoleCommandBase :: Setters
@@ -141,9 +148,6 @@ bool ConsoleCommandBase::isMatchingUserEntryFirstArgument(const std::string &sUs
 }
 
 
-std::string ConsoleCommandBase::commandsParameter()
-{
-    return m_sUserEntryParameter;
-}
+
 
 
