@@ -3,7 +3,9 @@
 /*----------------------------------------------------------------*/
 /**
  * CLASS: ConsoleView
- *
+ * ConsoleView manage everything about text print and user entry.
+ * The class contain commands. Each command provide an executable action and corresponding argument/command.
+ * When ConsoleView is running, it catch user's entries and call the .execute() method of the corresponding command object.
  */
 #ifndef CONSOLEVIEW_H
 #define CONSOLEVIEW_H
@@ -24,11 +26,14 @@ public:
     // Getters:
 
     // Setters:
+    void setQuitCommand(const std::shared_ptr<ConsoleCommandBase> & quitCommand);
+    void setDisplayMenuCommand(const std::shared_ptr<ConsoleCommandBase> & displayMenuCommand);
     void setDisplayModelViewCommand(const std::shared_ptr<ConsoleCommandBase> & displayModelViewCommand);
 
 
     // Methods:
     void addCommand(const std::shared_ptr<ConsoleCommandBase> & newCommand);
+    void removeCommand(const std::shared_ptr<ConsoleCommandBase> & cmd);
     void run();
     void executeCommand(const std::string & sUserEntry);
     void displayMenu();

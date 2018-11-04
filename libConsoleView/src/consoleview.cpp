@@ -4,6 +4,8 @@
 #include <limits>
 #include <boost/bind.hpp>
 
+#include "commanddisplaymenudefault.h"
+#include "commandquitdefault.h"
 
 //-----------------------------------------------------------------------------------------------------------------------
 // ConsoleView :: Constructors / Destructors
@@ -16,13 +18,16 @@ ConsoleView::ConsoleView()
     , m_sMenuDescrition("")
     , m_bQuit(false)
 {
+    m_sMenuDescrition = "Commands menu:";
 
+    //this->setDisplayMenuCommand(std::make_shared<CommandDisplayMenuDefault>());
 }
 
 ConsoleView::~ConsoleView()
 {
 
 }
+
 
 //-----------------------------------------------------------------------------------------------------------------------
 // ConsoleView :: Getters
@@ -32,9 +37,26 @@ ConsoleView::~ConsoleView()
 //-----------------------------------------------------------------------------------------------------------------------
 // ConsoleView :: Setters
 //-----------------------------------------------------------------------------------------------------------------------
+
+void ConsoleView::setQuitCommand(const std::shared_ptr<ConsoleCommandBase> &quitCommand)
+{
+    this->removeCommand(m_commandQuit);
+    m_commandQuit = quitCommand;
+    this->addCommand(quitCommand);
+}
+
+void ConsoleView::setDisplayMenuCommand(const std::shared_ptr<ConsoleCommandBase> &displayMenuCommand)
+{
+    this->removeCommand(m_commandDisplayMenu);
+    m_commandDisplayMenu = displayMenuCommand;
+    this->addCommand(displayMenuCommand);
+}
+
 void ConsoleView::setDisplayModelViewCommand(const std::shared_ptr<ConsoleCommandBase> &displayModelViewCommand)
 {
+    this->removeCommand(m_commandDisplayModelView);
     m_commandDisplayModelView = displayModelViewCommand;
+    this->addCommand(displayModelViewCommand);
 }
 
 //-----------------------------------------------------------------------------------------------------------------------
@@ -48,9 +70,26 @@ void ConsoleView::setDisplayModelViewCommand(const std::shared_ptr<ConsoleComman
  */
 void ConsoleView::addCommand(const std::shared_ptr<ConsoleCommandBase> &newCommand)
 {
-    newCommand->modelModified.connect(boost::bind(&ConsoleView::displayModelView, shared_from_this()));
-    newCommand->sendMessageToUser.connect(boost::bind(&ConsoleView::printText, shared_from_this()));
+    newCommand->modelModified.connect(              boost::bind( &ConsoleView::displayModelView,     shared_from_this() ));
+    newCommand->sendMessageToUser.connect(          boost::bind( &ConsoleView::printText,            shared_from_this(), _1 ));
+    newCommand->displayAssociatedHelpToUser.connect(boost::bind( &ConsoleView::displayMenu,          shared_from_this() ));
+    newCommand->quitAssociatedViews.connect(        boost::bind( &ConsoleView::quit,                 shared_from_this() ));
+
     m_commands.push_back(newCommand);
+}
+/**
+ * Remove a command from the view.
+ * @param [in] cmd
+ */
+void ConsoleView::removeCommand(const std::shared_ptr<ConsoleCommandBase> &cmd)
+{
+    for (unsigned int i = 0 ; i < m_commands.size() ; ++i)
+    {
+        if(m_commands[i] == cmd)
+        {
+            m_commands.erase(m_commands.begin() + i);
+        }
+    }
 }
 
 /**
@@ -124,8 +163,8 @@ void ConsoleView::executeCommand(const std::string &sUserEntry)
 void ConsoleView::displayMenu()
 {
     std::cout << std::endl; // empty line
-    std::cout << "Commands menu:" << std::endl;
-    std::cout << "==============" << std::endl;
+    std::cout << m_sMenuDescrition << std::endl;
+    std::cout << "==============================" << std::endl;
 
     for (const auto & command : m_commands)
     {
@@ -149,7 +188,8 @@ void ConsoleView::printText(const std::string &sText)
  */
 void ConsoleView::displayModelView()
 {
-    m_commandDisplayModelView->execute();
+    if (m_commandDisplayModelView != nullptr)
+        m_commandDisplayModelView->execute();
 }
 
 /**

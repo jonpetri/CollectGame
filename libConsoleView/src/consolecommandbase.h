@@ -3,7 +3,10 @@
 /*----------------------------------------------------------------*/
 /**
  * CLASS: ConsoleCommandBase
- *
+ * ConsoleCommandBase is an abstract class.
+ * Once heritated the child class contains a code corresponding to a specific action, in the .execute() method.
+ * It also contains the argument/commands to be entered bay the user to call the command.
+ * Its different signals are to be connected to a view.
  */
 #ifndef CONSOLECOMMANDBASE_H
 #define CONSOLECOMMANDBASE_H
@@ -14,9 +17,6 @@
 #include <memory>
 #include <boost/signals2.hpp>
 
-// boost::signals2 typedefs
-//typedef boost::signals2::signal<void(double)>   registration_manager;
-//typedef registration_manager::slot_type         registration_request;
 
 class ConsoleCommandBase
 {
@@ -34,6 +34,8 @@ public:
     // Signals
     boost::signals2::signal<void ()> modelModified;
     boost::signals2::signal<void (std::string)> sendMessageToUser;
+    boost::signals2::signal<void ()> displayAssociatedHelpToUser;
+    boost::signals2::signal<void ()> quitAssociatedViews;
 
     // Methods:
     virtual void execute() = 0;
@@ -54,7 +56,6 @@ private:
     std::string m_sDescription;                 ///< Command's purpose description text, displayed in the menu
     std::vector<std::string> m_commandTerms;    ///< list of strings usable by the user to call the command
     std::string m_sUserEntryMemo;               ///< Last User's entry memo, in case it contains parameters
-
 
 };
 

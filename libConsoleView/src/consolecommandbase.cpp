@@ -6,9 +6,11 @@
 // ConsoleCommandBase :: Constructors / Destructors
 //-----------------------------------------------------------------------------------------------------------------------
 ConsoleCommandBase::ConsoleCommandBase()
-    : modelModified()
+    : /*modelModified()
     , sendMessageToUser()
-    , m_sDescription("")
+    , displayAssociatedHelpToUser()
+    , quitAssociatedViews()
+    , */m_sDescription("")
     , m_commandTerms(0)
     , m_sUserEntryMemo("")
 
@@ -66,7 +68,7 @@ std::string ConsoleCommandBase::description()
 /**
  * Define command's description.
  * The description will be displayed in ConsoleView menu.
- * @param sDescription
+ * @param [in] sDescription
  */
 void ConsoleCommandBase::setDescription(const std::string &sDescription)
 {
@@ -77,7 +79,7 @@ void ConsoleCommandBase::setDescription(const std::string &sDescription)
  * Add a term (or word) as possible command to call this command.
  * Then the command can be recognized testing the match with user typed command line.
  * The term will be displayed in ConsoleView menu.
- * @param sTerm command / term / word to be added
+ * @param [in] sTerm command / term / word to be added
  */
 void ConsoleCommandBase::addCommandTerm(std::string sTerm)
 {
@@ -88,7 +90,7 @@ void ConsoleCommandBase::addCommandTerm(std::string sTerm)
 /**
  * Test if users input / entry match with this command.
  * The user entry has to be up-cased before.
- * @param sUserEntry Entry to be tested.
+ * @param [in] sUserEntry Entry to be tested.
  * @return True if matches
  */
 bool ConsoleCommandBase::isMatchingUserEntryTotally(const std::string &sUserEntry)
@@ -107,7 +109,7 @@ bool ConsoleCommandBase::isMatchingUserEntryTotally(const std::string &sUserEntr
 /**
  * Test if users input / entry's first argument match with this command.
  * The user entry has to be up-cased before.
- * @param sUserEntry Entry to be tested.
+ * @param [in] sUserEntry Entry to be tested.
  * @return True if matches
  */
 bool ConsoleCommandBase::isMatchingUserEntryFirstArgument(const std::string &sUserEntry)
