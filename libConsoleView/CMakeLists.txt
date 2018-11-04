@@ -18,17 +18,16 @@ cmake_minimum_required(VERSION 3.4.3)  # for CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS
 ##
 # Projets's build  type set up: debug or release
 #
+    if( "${CMAKE_BUILD_TYPE}" STREQUAL "" )
+        set( CMAKE_BUILD_TYPE "Debug" )
+    endif()
+
     set_property(
         CACHE CMAKE_BUILD_TYPE
         PROPERTY STRINGS
         Debug Release )
 
-    if( "${CMAKE_BUILD_TYPE}" STREQUAL "" )
-        set( CMAKE_BUILD_TYPE "Debug" )
-    endif()
-
     MESSAGE(STATUS "BUILD TYPE: ${CMAKE_BUILD_TYPE}")
-
 
 
 
@@ -65,18 +64,17 @@ cmake_minimum_required(VERSION 3.4.3)  # for CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS
 # PROJECT'S OUTPUT DIRECTORIES
 #
 
-    set (Project_Targets_dir ${CMAKE_SOURCE_DIR}/build_targets CACHE STRING "Directory of the output files: exe, dll, so, doc, translations...")
+    set(Project_Targets_dir ${CMAKE_SOURCE_DIR}/build_targets CACHE STRING "Directory of the output files: exe, dll, so, doc, translations...")
     set(sDebugBuildProductsDir ${Project_Targets_dir}/debug)
     set(sReleaseBuildProductsDir ${Project_Targets_dir}/release)
 
-    set( CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG "${sDebugBuildProductsDir}" )
-    set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY_DEBUG "${sDebugBuildProductsDir}/archives" )
-    set( CMAKE_LIBRARY_OUTPUT_DIRECTORY_DEBUG "${sDebugBuildProductsDir}" )
+    set( CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG "${sDebugBuildProductsDir}/bin" )
+    set( CMAKE_LIBRARY_OUTPUT_DIRECTORY_DEBUG "${sDebugBuildProductsDir}/bin" )
+    set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY_DEBUG "${sDebugBuildProductsDir}/bin/archives" )
 
-    set( CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE "${sReleaseBuildProductsDir}" )
-    set( CMAKE_LIBRARY_OUTPUT_DIRECTORY_RELEASE "${sReleaseBuildProductsDir}" )
-
-    set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE "${sReleaseBuildProductsDir}/archives" )
+    set( CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE "${sReleaseBuildProductsDir}/bin" )
+    set( CMAKE_LIBRARY_OUTPUT_DIRECTORY_RELEASE "${sReleaseBuildProductsDir}/bin" )
+    set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE "${sReleaseBuildProductsDir}/bin/archives" )
 
 ##
 # FUNCTIONS

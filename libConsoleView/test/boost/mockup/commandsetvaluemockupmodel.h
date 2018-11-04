@@ -33,6 +33,7 @@ public:
     virtual void execute() override
     {
         m_model->setValue(this->commandsParameter());
+        this->modelModified();
     }
 
 

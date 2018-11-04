@@ -67,7 +67,8 @@ else ()
     # SOURCE FILES RESEARCH
     #
         file(GLOB_RECURSE sUnitTestSourceFiles  ${sUnitTestIncludeDir}/*.h ${sUnitTestIncludeDir}/*.cpp)
-        group_files(sUnitTestSourceFiles)
+        group_files(sDemoSourceFiles ${sUnitTestSourceFiles})
+        list(REMOVE_ITEM sUnitTestSourceFiles "${sUnitTestIncludeDir}/mockup/demo.cpp")
         target_sources(${sBoostUnitTestTargetName} PUBLIC ${sUnitTestSourceFiles})
 	
 
@@ -79,27 +80,27 @@ else ()
 
         get_target_property(sTestedIncludes ${sTestedTargetName} INCLUDE_DIRECTORIES)
         MESSAGE(STATUS  "sTestedIncludes = ${sTestedIncludes}")
-        include_directories (${sTestedIncludes})
+        target_include_directories(${sBoostUnitTestTargetName} PUBLIC ${sTestedIncludes})
 
         # Definition of exe files output directory
-        if( CMAKE_BUILD_TYPE MATCHES Release )
-            set(sTestedBinDir ${CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE})
-        else()
-            set(sTestedBinDir ${CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG})
-        endif()
-        #get_target_property(sTestedBinDir ${sTestedTargetName} LIBRARY_OUTPUT_DIRECTORY)
-        set(sTestBinDir "${sTestedBinDir}/../test")
-        MESSAGE(STATUS  "sTestBinDir = ${sTestBinDir}")
-        file(MAKE_DIRECTORY ${sTestBinDir})
-        set_target_properties(${sBoostUnitTestTargetName} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${sTestBinDir})
+        get_target_property(sTestDebugBinDir ${sTestedTargetName} LIBRARY_OUTPUT_DIRECTORY_DEBUG)
+        get_target_property(sTestRealeaseBinDir ${sTestedTargetName} LIBRARY_OUTPUT_DIRECTORY_REALEASE)
+
+        set(sTestDebugBinDir "${sTestDebugBinDir}/../test")
+        set(sTestRealeaseBinDir "${sTestRealeaseBinDir}/../test")
+
+        #file(MAKE_DIRECTORY ${sTestBinDir})
+        set_target_properties(${sBoostUnitTestTargetName} PROPERTIES
+            RUNTIME_OUTPUT_DIRECTORY_DEBUG ${sTestDebugBinDir}
+            RUNTIME_OUTPUT_DIRECTORY_REALEASE ${sTestRealeaseBinDir}
+            )
 
 
 
     ##
     # BOOST
     #
-        INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIR})
-        LINK_DIRECTORIES(${Boost_LIBRARY_DIRS})
+        target_include_directories(${sBoostUnitTestTargetName} PUBLIC "${Boost_INCLUDE_DIR}")
         target_link_libraries(${sBoostUnitTestTargetName} ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY})
 
 
@@ -120,6 +121,25 @@ else ()
         #target_compile_options(${sBoostUnitTestTargetName} PUBLIC ${GCC_COVERAGE_COMPILE_FLAGS})
         set_target_properties(${sBoostUnitTestTargetName} PROPERTIES LINK_FLAGS ${GCC_COVERAGE_LINK_FLAGS})
 
+    ##
+    # DEMO exe build
+    #
+
+        set(sDemoExeTarget "Demo")
+        add_executable(${sDemoExeTarget} )
+        target_include_directories(${sDemoExeTarget} PUBLIC "${sUnitTestIncludeDir}/mockup")
+
+        file(GLOB_RECURSE sDemoSources  ${sUnitTestIncludeDir}/mockup/*.h ${sUnitTestIncludeDir}/mockup/*.cpp)
+        target_sources(${sDemoExeTarget} PUBLIC ${sDemoSources})
+
+        set_target_properties(${sDemoExeTarget} PROPERTIES
+            RUNTIME_OUTPUT_DIRECTORY_DEBUG ${sTestDebugBinDir}
+            RUNTIME_OUTPUT_DIRECTORY_REALEASE ${sTestRealeaseBinDir}
+            )
+
+        # Library link
+        target_include_directories(${sDemoExeTarget} PUBLIC ${sTestedIncludes})
+        target_link_libraries(${sDemoExeTarget}  ${sTestedTargetName})
 
     endif()
 
@@ -127,10 +147,5 @@ endif()
 
 
     MESSAGE(STATUS " ")
-##
-# DEMO exe build
-#
-    set(sDemoExeTarget "Demo")
-    add_executable(${sDemoExeTarget} )
-    target_include_directories(${sDemoExeTarget} PUBLIC ${sUnitTestIncludeDir})
-    target_sources(${sDemoExeTarget} PUBLIC ${sUnitTestSourceFiles})
+
+

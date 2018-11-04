@@ -5,12 +5,9 @@ cmake_minimum_required(VERSION 3.4.3)  # for CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS
 #
     Add_library(${sConsoleViewLibraryTargetName} SHARED )
     MESSAGE(STATUS " ") #Display an empty line
-    MESSAGE(STATUS "Shared library project")
+    MESSAGE(STATUS "* Shared library target")
 
     set_target_properties(${sConsoleViewLibraryTargetName} PROPERTIES
-            #ARCHIVE_OUTPUT_DIRECTORY ${sOutputDir}/bin
-            #LIBRARY_OUTPUT_DIRECTORY ${sOutputDir}/bin
-            #RUNTIME_OUTPUT_DIRECTORY ${sOutputDir}/bin
             WINDOWS_EXPORT_ALL_SYMBOLS WIN32
             )
 
