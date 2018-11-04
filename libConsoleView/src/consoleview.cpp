@@ -19,8 +19,18 @@ ConsoleView::ConsoleView()
     , m_bQuit(false)
 {
     m_sMenuDescrition = "Commands menu:";
+}
 
-    //this->setDisplayMenuCommand(std::make_shared<CommandDisplayMenuDefault>());
+/**
+ * The class has enable_shared_from_this, and it is not possible to call shared_from_this() within the constructor.
+ * So use this method to construct a ConsoleView.
+ * @return properly build ConsoleView
+ */
+std::shared_ptr<ConsoleView> ConsoleView::create()
+{
+    std::shared_ptr<ConsoleView> v =std::make_shared<ConsoleView>();
+    v->setDisplayMenuCommand(std::make_shared<CommandDisplayMenuDefault>());
+    return v;
 }
 
 ConsoleView::~ConsoleView()

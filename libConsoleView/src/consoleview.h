@@ -18,10 +18,12 @@
 
 class ConsoleView : public std::enable_shared_from_this<ConsoleView>
 {
+
+
 public:
     ConsoleView();
-
     ~ConsoleView();
+    static std::shared_ptr<ConsoleView> create();
 
     // Getters:
 
