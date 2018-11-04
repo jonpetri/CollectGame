@@ -2,6 +2,8 @@
 
 #include <iostream>
 #include <limits>
+#include <boost/bind.hpp>
+
 
 //-----------------------------------------------------------------------------------------------------------------------
 // ConsoleView :: Constructors / Destructors
@@ -21,8 +23,6 @@ ConsoleView::~ConsoleView()
 {
 
 }
-
-
 
 //-----------------------------------------------------------------------------------------------------------------------
 // ConsoleView :: Getters
@@ -48,11 +48,13 @@ void ConsoleView::setDisplayModelViewCommand(const std::shared_ptr<ConsoleComman
  */
 void ConsoleView::addCommand(const std::shared_ptr<ConsoleCommandBase> &newCommand)
 {
+    newCommand->modelModified.connect(boost::bind(&ConsoleView::displayModelView, shared_from_this()));
+    newCommand->sendMessageToUser.connect(boost::bind(&ConsoleView::printText, shared_from_this()));
     m_commands.push_back(newCommand);
 }
 
 /**
- * Run the iser interface view in the console
+ * Run the user interface view in the console
  */
 void ConsoleView::run()
 {

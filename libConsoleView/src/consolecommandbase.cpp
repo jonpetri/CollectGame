@@ -6,14 +6,20 @@
 // ConsoleCommandBase :: Constructors / Destructors
 //-----------------------------------------------------------------------------------------------------------------------
 ConsoleCommandBase::ConsoleCommandBase()
-    : m_sDescription("")
+    : modelModified()
+    , sendMessageToUser()
+    , m_sDescription("")
     , m_commandTerms(0)
     , m_sUserEntryMemo("")
+
 {
 
 }
 
+ConsoleCommandBase::~ConsoleCommandBase()
+{
 
+}
 
 
 
@@ -45,6 +51,8 @@ std::string ConsoleCommandBase::description()
 {
     return m_sDescription;
 }
+
+
 
 //-----------------------------------------------------------------------------------------------------------------------
 // ConsoleCommandBase :: Setters

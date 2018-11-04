@@ -14,7 +14,7 @@
 
 #include "consolecommandbase.h"
 
-class ConsoleView
+class ConsoleView : public std::enable_shared_from_this<ConsoleView>
 {
 public:
     ConsoleView();

@@ -11,13 +11,19 @@
 // Includes:
 #include <string>
 #include <vector>
+#include <memory>
+#include <boost/signals2.hpp>
+
+// boost::signals2 typedefs
+//typedef boost::signals2::signal<void(double)>   registration_manager;
+//typedef registration_manager::slot_type         registration_request;
 
 class ConsoleCommandBase
 {
 public:
     ConsoleCommandBase();
 
-    virtual ~ConsoleCommandBase() = 0;
+    virtual ~ConsoleCommandBase();
 
     // Getters:
     std::string commandTermsString();
@@ -25,8 +31,12 @@ public:
 
     // Setters:
 
+    // Signals
+    boost::signals2::signal<void ()> modelModified;
+    boost::signals2::signal<void (std::string)> sendMessageToUser;
+
     // Methods:
-    virtual bool execute() = 0;
+    virtual void execute() = 0;
 
 
     void setDescription(const std::string &sDescription);
@@ -44,6 +54,8 @@ private:
     std::string m_sDescription;                 ///< Command's purpose description text, displayed in the menu
     std::vector<std::string> m_commandTerms;    ///< list of strings usable by the user to call the command
     std::string m_sUserEntryMemo;               ///< Last User's entry memo, in case it contains parameters
+
+
 };
 
 #endif // CONSOLECOMMANDBASE_H

@@ -4,6 +4,7 @@ cmake_minimum_required(VERSION 3.4.3)  # for CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS
 # TARGET:
 #
     Add_library(${sConsoleViewLibraryTargetName} SHARED )
+    MESSAGE(STATUS " ") #Display an empty line
     MESSAGE(STATUS "Shared library project")
 
     set_target_properties(${sConsoleViewLibraryTargetName} PROPERTIES
