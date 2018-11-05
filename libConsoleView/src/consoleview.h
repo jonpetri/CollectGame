@@ -69,6 +69,8 @@ public:
     void removeCommand(const std::shared_ptr<ConsoleCommandBase> & cmd);
     void run();
     void executeCommand(std::string sUserEntry);
+
+    // Slots:
     void displayMenu();
     void printText(const std::string & sText);
     void displayModelView();
