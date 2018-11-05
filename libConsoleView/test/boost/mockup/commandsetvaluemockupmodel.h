@@ -22,6 +22,7 @@ public:
         this->addCommandTerm("SET");
 
         this->setDescription("Set model's string value. To set the string 'val', enter 'SET value'.");
+        this->setExpectedParameterCount(1);
     }
     //~CommandSetValueMockupModel()override;
 
@@ -32,7 +33,7 @@ public:
     // Methods:
     virtual void execute() override
     {
-        m_model->setValue(this->commandsParameter());
+        m_model->setValue(this->commandsParameter(0));
         this->modelModified();
     }
 

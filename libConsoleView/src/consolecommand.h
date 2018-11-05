@@ -3,7 +3,10 @@
 /*----------------------------------------------------------------*/
 /**
  * CLASS: ConsoleCommand
- *
+ * See all the explanations about ConsoleCommand in the ConsoleCommandBase class.
+ * The only purpose of this inheritance is to make ConsoleCommandBase hold a Model (or anything to operate).
+ * To use ConsoleCommand<Model>, inherit it in a class, with model's head class as template parameter,
+ * and implement the action in the .execute() method.
  */
 #ifndef CONSOLECOMMAND_H
 #define CONSOLECOMMAND_H
@@ -12,12 +15,11 @@
 #include "consolecommandbase.h"
 #include <memory>
 
-template  <class M>  // M for model
+template <class M>  // M for model
 class ConsoleCommand : public ConsoleCommandBase
 {
 public:
     ConsoleCommand();
-
     ~ConsoleCommand();
 
     // Getters:
@@ -32,17 +34,12 @@ protected:
     // Methods:
 
     // Members:
-
-    std::shared_ptr<M> m_model;
-
+    std::shared_ptr<M> m_model;  ///< The head class of a model to be operate by the command
 };
 
 
-
-
-// Methodes definitions (equivalent to .cpp)
-
-
+// Methods definitions (equivalent to .cpp)
+// =========================================
 
 //-----------------------------------------------------------------------------------------------------------------------
 // ConsoleCommand :: Constructors / Destructors
@@ -58,7 +55,6 @@ ConsoleCommand<M>::~ConsoleCommand()
 {
 
 }
-
 
 //-----------------------------------------------------------------------------------------------------------------------
 // ConsoleCommand :: Getters

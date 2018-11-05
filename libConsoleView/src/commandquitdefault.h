@@ -4,6 +4,7 @@
 /**
  * CLASS: CommandQuitDefault
  * Action of exit from a ConsoleView menu.
+ * See all the explanations in the ConsoleCommandBase class.
  */
 #ifndef COMMANDQUITDEFAULT_H
 #define COMMANDQUITDEFAULT_H

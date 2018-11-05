@@ -10,7 +10,7 @@ CommandQuitDefault::CommandQuitDefault()
     this->addCommandTerm("quit");
     this->addCommandTerm("q");
 
-    this->setDescription("Quit the program");
+    this->setDescription("Quit the program (Also ^D on Linux and ^Z on windows)");
 }
 
 CommandQuitDefault::~CommandQuitDefault()

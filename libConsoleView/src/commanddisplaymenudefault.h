@@ -1,11 +1,10 @@
-
-
 /*----------------------------------------------------------------*/
 /*  PROJECT:    Console View                                  */
 /*----------------------------------------------------------------*/
 /**
  * CLASS: CommandDisplayMenuDefault
- * Ask the linked views to display help.
+ * Ask the linked view to display the menu.
+ * See all the explanations in the ConsoleCommandBase class.
  */
 #ifndef COMMANDDISPLAYMENUDEFAULT_H
 #define COMMANDDISPLAYMENUDEFAULT_H

@@ -32,7 +32,7 @@ BOOST_AUTO_TEST_CASE(add_execute_command)
 
     BOOST_CHECK_EQUAL(c->description(),"");
     v->executeCommand("cmd arg");
-    BOOST_CHECK_EQUAL(c->description(),"OK");
+    BOOST_CHECK_EQUAL(c->description(),"");
 }
 
 BOOST_AUTO_TEST_CASE(setCommand)

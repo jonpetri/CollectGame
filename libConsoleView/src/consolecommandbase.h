@@ -4,9 +4,26 @@
 /**
  * CLASS: ConsoleCommandBase
  * ConsoleCommandBase is an abstract class.
- * Once inherited, the child class contains a code corresponding to a specific action, in the .execute() method.
- * It also contains the argument/commands to be entered bay the user to call the command.
- * Its different signals are to be connected to a view.
+ * It represent an action proposed to the user in a console program.
+ *
+ * Action implementation
+ * ---------------------
+ * Inherit the ConsoleCommand<Model> class, with model's head class as template parameter,
+ * and implement the action in the .execute() method.
+ * The command terms, description and parameter count variables has to be filled as well.
+ * Then the created class has to be linked to the an object ConsoleView, thanks to the method ConsoleView::addCommand().
+ *
+ * ConsoleCommandBase::modelModified() signal
+ * -------------------------------------------
+ * This signal work only if a DisplayModelView Command is implemented,
+ * and linked to ConsoleView using the method .setDisplayModelViewCommand().
+ *
+ * Command term/argument
+ * ---------------------
+ * ConsoleCommandBase manage the user's entry validity.
+ * According the command term and the expected parameter count (e.g. CMD <arg1> <arg2>),
+ * the class is able to indicate if an entry correspond to itself.
+ *
  */
 #ifndef CONSOLECOMMANDBASE_H
 #define CONSOLECOMMANDBASE_H
@@ -27,8 +44,11 @@ public:
     // Getters:
     std::string commandTermsString();
     std::string description();
-    std::string commandsParameter();
+    std::string commandsParameter(int iIndex);
+
     // Setters:
+    void setDescription(const std::string &sDescription);
+    void setExpectedParameterCount(int iExpectedParameterCount);
 
     // Signals
     boost::signals2::signal<void ()> modelModified;
@@ -38,26 +58,22 @@ public:
 
     // Methods:
     virtual void execute() = 0;
-
-
-    void setDescription(const std::string &sDescription);
     void addCommandTerm(std::string sTerm);
-
-    bool isMatchingUserEntryTotally(const std::string &sUserEntry);
-    bool isMatchingUserEntryFirstArgument(const std::string &sUserEntry);
+    void clearCommandTermList();
+    bool isMatchingUserEntry(const std::string &sUserEntry);
 
 protected:
 
 private:
     // Methods:
+    bool isMatchingUserEntryWithoutParam(std::string sUserEntry);
+    bool isMatchingUserEntryWithParam(const std::string &sUserEntry);
 
     // Members:
-    std::string m_sDescription;                 ///< Command's purpose description text, displayed in the menu
-    std::vector<std::string> m_commandTerms;    ///< list of strings usable by the user to call the command
-    std::string m_sUserEntryMemo;               ///< Last User's entry memo, in case it contains parameters
-    std::string m_sUserEntryParameter;          ///< Last User's entry's parameter, if any
-
-
+    std::string m_sDescription;                     ///< Command's purpose description text, displayed in the menu
+    std::vector<std::string> m_commandTerms;        ///< list of strings usable by the user to call the command
+    int m_iExpectedParameterCount;                  ///< The number of parameter the command should receive, in addition to the first term
+    std::vector<std::string> m_parameters;          ///< Last User's entry's parameters, if any
 };
 
 #endif // CONSOLECOMMANDBASE_H
