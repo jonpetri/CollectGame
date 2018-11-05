@@ -43,24 +43,11 @@ else ()
     # TESTED PROJECT:
     #
         SET(sTestedTargetName ${sConsoleViewLibraryTargetName})
-
-
-
     ##
-    # TEST PROJECT:
-    #
-        SET(sBoostUnitTestTargetName "${sTestedTargetName}_UnitTest")
-
-        add_executable(${sBoostUnitTestTargetName} )
-        ADD_TEST(${sBoostUnitTestTargetName} ${sBoostUnitTestTargetName})
-
-
-    ##
-    # INCLUDES:
+    # Sources files path variables declaration
     #
         set( sUnitTestIncludeDir "${CMAKE_CURRENT_SOURCE_DIR}" )
         MESSAGE(STATUS "INCLUDE_DIR: ${sUnitTestIncludeDir}")
-        target_include_directories(${sBoostUnitTestTargetName} PUBLIC ${sUnitTestIncludeDir})
 
 
     ##
@@ -69,8 +56,23 @@ else ()
         file(GLOB_RECURSE sUnitTestSourceFiles  ${sUnitTestIncludeDir}/*.h ${sUnitTestIncludeDir}/*.cpp)
         group_files(sDemoSourceFiles ${sUnitTestSourceFiles})
         list(REMOVE_ITEM sUnitTestSourceFiles "${sUnitTestIncludeDir}/mockup/demo.cpp")
-        target_sources(${sBoostUnitTestTargetName} PUBLIC ${sUnitTestSourceFiles})
-	
+        #target_sources(${sBoostUnitTestTargetName} PUBLIC ${sUnitTestSourceFiles})  # Doesn't work with Cmake version 3.5.2, which I use for cross compiling (MXE)
+
+
+    ##
+    # TEST PROJECT:
+    #
+        SET(sBoostUnitTestTargetName "${sTestedTargetName}_UnitTest")
+
+        add_executable(${sBoostUnitTestTargetName} ${sUnitTestSourceFiles} )
+        ADD_TEST(${sBoostUnitTestTargetName} ${sBoostUnitTestTargetName})
+
+
+    ##
+    # INCLUDES:
+    #
+        target_include_directories(${sBoostUnitTestTargetName} PUBLIC ${sUnitTestIncludeDir})
+
 
     ##
     # TESTED PROJECT's DATA:
@@ -83,18 +85,19 @@ else ()
         target_include_directories(${sBoostUnitTestTargetName} PUBLIC ${sTestedIncludes})
 
         # Definition of exe files output directory
-        get_target_property(sTestDebugBinDir ${sTestedTargetName} LIBRARY_OUTPUT_DIRECTORY_DEBUG)
-        get_target_property(sTestRealeaseBinDir ${sTestedTargetName} LIBRARY_OUTPUT_DIRECTORY_REALEASE)
+MESSAGE(STATUS  "sTestedTargetName = ${sTestedTargetName}")
+        #get_target_property(sTestDebugBinDir ${sTestedTargetName} LIBRARY_OUTPUT_DIRECTORY_DEBUG)       # Doesn't work with Cmake version 3.5.2, which I use for cross compiling (MXE)
+        #get_target_property(sTestRealeaseBinDir ${sTestedTargetName} LIBRARY_OUTPUT_DIRECTORY_REALEASE)  # Doesn't work with Cmake version 3.5.2, which I use for cross compiling (MXE)
 
-        set(sTestDebugBinDir "${sTestDebugBinDir}/../test")
-        set(sTestRealeaseBinDir "${sTestRealeaseBinDir}/../test")
+        set(sTestDebugBinDir "${CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG}/../test")
+        set(sTestRealeaseBinDir "${CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE}/../test")
 
         #file(MAKE_DIRECTORY ${sTestBinDir})
         set_target_properties(${sBoostUnitTestTargetName} PROPERTIES
             RUNTIME_OUTPUT_DIRECTORY_DEBUG ${sTestDebugBinDir}
             RUNTIME_OUTPUT_DIRECTORY_REALEASE ${sTestRealeaseBinDir}
+            RUNTIME_OUTPUT_DIRECTORY ${sTestDebugBinDir}
             )
-
 
 
     ##
@@ -126,12 +129,14 @@ else ()
     #
 
         set(sDemoExeTarget "Demo")
-        add_executable(${sDemoExeTarget} )
-        target_include_directories(${sDemoExeTarget} PUBLIC "${sUnitTestIncludeDir}/mockup")
 
         file(GLOB_RECURSE sDemoSources  ${sUnitTestIncludeDir}/mockup/*.h ${sUnitTestIncludeDir}/mockup/*.cpp)
-        target_sources(${sDemoExeTarget} PUBLIC ${sDemoSources})
+        #target_sources(${sDemoExeTarget} PUBLIC ${sDemoSources})  # Doesn't work with Cmake version 3.5.2, which I use for cross compiling (MXE)
 
+        add_executable(${sDemoExeTarget} ${sDemoSources})
+        target_include_directories(${sDemoExeTarget} PUBLIC "${sUnitTestIncludeDir}/mockup")
+
+        MESSAGE(STATUS "sTestDebugBinDir = ${sTestDebugBinDir}")
         set_target_properties(${sDemoExeTarget} PROPERTIES
             RUNTIME_OUTPUT_DIRECTORY_DEBUG ${sTestDebugBinDir}
             RUNTIME_OUTPUT_DIRECTORY_REALEASE ${sTestRealeaseBinDir}

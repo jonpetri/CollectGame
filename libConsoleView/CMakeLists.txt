@@ -70,11 +70,11 @@ cmake_minimum_required(VERSION 3.4.3)  # for CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS
 
     set( CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG "${sDebugBuildProductsDir}/bin" )
     set( CMAKE_LIBRARY_OUTPUT_DIRECTORY_DEBUG "${sDebugBuildProductsDir}/bin" )
-    set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY_DEBUG "${sDebugBuildProductsDir}/bin/archives" )
+    #set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY_DEBUG "${sDebugBuildProductsDir}/bin" )
 
     set( CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE "${sReleaseBuildProductsDir}/bin" )
     set( CMAKE_LIBRARY_OUTPUT_DIRECTORY_RELEASE "${sReleaseBuildProductsDir}/bin" )
-    set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE "${sReleaseBuildProductsDir}/bin/archives" )
+    #set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE "${sReleaseBuildProductsDir}/bin" )
 
 ##
 # FUNCTIONS
