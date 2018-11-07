@@ -9,7 +9,7 @@
 
 BOOST_AUTO_TEST_SUITE( model_suite )
 
-BOOST_AUTO_TEST_CASE(setAsCandidate)
+BOOST_AUTO_TEST_CASE(setIntoCandidateState)
 {
  
 }

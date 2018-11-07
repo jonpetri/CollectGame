@@ -1,0 +1,74 @@
+/*----------------------------------------------------------------*/
+/*  PROJECT:    Collect Game                                       */
+/*----------------------------------------------------------------*/
+/**
+ * CLASS: Node
+ * A node of map, where the player can find Items.
+ * It can have 3 states: 1- Absent, 2- Candidate (Candidate to be existent) and  3- Existing
+ *
+ * The state diagram is:  Absent -----> Candidate -----> Existing
+ *                            \____________________________^
+ *
+ * When it become existent, the signal setAdjacentsAsCandidate is called,
+ * and :
+ *   - all the adjacent absent nodes become Candidate.
+ *   - The  adjacent candidate do not change of state
+ *   - The existing's keep being existent, following the state diagram.
+ *
+ * When the class become candidate (that happen only once in it live time), the signal addToCandidateList is called.
+ */
+#ifndef NODE_H
+#define NODE_H
+
+// Includes:
+#include <memory>
+#include <boost/signals2.hpp>
+class NodeState;
+
+class Node : public std::enable_shared_from_this<Node>
+{
+private:
+
+public:
+    Node();
+    ~Node();
+
+    // Getters:
+    int x() const;
+    int y() const;
+    unsigned long graphIndex() const;
+
+
+    // Setters:
+    void setX(int iX);
+    void setY(int iY);
+    void setGraphIndex(unsigned long value);
+
+    // Signals
+    boost::signals2::signal<void (const std::shared_ptr<Node> &)> addToCandidateList;
+    boost::signals2::signal<void (const std::shared_ptr<Node> &)> setAdjacentsAsCandidate;
+
+    // Methods:
+    void setIntoCandidateState();
+    void setIntoExistingState();
+    bool exists();
+
+
+private:
+    // Methods:
+
+    // Members:
+    int m_iX;
+    int m_iY;
+    unsigned long m_lGraphIndex;
+
+    std::unique_ptr<NodeState> m_state;
+
+    friend class AbsentNode;
+    friend class CandidateNode;
+    friend class ExistingNode;
+    void setState(std::unique_ptr<NodeState> &state);
+
+};
+
+#endif // NODE_H
