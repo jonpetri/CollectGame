@@ -53,3 +53,24 @@ bool ExistingNode::exists()
 {
     return true;
 }
+
+
+/**
+ * indicate if the node is in Candidate state.
+ * @return  false
+ */
+bool ExistingNode::isCandidate()
+{
+    return false;
+}
+
+/**
+ * indicate if the node is in Absent state.
+ * @return  false
+ */
+bool ExistingNode::isAbsent()
+{
+    return false;
+}
+
+

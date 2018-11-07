@@ -77,15 +77,18 @@ else ()
     ##
     # TESTED PROJECT's DATA:
     #
-        get_target_property(sTestedSources ${sTestedTargetName} SOURCES)
-        target_sources(${sBoostUnitTestTargetName} PUBLIC ${sTestedSources})
-
         get_target_property(sTestedIncludes ${sTestedTargetName} INCLUDE_DIRECTORIES)
         MESSAGE(STATUS  "sTestedIncludes = ${sTestedIncludes}")
         target_include_directories(${sBoostUnitTestTargetName} PUBLIC ${sTestedIncludes})
 
+        get_target_property(sTestedSources ${sTestedTargetName} SOURCES)
+        list(GET sTestedIncludes 0 sTestedFirstInclude)
+        list(REMOVE_ITEM sTestedSources "${sTestedFirstInclude}/main.cpp")
+        target_sources(${sBoostUnitTestTargetName} PUBLIC ${sTestedSources})
+
+
         # Definition of exe files output directory
-MESSAGE(STATUS  "sTestedTargetName = ${sTestedTargetName}")
+        MESSAGE(STATUS  "sTestedTargetName = ${sTestedTargetName}")
         #get_target_property(sTestDebugBinDir ${sTestedTargetName} LIBRARY_OUTPUT_DIRECTORY_DEBUG)       # Doesn't work with Cmake version 3.5.2, which I use for cross compiling (MXE)
         #get_target_property(sTestRealeaseBinDir ${sTestedTargetName} LIBRARY_OUTPUT_DIRECTORY_REALEASE)  # Doesn't work with Cmake version 3.5.2, which I use for cross compiling (MXE)
 

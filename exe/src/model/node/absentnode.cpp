@@ -61,3 +61,24 @@ bool AbsentNode::exists()
 {
     return false;
 }
+
+
+/**
+ * indicate if the node is in Candidate state.
+ * @return  false
+ */
+bool AbsentNode::isCandidate()
+{
+    return false;
+}
+
+/**
+ * indicate if the node is in Absent state.
+ * @return  true
+ */
+bool AbsentNode::isAbsent()
+{
+    return true;
+}
+
+

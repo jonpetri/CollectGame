@@ -31,6 +31,11 @@ public:
     virtual void setIntoExistingState(std::shared_ptr<Node> & node) = 0 ;
     virtual bool exists() = 0 ;
 
+    virtual bool isCandidate() = 0;
+    virtual bool isAbsent() = 0;
+
+
+
 private:
     // Methods:
 

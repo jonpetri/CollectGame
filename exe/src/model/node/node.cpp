@@ -23,6 +23,20 @@ Node::~Node()
 }
 
 
+/**
+ * The class has enable_shared_from_this,
+ * so we have to make sure the class will always be stored in a std::shared_ptr<Node>.
+ * The constructor is private, must use that method instead.
+ * @return properly build Class
+ */
+std::shared_ptr<Node> Node::create()
+{
+    struct make_shared_enabler : public Node {};
+    return std::make_shared<make_shared_enabler>();
+}
+
+
+
 //-----------------------------------------------------------------------------------------------------------------------
 // Node :: Getters
 //-----------------------------------------------------------------------------------------------------------------------
@@ -90,7 +104,32 @@ void Node::setIntoExistingState()
     m_state->setIntoExistingState(n);
 }
 
-bool Node::exists()
+
+/**
+ * indicate if the node is in Existing state.
+ * @return  true if Existing state
+ */
+bool Node::exists() const
 {
     return m_state->exists();
 }
+
+/**
+ * indicate if the node is in Candidate state.
+ * @return  true if Candidate state
+ */
+bool Node::isCandidate() const
+{
+    return m_state->isCandidate();
+}
+
+/**
+ * indicate if the node is in Absent state.
+ * @return  true if Absent state
+ */
+bool Node::isAbsent() const
+{
+    return m_state->isAbsent();
+}
+
+

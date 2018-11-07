@@ -6,8 +6,11 @@
  * A node of map, where the player can find Items.
  * It can have 3 states: 1- Absent, 2- Candidate (Candidate to be existent) and  3- Existing
  *
- * The state diagram is:  Absent -----> Candidate -----> Existing
- *                            \____________________________^
+
+ * The state diagram is:
+ *
+ * Absent -----> Candidate -----> Existing
+ *     \____________________________^
  *
  * When it become existent, the signal setAdjacentsAsCandidate is called,
  * and :
@@ -29,9 +32,13 @@ class Node : public std::enable_shared_from_this<Node>
 {
 private:
 
-public:
+    // The class has enable_shared_from_this,
+    // so we have to make sure the class will always be stored in a std::shared_ptr<Node>.
+    // use Node::create() instead.
     Node();
     ~Node();
+public:
+    static std::shared_ptr<Node> create();
 
     // Getters:
     int x() const;
@@ -51,8 +58,10 @@ public:
     // Methods:
     void setIntoCandidateState();
     void setIntoExistingState();
-    bool exists();
 
+    bool exists() const;
+    bool isCandidate() const;
+    bool isAbsent() const;
 
 private:
     // Methods:
