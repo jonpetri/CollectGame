@@ -10,9 +10,9 @@
 Node::Node()
     : addToCandidateList()
     , setAdjacentsAsCandidate()
-    , m_iX(0)
-    , m_iY(0)
-    , m_lGraphIndex(0)
+    , m_iX(-1)
+    , m_iY(-1)
+    , m_lGraphIndex(ULONG_MAX)
     , m_state(std::unique_ptr<NodeState>(new AbsentNode))
 {
 

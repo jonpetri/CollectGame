@@ -21,9 +21,9 @@ BOOST_AUTO_TEST_CASE(constructor)
     //{
         std::shared_ptr<Node> n = Node::create() ;
 
-        BOOST_CHECK_EQUAL(n->graphIndex(),0);
-        BOOST_CHECK_EQUAL(n->x(),0);
-        BOOST_CHECK_EQUAL(n->y(),0);
+        BOOST_CHECK_EQUAL(n->graphIndex(),ULONG_MAX);
+        BOOST_CHECK_EQUAL(n->x(),-1);
+        BOOST_CHECK_EQUAL(n->y(),-1);
         BOOST_CHECK_EQUAL(n->exists(),false);
         BOOST_CHECK_EQUAL(n->isCandidate(),false);
         BOOST_CHECK_EQUAL(n->isAbsent(),true);
