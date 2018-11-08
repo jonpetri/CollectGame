@@ -159,8 +159,10 @@ void NodeGraph::removeNonBridgeEdges(int iRemainingTargetCount)
  */
 bool NodeGraph::edgeExists(const std::shared_ptr<Node> &node1, const std::shared_ptr<Node> &node2)
 {
-    std::pair<EdgeDescription, bool> ret;
-    ret = edge(node1->graphIndex(), node2->graphIndex(), m_nodeGraph);
+    if (node1->exists() == false || node2->exists() == false)
+        return false;
+
+    std::pair<EdgeDescription, bool> ret = edge(node1->graphIndex(), node2->graphIndex(), m_nodeGraph);
     return ret.second;
 }
 

@@ -1,7 +1,7 @@
 #include "gameparameters.h"
 
 //-----------------------------------------------------------------------------------------------------------------------
-// GameProperties :: Constructors / Destructors
+// GameParameters :: Constructors / Destructors
 //-----------------------------------------------------------------------------------------------------------------------
 GameParameters::GameParameters()
     : m_iGridSize(5)
@@ -21,7 +21,7 @@ GameParameters::~GameParameters()
 }
 
 //-----------------------------------------------------------------------------------------------------------------------
-// GameProperties :: Getters / Setters
+// GameParameters :: Getters / Setters
 //-----------------------------------------------------------------------------------------------------------------------
 
 int GameParameters::itemMaxWeight() const
@@ -151,7 +151,7 @@ int GameParameters::gridSize() const
  */
 bool GameParameters::setGridSize(int value)
 {
-    if (value<3)
+    if (value<3 || value>99) // limit to 99 to make the console print easier
         return false;
 
     m_iGridSize = value;
@@ -163,7 +163,7 @@ bool GameParameters::setGridSize(int value)
 
 
 //-----------------------------------------------------------------------------------------------------------------------
-// GameProperties :: Methods
+// GameParameters :: Methods
 //-----------------------------------------------------------------------------------------------------------------------
 int GameParameters::nodeCount()
 {

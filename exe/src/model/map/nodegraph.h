@@ -81,6 +81,7 @@ public:
     bool edgeExists(const std::shared_ptr<Node> & node1, const std::shared_ptr<Node> & node2);
     void clear();
 
+
     // Slots
     void setAdjacentsCandidate(const std::shared_ptr<Node> & node);
 

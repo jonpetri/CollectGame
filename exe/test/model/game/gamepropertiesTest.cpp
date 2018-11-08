@@ -45,7 +45,7 @@ BOOST_AUTO_TEST_CASE(itemCount)
     p.setRatio_ItemCountVsNodeCount(2);
     BOOST_CHECK_EQUAL(p.itemCount(),40);
     p.setRatio_ItemCountVsNodeCount(0.5);
-    BOOST_CHECK_EQUAL(p.itemCount(),20);
+    BOOST_CHECK_EQUAL(p.itemCount(),10);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

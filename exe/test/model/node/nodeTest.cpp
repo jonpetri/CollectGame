@@ -27,6 +27,7 @@ BOOST_AUTO_TEST_CASE(constructor)
         BOOST_CHECK_EQUAL(n->exists(),false);
         BOOST_CHECK_EQUAL(n->isCandidate(),false);
         BOOST_CHECK_EQUAL(n->isAbsent(),true);
+        BOOST_CHECK_EQUAL(n->consolePrintCharacter(), " ");
     //}
 
 }
@@ -57,6 +58,7 @@ BOOST_AUTO_TEST_CASE(setIntoCandidateStateFirst_ThenExisting)
     BOOST_CHECK_EQUAL(n->exists(),false);
     BOOST_CHECK_EQUAL(n->isCandidate(),true);
     BOOST_CHECK_EQUAL(n->isAbsent(),false);
+    BOOST_CHECK_EQUAL(n->consolePrintCharacter(), " ");
     BOOST_CHECK_EQUAL(signalTester1.node(), n);
     BOOST_CHECK(signalTester2.node() == nullptr);
 
@@ -66,6 +68,7 @@ BOOST_AUTO_TEST_CASE(setIntoCandidateStateFirst_ThenExisting)
     BOOST_CHECK_EQUAL(n->exists(),true);
     BOOST_CHECK_EQUAL(n->isCandidate(),false);
     BOOST_CHECK_EQUAL(n->isAbsent(),false);
+    BOOST_CHECK_EQUAL(n->consolePrintCharacter(), "O");
     BOOST_CHECK(signalTester1.node() == nullptr);
     BOOST_CHECK_EQUAL(signalTester2.node(), n);
 
@@ -78,6 +81,7 @@ BOOST_AUTO_TEST_CASE(setIntoCandidateStateFirst_ThenExisting)
     BOOST_CHECK_EQUAL(n->exists(),true);
     BOOST_CHECK_EQUAL(n->isCandidate(),false);
     BOOST_CHECK_EQUAL(n->isAbsent(),false);
+    BOOST_CHECK_EQUAL(n->consolePrintCharacter(), "O");
     BOOST_CHECK(signalTester1.node() == nullptr);
     BOOST_CHECK(signalTester2.node() == nullptr);
 
@@ -98,6 +102,7 @@ BOOST_AUTO_TEST_CASE(setIntoExistingStateDirectly)
     BOOST_CHECK_EQUAL(n->exists(),true);
     BOOST_CHECK_EQUAL(n->isCandidate(),false);
     BOOST_CHECK_EQUAL(n->isAbsent(),false);
+    BOOST_CHECK_EQUAL(n->consolePrintCharacter(), "O");
     BOOST_CHECK(signalTester1.node() == nullptr);
     BOOST_CHECK_EQUAL(signalTester2.node(), n);
 
@@ -110,8 +115,15 @@ BOOST_AUTO_TEST_CASE(setIntoExistingStateDirectly)
     BOOST_CHECK_EQUAL(n->exists(),true);
     BOOST_CHECK_EQUAL(n->isCandidate(),false);
     BOOST_CHECK_EQUAL(n->isAbsent(),false);
+    BOOST_CHECK_EQUAL(n->consolePrintCharacter(), "O");
     BOOST_CHECK(signalTester1.node() == nullptr);
     BOOST_CHECK(signalTester2.node() == nullptr);
+
+    //set the player
+    n->hostThePlayer(true);
+    BOOST_CHECK_EQUAL(n->consolePrintCharacter(), "@");
+    n->hostThePlayer(false);
+    BOOST_CHECK_EQUAL(n->consolePrintCharacter(), "O");
 }
 
 BOOST_AUTO_TEST_SUITE_END()

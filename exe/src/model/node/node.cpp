@@ -13,7 +13,9 @@ Node::Node()
     , m_iX(-1)
     , m_iY(-1)
     , m_lGraphIndex(ULONG_MAX)
+    , m_bHostThePlayer(false)
     , m_state(std::unique_ptr<NodeState>(new AbsentNode))
+
 {
 
 }
@@ -130,6 +132,34 @@ bool Node::isCandidate() const
 bool Node::isAbsent() const
 {
     return m_state->isAbsent();
+}
+
+/**
+ * Method trigered by the class player, according his position
+ * @param [in] bStatus true if the node host the player
+ */
+void Node::hostThePlayer(bool bStatus)
+{
+     m_bHostThePlayer = bStatus;
+}
+
+/**
+ * Retrieve the character to be used to represent the node
+ * @return "@" if player, "O" if existing, " " if not existing
+ */
+std::string Node::consolePrintCharacter()
+{
+    if (this->exists())
+    {
+        if (m_bHostThePlayer)
+            return "@";
+        else
+            return "O";
+    }
+    else
+    {
+        return " ";
+    }
 }
 
 

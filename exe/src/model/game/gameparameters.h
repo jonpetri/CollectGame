@@ -2,11 +2,11 @@
 /*  PROJECT:    Collect Game                                      */
 /*----------------------------------------------------------------*/
 /**
- * CLASS: GameProperties
+ * CLASS: GameParameters
  *
  */
-#ifndef GAMEPROPERTIES_H
-#define GAMEPROPERTIES_H
+#ifndef GameParameters_H
+#define GameParameters_H
 
 // Includes:
 
@@ -61,4 +61,4 @@ private:
 
 };
 
-#endif // GAMEPROPERTIES_H
+#endif // GameParameters_H

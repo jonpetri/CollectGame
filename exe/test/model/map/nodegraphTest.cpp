@@ -16,6 +16,9 @@ BOOST_AUTO_TEST_SUITE( graph_suite )
 //using namespace boost;
 void createSampleGraph( NodeGraph & g, std::vector<std::shared_ptr<Node>> & nodes)
 {
+
+
+
     g.clear();
     nodes.clear();
     nodes.resize(9);
@@ -215,6 +218,7 @@ BOOST_AUTO_TEST_CASE(edgeExists)
     for (auto&& n : nodes)
     {
         n = Node::create() ;
+        n->setIntoExistingState();
         g.addIsolateNode(n);
     }
 

@@ -62,7 +62,8 @@ public:
     bool exists() const;
     bool isCandidate() const;
     bool isAbsent() const;
-
+    void hostThePlayer(bool bStatus);
+    std::string consolePrintCharacter();
 private:
     // Methods:
 
@@ -70,6 +71,7 @@ private:
     int m_iX;
     int m_iY;
     unsigned long m_lGraphIndex;
+    bool m_bHostThePlayer;
 
     std::unique_ptr<NodeState> m_state;
 
