@@ -2,6 +2,8 @@
 #include <map>
 #include <random>
 #include <boost/graph/connected_components.hpp>
+#include <boost/graph/graph_utility.hpp>
+
 //-----------------------------------------------------------------------------------------------------------------------
 // NodeGraph :: Constructors / Destructors
 //-----------------------------------------------------------------------------------------------------------------------
@@ -100,10 +102,12 @@ void NodeGraph::removeAbsentNodesAndEdges()
     VertexIndex nodeIndex;
     //graph_traits<node_graph_t>::vertices_size_type lVertexCount = num_vertices(m_nodeGraph);
     std::pair<BoostNodeGraph::vertex_iterator, BoostNodeGraph::vertex_iterator> it = boost::vertices(m_nodeGraph);
-    for( ; it.first != it.second; ++it.first)
+    --it.second;
+    for( ; it.first -1 != it.second; --it.second)
     {
-       nodeIndex = *it.first;
-       node = get(boost::vertex_bundle, m_nodeGraph)[nodeIndex];
+       nodeIndex = *it.second;
+       //node = get(boost::vertex_bundle, m_nodeGraph)[nodeIndex];
+       node = m_nodeGraph[nodeIndex];
 
        if (node->exists() == false)
        {
@@ -112,9 +116,7 @@ void NodeGraph::removeAbsentNodesAndEdges()
            // then the vertex can be deleted
            remove_vertex(nodeIndex, m_nodeGraph);
        }
-
     }
-
 }
 
 /**
@@ -135,7 +137,7 @@ void NodeGraph::removeNonBridgeEdges(int iRemainingTargetCount)
     edgeCount = num_edges(m_nodeGraph);
     this->selectNonBridges(nonBridgeEdgeList);
 
-    while((lRemainingTargetCount <= edgeCount) and (nonBridgeEdgeList.size() > 0))
+    while((lRemainingTargetCount < edgeCount) and (nonBridgeEdgeList.size() > 0))
     {
         // remove a random edge within that edges
         std::uniform_int_distribution<> randomDistribution(0, static_cast<int>(nonBridgeEdgeList.size()-1));
@@ -203,6 +205,11 @@ bool NodeGraph::isConnected()
 
 }
 
+void NodeGraph::printGraph()
+{
+    print_graph(m_nodeGraph);
+}
+
 
 
 /**
@@ -250,6 +257,7 @@ void NodeGraph::selectNonBridges(std::vector<EdgeDescription> &edgeList)
     }
 
     // if an edge's tag has a "components Edge Qty" superior to 1, it is not a bridge --> we add it to edgeList
+    edgeList.clear();
     for(auto const &mapIt : edgeComponentTag) {
 
         if (componentsEdgeQty[mapIt.second] > 1)  // mapIt.second = component Tag

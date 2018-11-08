@@ -89,6 +89,7 @@ public:
     int edgeCount();
     int nodeCount();
     bool isConnected();
+    void printGraph();
 
 
 private:
