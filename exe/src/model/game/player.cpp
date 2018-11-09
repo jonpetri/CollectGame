@@ -19,6 +19,10 @@ Player::~Player()
 //-----------------------------------------------------------------------------------------------------------------------
 // Player :: Getters
 //-----------------------------------------------------------------------------------------------------------------------
+/**
+ * player's current location.
+ * @return node
+ */
 std::shared_ptr<Node> Player::currentNode() const
 {
     return m_currentNode;
@@ -27,6 +31,11 @@ std::shared_ptr<Node> Player::currentNode() const
 //-----------------------------------------------------------------------------------------------------------------------
 // Player :: Setters
 //-----------------------------------------------------------------------------------------------------------------------
+/**
+ * Switch from a node to another.
+ * When the player switch from a node to another he is in charge of change nodes "HostThePlayer" status.
+ * @param node New player's location.
+ */
 void Player::setCurrentNode(const std::shared_ptr<Node> & node)
 {
     if (m_currentNode != nullptr)

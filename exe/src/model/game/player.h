@@ -3,7 +3,9 @@
 /*----------------------------------------------------------------*/
 /**
  * CLASS: Player
- *
+ * Represent the player, witch is located in the node "currentNode".
+ * When the player switch from a node to another he is in charge of change nodes "HostThePlayer" status.
+ * The class doesn't know which item had collected the player.
  */
 #ifndef PLAYER_H
 #define PLAYER_H
