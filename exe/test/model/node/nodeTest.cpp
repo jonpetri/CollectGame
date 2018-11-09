@@ -120,9 +120,9 @@ BOOST_AUTO_TEST_CASE(setIntoExistingStateDirectly)
     BOOST_CHECK(signalTester2.node() == nullptr);
 
     //set the player
-    n->hostThePlayer(true);
+    n->setHostThePlayer(true);
     BOOST_CHECK_EQUAL(n->consolePrintCharacter(), "@");
-    n->hostThePlayer(false);
+    n->setHostThePlayer(false);
     BOOST_CHECK_EQUAL(n->consolePrintCharacter(), "O");
 }
 

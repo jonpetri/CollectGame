@@ -43,6 +43,7 @@ void CandidateNode::setIntoCandidateState(std::shared_ptr<Node> &node)
 void CandidateNode::setIntoExistingState(std::shared_ptr<Node> &node)
 {
     std::unique_ptr<NodeState> state = std::unique_ptr<NodeState>(new ExistingNode);
+    node->removeFromCandidateList(node);
     node->setState(state);
     node->setAdjacentsAsCandidate(node);
 }

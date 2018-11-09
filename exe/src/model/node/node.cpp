@@ -9,6 +9,7 @@
 //-----------------------------------------------------------------------------------------------------------------------
 Node::Node()
     : addToCandidateList()
+    , removeFromCandidateList()
     , setAdjacentsAsCandidate()
     , m_iX(-1)
     , m_iY(-1)
@@ -58,6 +59,11 @@ unsigned long Node::graphIndex() const
     return m_lGraphIndex;
 }
 
+bool Node::hostThePlayer() const
+{
+    return m_bHostThePlayer;
+}
+
 //-----------------------------------------------------------------------------------------------------------------------
 // Node :: Setters
 //-----------------------------------------------------------------------------------------------------------------------
@@ -77,11 +83,15 @@ void Node::setGraphIndex(unsigned long value)
     m_lGraphIndex = value;
 }
 
-void Node::setState(std::unique_ptr<NodeState> &state)
- {
-     m_state.reset();
-     m_state = std::move(state);
- }
+
+/**
+ * Method trigered by the class player, according his position
+ * @param [in] bStatus true if the node host the player
+ */
+void Node::setHostThePlayer(bool bStatus)
+{
+     m_bHostThePlayer = bStatus;
+}
 //-----------------------------------------------------------------------------------------------------------------------
 // Node :: Methods
 //-----------------------------------------------------------------------------------------------------------------------
@@ -135,19 +145,10 @@ bool Node::isAbsent() const
 }
 
 /**
- * Method trigered by the class player, according his position
- * @param [in] bStatus true if the node host the player
- */
-void Node::hostThePlayer(bool bStatus)
-{
-     m_bHostThePlayer = bStatus;
-}
-
-/**
  * Retrieve the character to be used to represent the node
  * @return "@" if player, "O" if existing, " " if not existing
  */
-std::string Node::consolePrintCharacter()
+std::string Node::consolePrintCharacter() const
 {
     if (this->exists())
     {
@@ -162,4 +163,13 @@ std::string Node::consolePrintCharacter()
     }
 }
 
+/**
+ * Set the node to a new state. (private)
+ * @param [in] state
+ */
+void Node::setState(std::unique_ptr<NodeState> &state)
+ {
+     m_state.reset();
+     m_state = std::move(state);
+ }
 

@@ -146,9 +146,18 @@ BOOST_AUTO_TEST_CASE(removeAbsentNodesAndEdges2)
     nodes[4]->setIntoExistingState();
     nodes[5]->setIntoExistingState();
 
+
     g.removeAbsentNodesAndEdges();
     BOOST_CHECK_EQUAL(g.edgeCount(), 2);
     BOOST_CHECK_EQUAL(g.nodeCount(), 3);
+
+    BOOST_CHECK_EQUAL(g.edgeExists(nodes[0], nodes[4]), false);
+    BOOST_CHECK_EQUAL(g.edgeExists(nodes[0], nodes[5]), true);
+    BOOST_CHECK_EQUAL(g.edgeExists(nodes[5], nodes[4]), true);
+    BOOST_CHECK_EQUAL(g.edgeExists(nodes[0], nodes[1]), false);
+
+    BOOST_CHECK_EQUAL(g.edgeCount(), 2);
+
 }
 
 

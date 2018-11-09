@@ -44,15 +44,18 @@ public:
     int x() const;
     int y() const;
     unsigned long graphIndex() const;
+    bool hostThePlayer() const;
 
 
     // Setters:
     void setX(int iX);
     void setY(int iY);
     void setGraphIndex(unsigned long value);
+    void setHostThePlayer(bool bStatus);
 
     // Signals
     boost::signals2::signal<void (const std::shared_ptr<Node> &)> addToCandidateList;
+    boost::signals2::signal<void (const std::shared_ptr<Node> &)> removeFromCandidateList;
     boost::signals2::signal<void (const std::shared_ptr<Node> &)> setAdjacentsAsCandidate;
 
     // Methods:
@@ -62,8 +65,8 @@ public:
     bool exists() const;
     bool isCandidate() const;
     bool isAbsent() const;
-    void hostThePlayer(bool bStatus);
-    std::string consolePrintCharacter();
+
+    std::string consolePrintCharacter() const;
 private:
     // Methods:
 

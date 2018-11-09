@@ -3,7 +3,13 @@
 /*----------------------------------------------------------------*/
 /**
  * CLASS: NodeGraph
+ * The class is a container for a Boost graph of the nodes (m_nodeGraph).
+ * It has handy methods to handle Nodes in the graph, generate the map.
  *
+ * All the methods except NodeGraph::edgeExists(n1, n2) serves to map generation.
+ * (see generation algo in Map::createNewMap())
+ *
+ * NodeGraph::edgeExists(n1, n2) serves to check if player's move are possible.
  */
 #ifndef NODEGRAPH_H
 #define NODEGRAPH_H
@@ -39,21 +45,22 @@ namespace boost
 
 
 /**
- * @typedef adjacency_list
- * Graph type definition
+ * @typedef BoostNodeGraph
+ * Member graph typedef
  */
 typedef boost::adjacency_list < boost::vecS, boost::vecS, boost::undirectedS,
        std::shared_ptr<Node> , boost::property < boost::Edge, std::size_t > > BoostNodeGraph;
 
 /**
  * @typedef vertex_index_t
- * Index of a vertex in the graph (unsigned long)
+ * Id of a vertex in the graph (unsigned long)
+ * At Vertex (node) remove, Id's are mixed.
  */
-typedef BoostNodeGraph::vertex_descriptor VertexIndex;
+typedef BoostNodeGraph::vertex_descriptor VertexId;
 
 /**
  * @typedef edge_index_t
- * Index of an edge in the graph (unsigned long)
+ * This is a struct
  */
 typedef BoostNodeGraph::edge_descriptor  EdgeDescription;
 
@@ -74,12 +81,13 @@ public:
 
     // Methods:
     void addIsolateNode(const std::shared_ptr<Node> & node);
-    void connectNodes(const std::shared_ptr<Node> & node1, const std::shared_ptr<Node> & node2);
-    void getAdjacentNodesOf(const std::shared_ptr<Node> &node, std::vector<std::shared_ptr<Node>> & nodeList )const;
+    bool connectNodes(const std::shared_ptr<Node> & node1, const std::shared_ptr<Node> & node2);
+    void getAdjacentNodesOf(const std::shared_ptr<Node> &node, std::vector<std::shared_ptr<Node>> & nodeList ) const;
     void removeAbsentNodesAndEdges();
     void removeNonBridgeEdges(int iRemainingTargetCount);
-    bool edgeExists(const std::shared_ptr<Node> & node1, const std::shared_ptr<Node> & node2);
+    bool edgeExists(const std::shared_ptr<Node> & node1, const std::shared_ptr<Node> & node2) const;
     void clear();
+    void updateNodeIds();
 
 
     // Slots
@@ -87,15 +95,16 @@ public:
 
 
     // Should be used for unit testing only
-    int edgeCount();
-    int nodeCount();
-    bool isConnected();
+    int edgeCount() const;
+    int nodeCount() const;
+    bool isConnected() const;
     void printGraph();
 
 
 private:
     // Methods:
     void selectNonBridges(std::vector<EdgeDescription> & edgeList);
+    std::pair<VertexId, bool> nodeIndex(const std::shared_ptr<Node> & node) const;
 
     // Members:
     BoostNodeGraph m_nodeGraph;

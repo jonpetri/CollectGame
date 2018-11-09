@@ -4,7 +4,10 @@
 /**
  * CLASS: Map
  * The map is in charge of nodes position in a X/Y grid and the edges between them.
- * It creates a random map, give access to the nodes by them xy index, through Map::grid()->
+ * The map management is sheared between 2 member class : NodeGrid and NodeGraph.
+ * NodeGrid for xy positions and NodeGraph for edges and graph creation.
+ *
+ * The Map class creates a random map, give access to the nodes by them xy index, through Map::grid()->
  * It indicates if a move of the player is possible,
  * letting know if connection between 2 nodes exists, through Map::graph()->
  * It provide a string-view of the graph, printable in the console.
@@ -21,6 +24,11 @@
 #include "nodegraph.h"
 
 class GameParameters;
+/**
+ * @typedef NodeGrid
+ * Grid XY of nodes
+ */
+typedef Array2d<std::shared_ptr<Node>> NodeGrid;
 
 class Map : public std::enable_shared_from_this<Map>
 {
@@ -42,19 +50,20 @@ public:
 
     // Methods:
     void createNewMap(const std::shared_ptr<GameParameters> & gameParameters);
-    std::string getMapsConsolePrint();
+    std::string consolePrint(bool bPrintNodeIds = false) const;
 
     // slots
     void addToCandidatesNodes(const std::shared_ptr<Node> & n);
+    void remomoveFromCandidatesNodes(const std::shared_ptr<Node> & n);
 
 private:
     // Methods:
-    std::string edgeCharacterRightOfNode(const std::shared_ptr<Node> & n);
-    std::string edgeCharacterBelowOfNode(const std::shared_ptr<Node> & n);
-    std::string edgeCharacterDiagonaleOfNode(const std::shared_ptr<Node> & n);
+    std::string edgeCharacterRightOfNode(const std::shared_ptr<Node> & n) const;
+    std::string edgeCharacterBelowOfNode(const std::shared_ptr<Node> & n) const;
+    std::string edgeCharacterDiagonaleOfNode(const std::shared_ptr<Node> & n) const;
     static std::string getNumberInTwoChar(int iNumber);
     // Members:
-    std::shared_ptr<Array2d<std::shared_ptr<Node>>> m_grid;
+    std::shared_ptr<NodeGrid> m_grid;
     std::shared_ptr<NodeGraph> m_graph;
     std::vector<std::shared_ptr<Node>> m_candidateNodes;
 };

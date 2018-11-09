@@ -27,25 +27,25 @@ public:
 
 
     void addLine();
-    long size();
+    long size() const;
 	bool removeRow(long iRow);
 
-    long colNb(){return m_iColCount;}
+    long colNb() const{return m_iColCount;}
     void set(long iRow, long iCol, const T & tVal);
     void set(long iCol, const T &tVal);
 
     void setCells(long iStartRow, long iStartCol, long iEndRow, long iEndCol, const T & tVal);
 
-    T get(long iRow, long iCol);
+    T get(long iRow, long iCol) const;
 
     long searchRow(long *iCol1, T * tVal1,
-                       long *iCol2 = nullptr, T * tVal2  = nullptr, long *iCol3 = nullptr, T * tVal3 = nullptr);
+                       long *iCol2 = nullptr, T * tVal2  = nullptr, long *iCol3 = nullptr, T * tVal3 = nullptr) const;
     T searchValue(long iColReturn, long *iCol1, T * tVal1,
-                      long *iCol2 = nullptr, T * tVal2  = nullptr, long *iCol3 = nullptr, T * tVal3 = nullptr);
+                      long *iCol2 = nullptr, T * tVal2  = nullptr, long *iCol3 = nullptr, T * tVal3 = nullptr) const;
 
 private:
-    void VerifLimit(long iCol);
-    void VerifLimit(long iRow, long iCol);
+    void VerifLimit(long iCol) const;
+    void VerifLimit(long iRow, long iCol) const;
 
 };
 
@@ -142,7 +142,7 @@ bool Array2d<T>::removeRow(long iRow)
  * @return column count
  */
 template <class T>
-long Array2d<T>::size(){
+long Array2d<T>::size() const{
     return m_vArray2d.size();
 }
 
@@ -176,7 +176,7 @@ void Array2d<T>::set( long iCol,const T & tVal){
  * @return value
  */
 template <class T>
-T Array2d<T>::get(long iRow, long iCol){
+T Array2d<T>::get(long iRow, long iCol) const{
     this->VerifLimit(iRow, iCol);
     return m_vArray2d[iRow][iCol];
 }
@@ -187,11 +187,11 @@ T Array2d<T>::get(long iRow, long iCol){
  * @param iCol
  */
 template <class T>
-void  Array2d<T>::VerifLimit(long iRow, long iCol){
+void  Array2d<T>::VerifLimit(long iRow, long iCol) const{
     if (iRow < 0 || iRow >= this->size() )
     {
         // Error throw: Array2d::VerifLimite ligne
-        throw std::out_of_range( "Lecture ou écriture hors limite colonne du tableau" );
+        throw std::out_of_range( "in Array2d::VerifLimit(long iRow, long iCol)" );
     }
     this->VerifLimit(iCol);
 }
@@ -200,11 +200,11 @@ void  Array2d<T>::VerifLimit(long iRow, long iCol){
  * @param iCol
  */
 template <class T>
-void  Array2d<T>::VerifLimit(long iCol){
+void  Array2d<T>::VerifLimit(long iCol) const{
     if (iCol < 0 || iCol >= m_iColCount )
     {
         // Error throw: Array2d::VerifLimite colonne
-        throw std::out_of_range( "Lecture ou écriture hors limite colonne du tableau" );
+        throw std::out_of_range( "in Array2d::VerifLimit(long iCol)" );
     }
 }
 /**
@@ -220,7 +220,7 @@ void  Array2d<T>::VerifLimit(long iCol){
  */
 template <class T>
 long Array2d<T>::searchRow(long * iCol1, T* tVal1, long * iCol2,
-        T* tVal2, long * iCol3, T* tVal3 ){
+        T* tVal2, long * iCol3, T* tVal3 ) const{
 
     long iSizeTab = this->size();
     long i;
@@ -262,7 +262,7 @@ long Array2d<T>::searchRow(long * iCol1, T* tVal1, long * iCol2,
  */
 template <class T>
 T Array2d<T>::searchValue(long iColReturn, long *iCol1, T* tVal1, long *iCol2,
-        T* tVal2, long *iCol3, T* tVal3 ){
+        T* tVal2, long *iCol3, T* tVal3 ) const{
 
     long iRow = this->searchRow(iCol1, tVal1, iCol2, tVal2, iCol3, tVal3);
     if (iRow != -1)

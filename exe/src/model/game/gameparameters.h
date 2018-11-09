@@ -3,7 +3,12 @@
 /*----------------------------------------------------------------*/
 /**
  * CLASS: GameParameters
+ * The class generate game's parameters.
  *
+ * The class calculate :  nodeCount, edgeTargetCount, itemCount from the grid size.
+ * The ratios used to make the calcules can be modified.
+ *
+ * The other parameters has to be set. (also default values available)
  */
 #ifndef GameParameters_H
 #define GameParameters_H
@@ -18,41 +23,39 @@ public:
     ~GameParameters();
 
     // Getters:
-    int gridSize() const;
+    int gridSideSize() const;
     int itemMaxValue() const;
     int itemMaxWeight() const;
     int playerWeightLimit() const;
     int playerItemCountLimit() const;
-    double ratio_NodeCountVsGridSize() const;
-    double ratio_EdgeCountVsGridSize() const;
+    double ratio_NodeCountVsGridSpotCount() const;
+    double ratio_EdgeCountVsGridSpotCount() const;
     double ratio_ItemCountVsNodeCount() const;
 
 
     // Setters:
-    bool setGridSize(int value);
+    bool setGridSideSize(int value);
     void setItemMaxWeight(int value);
     void setItemMaxValue(int value);
     bool setPlayerWeightLimit(int value);
     bool setPlayerItemCountLimit(int value);
-    bool setRatio_NodeCountVsGridSize(double value);
-    bool setRatio_EdgeCountVsGridSize(double value);
+    bool setRatio_NodeCountVsGridSpotCount(double value);
+    bool setRatio_EdgeCountVsGridSpotCount(double value);
     bool setRatio_ItemCountVsNodeCount(double value);
 
     // Methods:
 
-    int nodeCount();
-    int edgeTargetCount();
-    int itemCount();
-
-
+    int nodeCount() const;
+    int edgeTargetCount() const;
+    int itemCount() const;
 
 private:
     // Methods:
 
     // Members:
     int m_iGridSize;
-    double m_dRatio_NodeCountVsGridSize;
-    double m_dRatio_EdgeCountVsGridSize;
+    double m_dRatio_NodeCountVsGridSpotCount;
+    double m_dRatio_EdgeCountVsGridSpotCount;
     double m_dRatio_ItemCountVsNodeCount;
     int m_iItemMaxWeight;
     int m_iItemMaxValue;

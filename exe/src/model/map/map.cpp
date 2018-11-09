@@ -10,7 +10,7 @@
 // Map :: Constructors / Destructors
 //-----------------------------------------------------------------------------------------------------------------------
 Map::Map()
-    : m_grid(std::make_shared<Array2d<std::shared_ptr<Node>>>())
+    : m_grid(std::make_shared<NodeGrid>())
     , m_graph(std::make_shared<NodeGraph>())
     , m_candidateNodes()
 {
@@ -61,7 +61,7 @@ const std::shared_ptr<NodeGraph> Map::graph() const
  */
 void Map::createNewMap(const std::shared_ptr<GameParameters> & gameParameters)
 {
-    int iGridSize =  gameParameters->gridSize();
+    int iGridSize =  gameParameters->gridSideSize();
 
     // clean of former game
     // -------------
@@ -82,6 +82,7 @@ void Map::createNewMap(const std::shared_ptr<GameParameters> & gameParameters)
             std::shared_ptr<Node> newNode = Node::create();
             newNode->setAdjacentsAsCandidate.connect( boost::bind( &NodeGraph::setAdjacentsCandidate,  m_graph, _1));
             newNode->addToCandidateList.connect( boost::bind( &Map::addToCandidatesNodes, shared_from_this(), _1));
+            newNode->removeFromCandidateList.connect( boost::bind( &Map::remomoveFromCandidatesNodes, shared_from_this(), _1));
             newNode->setX(x);
             newNode->setY(y);
 
@@ -107,13 +108,19 @@ void Map::createNewMap(const std::shared_ptr<GameParameters> & gameParameters)
                 m_graph->connectNodes(m_grid->get(x, y), m_grid->get(x - 1, y));
 
                 if ( y > 0) // and x > 0
+                {
                     m_graph->connectNodes(m_grid->get(x, y), m_grid->get(x - 1, y -1));
 
-                if (y < iGridSize -1) // and x > 0
-                    m_graph->connectNodes(m_grid->get(x, y), m_grid->get(x - 1, y + 1));
+                    //if (y < iGridSize -1) // and x > 0, y > 0
+                    m_graph->connectNodes(m_grid->get(x -1 , y), m_grid->get(x, y - 1));
+                }
             }
         }
     }
+
+//    std::cout << this->consolePrint(true) << std::endl;
+//    std::cout << "edge count= " << m_graph->edgeCount() << std::endl;
+
 
     // Choice of the first existing node randomly
     // ------------------------------------------------------
@@ -137,9 +144,11 @@ void Map::createNewMap(const std::shared_ptr<GameParameters> & gameParameters)
     }
 
 
+
     // Remove of edges linked to absent and candidate nodes in the graph
     // -----------------------------------------------------------------
     m_graph->removeAbsentNodesAndEdges();
+
 
 
     // Remove of random edges
@@ -152,26 +161,31 @@ void Map::createNewMap(const std::shared_ptr<GameParameters> & gameParameters)
 
 /**
  * Retrieve the string to be displayed in the console in order to show the graph to the user.
+ * @param [in] bPrintNodeIds If true, don ot print "O" for nodes, but ID's (useful for debug)
  * @return string of the view
  */
-std::string Map::getMapsConsolePrint()
+std::string Map::consolePrint(bool bPrintNodeIds) const
 {
-    // The return print is:
+    /* The return print is:
 
-    //  X 1   2   3   4         | <- sXindex  (header)
-    //Y  ----------------> X    | <- sXLine   (header)
-    //1 | O – O   O – @         | <- sNodeLine y=1  (grid)
-    //  | | \ | X | /           | <- sEdgeLine y=1  (grid)
-    //2 | O – O – O               ....
-    //  ▽
-    //  Y
-
+      X 1   2   3   4         //<- sXindex  (header)
+    Y  ----------------> X    //<- sXLine   (header)
+    1 |     O   O – @         //<- sNodeLine y=1  (grid)
+      |     | X | /           //<- sEdgeLine y=1  (grid)
+    2 | O – O – O             //<- sNodeLine y=2  (grid)
+      |     |    \            //<- sEdgeLine y=2  (grid)
+    3 |     O     O           // ++y  ...
+      ▽
+      Y                         */
 
     std::string sConsolePrint("");
     std::string sXindex("");
     std::string sXLine("");
     std::string sNodeLine("");
     std::string sEdgeLine("");
+
+    if (bPrintNodeIds)
+        m_graph->updateNodeIds();
 
     // the header
     // ----------
@@ -180,7 +194,7 @@ std::string Map::getMapsConsolePrint()
     for (int x = 0 ; x < m_grid->size() ; ++x)
     {
         sXindex += getNumberInTwoChar(x+1) + "  ";
-        sXLine += "  | ";
+        sXLine += "----";
     }
     sXLine  += ">";
 
@@ -188,7 +202,7 @@ std::string Map::getMapsConsolePrint()
     sConsolePrint += sXLine + "\n";
 
     // the grid
-    // ----------------
+    // ----------
     std::shared_ptr<Node> node;
 
     for (int y = 0 ; y < m_grid->size() - 1 ; ++y)
@@ -200,11 +214,21 @@ std::string Map::getMapsConsolePrint()
         for (int x = 0 ; x < m_grid->size() -1 ; ++x)
         {
             node = m_grid->get(x,y);
-            sNodeLine += node->consolePrintCharacter()  + edgeCharacterRightOfNode(node);
+
+            if (bPrintNodeIds)
+                sNodeLine += getNumberInTwoChar(static_cast<int>(node->graphIndex()))  + edgeCharacterRightOfNode(node);
+            else
+                sNodeLine += node->consolePrintCharacter()  + edgeCharacterRightOfNode(node);
+
             sEdgeLine += edgeCharacterBelowOfNode(node) + edgeCharacterDiagonaleOfNode(node);
         }
-        node = m_grid->get(m_grid->size() - 2 , y);
-        sNodeLine += node->consolePrintCharacter() ;
+        node = m_grid->get(m_grid->size() - 1 , y);
+
+        if (bPrintNodeIds)
+            sNodeLine += getNumberInTwoChar(static_cast<int>(node->graphIndex())) ;
+        else
+            sNodeLine += node->consolePrintCharacter() ;
+
         sEdgeLine += edgeCharacterBelowOfNode(node);
 
         sConsolePrint += sNodeLine + "\n";
@@ -213,35 +237,68 @@ std::string Map::getMapsConsolePrint()
 
     // last row of node
     // -----------------
-    int y = static_cast<int>(m_grid->size());
+    int y = static_cast<int>(m_grid->size() - 1);
     sNodeLine.clear();
-    sNodeLine += getNumberInTwoChar(y - 1) + "| ";
+    sNodeLine += getNumberInTwoChar(y + 1) + "| ";
 
     for (int x = 0 ; x < m_grid->size() -1 ; ++x)
     {
         node = m_grid->get(x,y);
-        sNodeLine += node->consolePrintCharacter()  + edgeCharacterRightOfNode(node);
-    }
-    node = m_grid->get(m_grid->size() - 2 , y);
-    sNodeLine += node->consolePrintCharacter() ;
 
+        if (bPrintNodeIds)
+            sNodeLine += getNumberInTwoChar(static_cast<int>(node->graphIndex()))  + edgeCharacterRightOfNode(node);
+        else
+            sNodeLine += node->consolePrintCharacter()  + edgeCharacterRightOfNode(node);
+    }
+    node = m_grid->get(m_grid->size() - 1 , y);
+
+    if (bPrintNodeIds)
+        sNodeLine +=getNumberInTwoChar(static_cast<int>(node->graphIndex())) ;
+    else
+        sNodeLine += node->consolePrintCharacter() ;
+
+    // end arrow of Y index
+    // ---------------------
     sConsolePrint += sNodeLine + "\n";
     sConsolePrint += "  ▽";
+
     return sConsolePrint;
 }
 
-
+/**
+ * Add the node to the member list m_candidateNodes.
+ * The candidate nodes are the nodes at the cliff / limit between created nodes and absent nodes.
+ * the nodes to be created are chosen among the candidate nodes.
+ * @param [in] n node
+ */
 void Map::addToCandidatesNodes(const std::shared_ptr<Node> &n)
 {
     m_candidateNodes.push_back(n);
 }
 
 /**
- * Retrieve the edge character to be displayed right to a node
+ * remoce the node from the member list m_candidateNodes.
+ * The candidate nodes are the nodes at the cliff / limit between created nodes and absent nodes.
+ * the nodes to be created are chosen among the candidate nodes.
+ * @param [in] n node
+ */
+void Map::remomoveFromCandidatesNodes(const std::shared_ptr<Node> &n)
+{
+    std::vector<std::shared_ptr<Node>>::iterator it;
+    for(it = m_candidateNodes.end()-1; it+1 != m_candidateNodes.begin(); it-- )
+    {
+        if(*it == n)
+            m_candidateNodes.erase(it);
+    }
+}
+
+/**
+ * (private)
+ * Retrieve the edge character to be displayed right to a node.
  * @param [in] n node
  * @return " - " or "   "
  */
-std::string Map::edgeCharacterRightOfNode(const std::shared_ptr<Node> &n)
+std::string Map::edgeCharacterRightOfNode(const std::shared_ptr<Node> &n) const
 {
     std::shared_ptr<Node> adjacentRightNode = m_grid->get(n->x() + 1, n->y());
     if(m_graph->edgeExists(n, adjacentRightNode) == true)
@@ -250,11 +307,12 @@ std::string Map::edgeCharacterRightOfNode(const std::shared_ptr<Node> &n)
         return "   ";
 }
 /**
+ * (private)
  * Retrieve the edge character to be displayed below a node
  * @param [in] n node
  * @return "|" or " "
  */
-std::string Map::edgeCharacterBelowOfNode(const std::shared_ptr<Node> &n)
+std::string Map::edgeCharacterBelowOfNode(const std::shared_ptr<Node> &n) const
 {
     std::shared_ptr<Node> adjacentBelowNode = m_grid->get(n->x(), n->y() + 1);
     if(m_graph->edgeExists(n, adjacentBelowNode) == true)
@@ -264,18 +322,19 @@ std::string Map::edgeCharacterBelowOfNode(const std::shared_ptr<Node> &n)
 }
 
 /**
+ * (private)
  * Retrieve the edge character to be displayed at the right/below a node
  * @param [in] n node
  * @return " X ", " / ", " \ " or "   "
  */
-std::string Map::edgeCharacterDiagonaleOfNode(const std::shared_ptr<Node> &n)
+std::string Map::edgeCharacterDiagonaleOfNode(const std::shared_ptr<Node> &n) const
 {
     std::shared_ptr<Node> adjacentDiagonalNode = m_grid->get(n->x() + 1, n->y() + 1);
     std::shared_ptr<Node> adjacentBelowNode = m_grid->get(n->x(), n->y() + 1);
     std::shared_ptr<Node> adjacentRightNode = m_grid->get(n->x() + 1, n->y());
 
-    bool bNeedSlash = m_graph->edgeExists(n, adjacentDiagonalNode);
-    bool bNeedAntiSlash = m_graph->edgeExists(adjacentBelowNode, adjacentRightNode);
+    bool bNeedAntiSlash = m_graph->edgeExists(n, adjacentDiagonalNode);
+    bool bNeedSlash = m_graph->edgeExists(adjacentBelowNode, adjacentRightNode);
     if( bNeedSlash and bNeedAntiSlash)
         return " X ";
     else if( bNeedSlash )
@@ -287,6 +346,7 @@ std::string Map::edgeCharacterDiagonaleOfNode(const std::shared_ptr<Node> &n)
 }
 
 /**
+ * (private)
  * Retrieve the number in string of 2 characters
  * @param [in] iNumber
  * @return string

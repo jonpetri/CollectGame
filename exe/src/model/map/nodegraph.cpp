@@ -27,7 +27,7 @@ NodeGraph::~NodeGraph()
  * This method Should be used for unit testing only.
  * @return edge count
  */
-int NodeGraph::edgeCount()
+int NodeGraph::edgeCount() const
 {
     return static_cast<int>(num_edges(m_nodeGraph));
 }
@@ -37,7 +37,7 @@ int NodeGraph::edgeCount()
  * This method Should be used for unit testing only.
  * @return node count
  */
-int NodeGraph::nodeCount()
+int NodeGraph::nodeCount() const
 {
     return static_cast<int>(num_vertices(m_nodeGraph));
 }
@@ -65,12 +65,19 @@ void NodeGraph::addIsolateNode(const std::shared_ptr<Node> &node)
  * @param [in] node1
  * @param [in] node2
  */
-void NodeGraph::connectNodes(const std::shared_ptr<Node> &node1, const std::shared_ptr<Node> &node2)
+bool NodeGraph::connectNodes(const std::shared_ptr<Node> &node1, const std::shared_ptr<Node> &node2)
 {
     // As the father class (Map) is in charge of adding all the Nodes before connecting then,
     // Node's existence in the graph is not checked, in order to make the code faster.
+    std::pair<VertexId, bool> idNode1, idNode2;
+    idNode1 = this->nodeIndex(node1);
+    idNode2 = this->nodeIndex(node2);
 
-    add_edge(node1->graphIndex(), node2->graphIndex(), m_nodeGraph);
+    if (idNode1.second == false || idNode2.second == false)
+        return false;
+
+    add_edge(idNode1.first,idNode2.first, m_nodeGraph);
+    return true;
 }
 
 /**
@@ -84,10 +91,14 @@ void NodeGraph::getAdjacentNodesOf(const std::shared_ptr<Node> &node, std::vecto
 
     auto vertexidMap = get(boost::vertex_index, m_nodeGraph);
     boost::graph_traits <BoostNodeGraph>::adjacency_iterator adjIt, adjEnd;
+    std::pair<VertexId, bool> idNode = this->nodeIndex(node);
 
-    for (boost::tie(adjIt, adjEnd) = adjacent_vertices(node->graphIndex(), m_nodeGraph); adjIt != adjEnd; ++adjIt)
+    if (idNode.second == true)
     {
-        nodeList.push_back(m_nodeGraph[vertexidMap[*adjIt]]);
+        for (boost::tie(adjIt, adjEnd) = adjacent_vertices(idNode.first, m_nodeGraph); adjIt != adjEnd; ++adjIt)
+        {
+            nodeList.push_back(m_nodeGraph[vertexidMap[*adjIt]]);
+        }
     }
 
 }
@@ -99,13 +110,13 @@ void NodeGraph::getAdjacentNodesOf(const std::shared_ptr<Node> &node, std::vecto
 void NodeGraph::removeAbsentNodesAndEdges()
 {
     std::shared_ptr<Node> node;
-    VertexIndex nodeIndex;
-    //graph_traits<node_graph_t>::vertices_size_type lVertexCount = num_vertices(m_nodeGraph);
+    VertexId nodeIndex;
     std::pair<BoostNodeGraph::vertex_iterator, BoostNodeGraph::vertex_iterator> it = boost::vertices(m_nodeGraph);
+    auto vertexidMap = get(boost::vertex_index, m_nodeGraph);
     --it.second;
     for( ; it.first -1 != it.second; --it.second)
     {
-       nodeIndex = *it.second;
+       nodeIndex = vertexidMap[*it.second];
        //node = get(boost::vertex_bundle, m_nodeGraph)[nodeIndex];
        node = m_nodeGraph[nodeIndex];
 
@@ -157,18 +168,43 @@ void NodeGraph::removeNonBridgeEdges(int iRemainingTargetCount)
  * @param [in] node2
  * @return True if exists.
  */
-bool NodeGraph::edgeExists(const std::shared_ptr<Node> &node1, const std::shared_ptr<Node> &node2)
+bool NodeGraph::edgeExists(const std::shared_ptr<Node> &node1, const std::shared_ptr<Node> &node2) const
 {
+    std::pair<VertexId, bool> idNode1, idNode2;
     if (node1->exists() == false || node2->exists() == false)
         return false;
 
-    std::pair<EdgeDescription, bool> ret = edge(node1->graphIndex(), node2->graphIndex(), m_nodeGraph);
+    idNode1 = this->nodeIndex(node1);
+    idNode2 = this->nodeIndex(node2);
+
+    if (idNode1.second == false || idNode2.second == false)
+        return false;
+
+    std::pair<EdgeDescription, bool> ret = edge(idNode1.first, idNode2.first, m_nodeGraph);
     return ret.second;
 }
 
 void NodeGraph::clear()
 {
     m_nodeGraph.clear();
+}
+
+/**
+ * Save the index of the nodes (VertexId) in the graph within the Node object.
+ * Remove of nodes in the graph change the VertexId values, so updating it can be usefull
+ */
+void NodeGraph::updateNodeIds()
+{
+    VertexId nodeIndex;
+    std::pair<BoostNodeGraph::vertex_iterator, BoostNodeGraph::vertex_iterator> it = boost::vertices(m_nodeGraph);
+    std::vector<std::shared_ptr<Node>>  adjNodes;
+    auto vertexidMap = get(boost::vertex_index, m_nodeGraph);
+
+    for( ; it.first != it.second; ++it.first)
+    {
+       nodeIndex = vertexidMap[*it.first];
+       m_nodeGraph[nodeIndex]->setGraphIndex(nodeIndex);
+    }
 }
 
 /**
@@ -179,13 +215,16 @@ void NodeGraph::setAdjacentsCandidate(const std::shared_ptr<Node> &node)
 {
     auto vertexidMap = get(boost::vertex_index, m_nodeGraph);
     boost::graph_traits <BoostNodeGraph>::adjacency_iterator adjIt, adjEnd;
-    //std::shared_ptr<Node> adjacentNode;
+    std::pair<VertexId, bool> idNode = this->nodeIndex(node);
 
-    for (tie(adjIt, adjEnd) = adjacent_vertices(node->graphIndex(), m_nodeGraph); adjIt != adjEnd; ++adjIt)
+    if (idNode.second == true)
     {
-        //adjacentNode = get(boost::vertex_bundle, m_nodeGraph)[vertexidMap[*ai]];
-        //adjacentNode->setIntoCandidateState();
-        m_nodeGraph[vertexidMap[*adjIt]]->setIntoCandidateState();
+        for (tie(adjIt, adjEnd) = adjacent_vertices(idNode.first, m_nodeGraph); adjIt != adjEnd; ++adjIt)
+        {
+            //adjacentNode = get(boost::vertex_bundle, m_nodeGraph)[vertexidMap[*ai]];
+            //adjacentNode->setIntoCandidateState();
+            m_nodeGraph[vertexidMap[*adjIt]]->setIntoCandidateState();
+        }
     }
 }
 
@@ -195,7 +234,7 @@ void NodeGraph::setAdjacentsCandidate(const std::shared_ptr<Node> &node)
  * Check if there is no more than one connected component in the graph
  * @return true if all the vertices are connected
  */
-bool NodeGraph::isConnected()
+bool NodeGraph::isConnected() const
 {
     std::vector<int> verticesComponent(num_vertices(m_nodeGraph));
     int iCompoponentCount = boost::connected_components(m_nodeGraph, &verticesComponent[0]);
@@ -207,14 +246,36 @@ bool NodeGraph::isConnected()
 
 }
 
+/**
+ * Graph print for debug
+ */
 void NodeGraph::printGraph()
 {
-    print_graph(m_nodeGraph);
+
+    std::shared_ptr<Node> node;
+    VertexId nodeIndex;
+    std::pair<BoostNodeGraph::vertex_iterator, BoostNodeGraph::vertex_iterator> it = boost::vertices(m_nodeGraph);
+    std::vector<std::shared_ptr<Node>>  adjNodes;
+    auto vertexidMap = get(boost::vertex_index, m_nodeGraph);
+    this->updateNodeIds();
+    for( ; it.first != it.second; ++it.first)
+    {
+       nodeIndex = vertexidMap[*it.first];
+
+       node = m_nodeGraph[nodeIndex];
+       std::cout << nodeIndex << " -- ";
+
+       this->getAdjacentNodesOf(node, adjNodes);
+       for (const std::shared_ptr<Node>& n : adjNodes) // const
+           std::cout << n->graphIndex() << ", ";
+       std::cout << std::endl;
+    }
 }
 
 
 
 /**
+ * (private)
  * Put all the non-bridge edges of the graph in edgeList.
  * The bridges are edges which make the graph non connected if deleted.
  * In other words, a bridge connect 2 separate group of vertices.
@@ -272,3 +333,18 @@ void NodeGraph::selectNonBridges(std::vector<EdgeDescription> &edgeList)
 }
 
 
+/**
+ * (private)
+ * Retrieve the vertex id of node in the graph.
+ * @param [in] node
+ * @return {VertexId, true if node find}
+ */
+std::pair<VertexId, bool> NodeGraph::nodeIndex(const std::shared_ptr<Node> & node) const
+{
+  for (VertexId id = 0; id < boost::num_vertices(m_nodeGraph); ++id)
+  {
+    if (m_nodeGraph[id] == node)
+      return std::make_pair(id, true);
+  }
+  return std::make_pair(0, false);
+}
