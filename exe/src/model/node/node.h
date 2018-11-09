@@ -24,11 +24,13 @@
 #define NODE_H
 
 // Includes:
+#include "model/item/itemholder.h"
 #include <memory>
 #include <boost/signals2.hpp>
 class NodeState;
 
-class Node : public std::enable_shared_from_this<Node>
+class Node : public ItemHolder
+           , public std::enable_shared_from_this<Node>
 {
 private:
 
