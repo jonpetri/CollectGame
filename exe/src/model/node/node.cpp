@@ -162,6 +162,14 @@ std::string Node::consolePrintCharacter() const
         return " ";
     }
 }
+/**
+ * Retrieve the string about the item to be displayed in the console.
+ * @return string to be print
+ */
+std::string Node::consoleFullPrint() const
+{
+    return "Node (X=" + std::to_string(m_iX) + ", Y= " + std::to_string(m_iY) + ")";
+}
 
 /**
  * Set the node to a new state. (private)

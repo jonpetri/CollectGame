@@ -118,3 +118,20 @@ void Items::addItem(std::shared_ptr<Item> item)
 {
     this->m_items.push_back(item);
 }
+
+/**
+ * Retrieve the string about items to be displayed in the console.
+ * @return string to be print
+ */
+std::string Items::consolePrint() const
+{
+    std::string sStringToPrint;
+
+    sStringToPrint += std::to_string(m_items.size()) + " items(s).\n";
+
+    for (unsigned int i = 0 ; i < m_items.size() ; ++i)
+    {
+         sStringToPrint += "    - Item " + std::to_string(i) + ": " + m_items[i]->consolePrint() + "\n";
+    }
+    return sStringToPrint;
+}

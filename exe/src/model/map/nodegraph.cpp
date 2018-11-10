@@ -27,9 +27,9 @@ NodeGraph::~NodeGraph()
  * This method Should be used for unit testing only.
  * @return edge count
  */
-int NodeGraph::edgeCount() const
+unsigned int NodeGraph::edgeCount() const
 {
-    return static_cast<int>(num_edges(m_nodeGraph));
+    return static_cast<unsigned int>(num_edges(m_nodeGraph));
 }
 
 /**
@@ -37,11 +37,50 @@ int NodeGraph::edgeCount() const
  * This method Should be used for unit testing only.
  * @return node count
  */
-int NodeGraph::nodeCount() const
+unsigned int NodeGraph::nodeCount() const
 {
-    return static_cast<int>(num_vertices(m_nodeGraph));
+    return static_cast<unsigned int>(num_vertices(m_nodeGraph));
 }
 
+/**
+ * Return the node at the index.
+ * iNodeIndex goes from 0 to NodeGraph::nodeCount()
+ * @param iNodeIndex
+ * @return node
+ */
+std::shared_ptr<Node> NodeGraph::node(unsigned int iNodeIndex)
+{
+    //VertexId id = iNodeIndex;
+    if (iNodeIndex >= boost::num_vertices(m_nodeGraph))
+    {
+        throw std::out_of_range( "In NodeGraph::node(iNodeIndex)" );
+    }
+
+    return m_nodeGraph[iNodeIndex] ;
+}
+
+
+/**
+ * Retrieve the list of the nodes connected to node.
+ * @param [in] node
+ * @param [out] nodeList
+ */
+void NodeGraph::getAdjacentNodesOf(const std::shared_ptr<Node> &node, std::vector<std::shared_ptr<Node>> & nodeList ) const
+{
+    nodeList.clear();
+
+    auto vertexidMap = get(boost::vertex_index, m_nodeGraph);
+    boost::graph_traits <BoostNodeGraph>::adjacency_iterator adjIt, adjEnd;
+    std::pair<VertexId, bool> idNode = this->nodeIndex(node);
+
+    if (idNode.second == true)
+    {
+        for (boost::tie(adjIt, adjEnd) = adjacent_vertices(idNode.first, m_nodeGraph); adjIt != adjEnd; ++adjIt)
+        {
+            nodeList.push_back(m_nodeGraph[vertexidMap[*adjIt]]);
+        }
+    }
+}
 //-----------------------------------------------------------------------------------------------------------------------
 // NodeGraph :: Setters
 //-----------------------------------------------------------------------------------------------------------------------
@@ -78,29 +117,6 @@ bool NodeGraph::connectNodes(const std::shared_ptr<Node> &node1, const std::shar
 
     add_edge(idNode1.first,idNode2.first, m_nodeGraph);
     return true;
-}
-
-/**
- * Retrieve the list of the nodes connected to node.
- * @param [in] node
- * @param [out] nodeList
- */
-void NodeGraph::getAdjacentNodesOf(const std::shared_ptr<Node> &node, std::vector<std::shared_ptr<Node>> & nodeList ) const
-{
-    nodeList.clear();
-
-    auto vertexidMap = get(boost::vertex_index, m_nodeGraph);
-    boost::graph_traits <BoostNodeGraph>::adjacency_iterator adjIt, adjEnd;
-    std::pair<VertexId, bool> idNode = this->nodeIndex(node);
-
-    if (idNode.second == true)
-    {
-        for (boost::tie(adjIt, adjEnd) = adjacent_vertices(idNode.first, m_nodeGraph); adjIt != adjEnd; ++adjIt)
-        {
-            nodeList.push_back(m_nodeGraph[vertexidMap[*adjIt]]);
-        }
-    }
-
 }
 
 /**
@@ -221,8 +237,6 @@ void NodeGraph::setAdjacentsCandidate(const std::shared_ptr<Node> &node)
     {
         for (tie(adjIt, adjEnd) = adjacent_vertices(idNode.first, m_nodeGraph); adjIt != adjEnd; ++adjIt)
         {
-            //adjacentNode = get(boost::vertex_bundle, m_nodeGraph)[vertexidMap[*ai]];
-            //adjacentNode->setIntoCandidateState();
             m_nodeGraph[vertexidMap[*adjIt]]->setIntoCandidateState();
         }
     }

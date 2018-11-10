@@ -47,6 +47,7 @@ public:
     int value() const;
     void clear();
     void addItem(std::shared_ptr<Item> item);
+    std::string consolePrint() const;
 
 private:
     // Methods:

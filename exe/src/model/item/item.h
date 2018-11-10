@@ -36,6 +36,8 @@ public:
 
     // Methods:
     void setRandomWeightAndValue(const std::shared_ptr<GameParameters> & gameParameters);
+    std::string consolePrint () const;
+
 
 private:
     // Methods:

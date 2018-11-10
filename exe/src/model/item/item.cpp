@@ -75,3 +75,12 @@ void Item::setRandomWeightAndValue(const std::shared_ptr<GameParameters> &gamePa
     m_iWeight =  randomDistributionWeight(gen);
     m_iValue =  randomDistributionValue(gen);
 }
+
+/**
+ * Retrieve the string about the item to be displayed in the console.
+ * @return string to be print
+ */
+std::string Item::consolePrint() const
+{
+    return "weight = " + std::to_string(m_iWeight) + " , value = " + std::to_string(m_iValue);
+}

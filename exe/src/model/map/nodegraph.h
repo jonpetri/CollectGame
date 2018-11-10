@@ -76,13 +76,15 @@ public:
     ~NodeGraph();
 
     // Getters:
+    unsigned int nodeCount() const;
+    std::shared_ptr<Node> node(unsigned int iNodeIndex);
+   void getAdjacentNodesOf(const std::shared_ptr<Node> &node, std::vector<std::shared_ptr<Node>> & nodeList ) const;
 
     // Setters:
 
     // Methods:
     void addIsolateNode(const std::shared_ptr<Node> & node);
     bool connectNodes(const std::shared_ptr<Node> & node1, const std::shared_ptr<Node> & node2);
-    void getAdjacentNodesOf(const std::shared_ptr<Node> &node, std::vector<std::shared_ptr<Node>> & nodeList ) const;
     void removeAbsentNodesAndEdges();
     void removeNonBridgeEdges(int iRemainingTargetCount);
     bool edgeExists(const std::shared_ptr<Node> & node1, const std::shared_ptr<Node> & node2) const;
@@ -90,13 +92,13 @@ public:
     void updateNodeIds();
 
 
+
     // Slots
     void setAdjacentsCandidate(const std::shared_ptr<Node> & node);
 
 
     // Should be used for unit testing only
-    int edgeCount() const;
-    int nodeCount() const;
+    unsigned int edgeCount() const;
     bool isConnected() const;
     void printGraph();
 

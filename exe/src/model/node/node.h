@@ -69,6 +69,8 @@ public:
     bool isAbsent() const;
 
     std::string consolePrintCharacter() const;
+    std::string consoleFullPrint() const;
+
 private:
     // Methods:
 
