@@ -29,7 +29,7 @@ ExistingNode::~ExistingNode()
 
 /**
  * Since the node is Existing, the method does nothing.
- * @param node
+ * @param [in] node
  */
 void ExistingNode::setIntoCandidateState(std::shared_ptr<Node> &node)
 {
@@ -38,7 +38,7 @@ void ExistingNode::setIntoCandidateState(std::shared_ptr<Node> &node)
 
 /**
  * Since the node is already Existing, the method does nothing.
- * @param node
+ * @param [in] node
  */
 void ExistingNode::setIntoExistingState(std::shared_ptr<Node> &node)
 {
@@ -49,7 +49,7 @@ void ExistingNode::setIntoExistingState(std::shared_ptr<Node> &node)
  * indicate if the node is in Existing state.
  * @return  true
  */
-bool ExistingNode::exists()
+bool ExistingNode::exists() const
 {
     return true;
 }
@@ -59,7 +59,7 @@ bool ExistingNode::exists()
  * indicate if the node is in Candidate state.
  * @return  false
  */
-bool ExistingNode::isCandidate()
+bool ExistingNode::isCandidate() const
 {
     return false;
 }
@@ -68,7 +68,7 @@ bool ExistingNode::isCandidate()
  * indicate if the node is in Absent state.
  * @return  false
  */
-bool ExistingNode::isAbsent()
+bool ExistingNode::isAbsent() const
 {
     return false;
 }

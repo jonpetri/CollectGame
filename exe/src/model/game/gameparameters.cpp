@@ -73,7 +73,7 @@ unsigned int GameParameters::playerWeightLimit() const
 }
 /**
  * Set the property, if the value is coherent.
- * @param value
+ * @param [in] value
  * @return false if the value is not coherent
  */
 bool GameParameters::setPlayerWeightLimit(unsigned int value)
@@ -92,7 +92,7 @@ unsigned int GameParameters::playerItemCountLimit() const
 
 /**
  * Set the property, if the value is coherent.
- * @param value
+ * @param [in] value
  * @return false if the value is not coherent
  */
 bool GameParameters::setPlayerItemCountLimit(unsigned int value)
@@ -111,7 +111,7 @@ float GameParameters::ratio_NodeCountVsGridSpotCount() const
 
 /**
  * Set the property, if the value is coherent.
- * @param value
+ * @param [in] value
  * @return false if the value is not coherent
  */
 bool GameParameters::setRatio_NodeCountVsGridSpotCount(float value)
@@ -130,7 +130,7 @@ float GameParameters::ratio_EdgeCountVsGridSpotCount() const
 
 /**
  * Set the property, if the value is coherent.
- * @param value
+ * @param [in] value
  * @return false if the value is not coherent
  */
 bool GameParameters::setRatio_EdgeCountVsGridSpotCount(float value)
@@ -149,7 +149,7 @@ float GameParameters::ratio_ItemCountVsNodeCount() const
 
 /**
  * Set the property, if the value is coherent.
- * @param value
+ * @param [in] value
  * @return false if the value is not coherent
  */
 bool GameParameters::setRatio_ItemCountVsNodeCount(float value)
@@ -169,7 +169,7 @@ unsigned int GameParameters::gridSideSize() const
 
 /**
  * Set the property, if the value is coherent
- * @param value
+ * @param [in] value
  * @return false if the value is not coherent
  */
 bool GameParameters::setGridSideSize(unsigned int value)

@@ -14,7 +14,8 @@
 #define NODESTATE_H
 
 // Includes:
-#include "node.h"
+#include <memory>
+class Node;
 
 class NodeState
 {
@@ -29,12 +30,10 @@ public:
     // Methods:
     virtual void setIntoCandidateState(std::shared_ptr<Node> & node) = 0 ;
     virtual void setIntoExistingState(std::shared_ptr<Node> & node) = 0 ;
-    virtual bool exists() = 0 ;
+    virtual bool exists() const = 0 ;
 
-    virtual bool isCandidate() = 0;
-    virtual bool isAbsent() = 0;
-
-
+    virtual bool isCandidate() const = 0;
+    virtual bool isAbsent() const = 0;
 
 private:
     // Methods:

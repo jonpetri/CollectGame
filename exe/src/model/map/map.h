@@ -19,11 +19,12 @@
 #include <vector>
 #include <memory>
 
-#include "model/node/node.h"
 #include "array2d.h"
 #include "nodegraph.h"
 
+class Node;
 class GameParameters;
+
 /**
  * @typedef NodeGrid
  * Grid XY of nodes
@@ -62,6 +63,7 @@ private:
     std::string edgeCharacterBelowOfNode(const std::shared_ptr<Node> & n) const;
     std::string edgeCharacterDiagonaleOfNode(const std::shared_ptr<Node> & n) const;
     static std::string getNumberInTwoChar(unsigned long lNumber);
+
     // Members:
     std::shared_ptr<NodeGrid> m_grid;
     std::shared_ptr<NodeGraph> m_graph;

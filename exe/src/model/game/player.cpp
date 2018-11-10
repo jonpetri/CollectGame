@@ -34,7 +34,7 @@ std::shared_ptr<Node> Player::currentNode() const
 /**
  * Switch from a node to another.
  * When the player switch from a node to another he is in charge of change nodes "HostThePlayer" status.
- * @param node New player's location.
+ * @param [in] node New player's location.
  */
 void Player::setCurrentNode(const std::shared_ptr<Node> & node)
 {

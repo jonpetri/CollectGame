@@ -16,18 +16,10 @@
 
 // Includes:
 #include <vector>
-#include <list>
-#include <iterator>
 #include <memory>
-#include <utility>
-
-#include <boost/graph/biconnected_components.hpp>
 #include <boost/graph/adjacency_list.hpp>
-#include <boost/config.hpp>
 
-#include "model/node/node.h"
-
-
+class Node;
 
 
 namespace boost
@@ -77,7 +69,7 @@ public:
 
     // Getters:
     unsigned long nodeCount() const;
-    std::shared_ptr<Node> node(unsigned long lNodeIndex);
+    std::shared_ptr<Node> node(unsigned long lNodeIndex) const;
    void getAdjacentNodesOf(const std::shared_ptr<Node> &node, std::vector<std::shared_ptr<Node>> & nodeList ) const;
 
     // Setters:
@@ -100,12 +92,12 @@ public:
     // Should be used for unit testing only
     unsigned long edgeCount() const;
     bool isConnected() const;
-    void printGraph();
+    void printGraphDebug();
 
 
 private:
     // Methods:
-    void selectNonBridges(std::vector<EdgeDescription> & edgeList);
+    void selectNonBridges(std::vector<EdgeDescription> & edgeList);  // not const
     std::pair<VertexId, bool> nodeIndex(const std::shared_ptr<Node> & node) const;
 
     // Members:

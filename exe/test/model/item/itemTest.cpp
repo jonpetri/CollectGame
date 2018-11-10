@@ -25,8 +25,8 @@ BOOST_AUTO_TEST_CASE(weight_value)
     BOOST_CHECK_EQUAL(i.value(), 0);
 
     i.setRandomWeightAndValue(p);
-    BOOST_CHECK(i.weight() >= 0);
-    BOOST_CHECK(i.value() >= 0);
+    //BOOST_CHECK(i.weight() >= 0);  weigh and value are _unsigned
+    //BOOST_CHECK(i.value() >= 0);
     BOOST_CHECK(i.value() <= 5);
     BOOST_CHECK(i.value() <= 100);
 }

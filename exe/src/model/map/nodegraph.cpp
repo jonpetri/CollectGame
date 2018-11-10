@@ -1,8 +1,12 @@
 #include "nodegraph.h"
+
 #include <map>
 #include <random>
 #include <boost/graph/connected_components.hpp>
 #include <boost/graph/graph_utility.hpp>
+#include <boost/graph/biconnected_components.hpp>
+
+#include "model/node/node.h"
 
 //-----------------------------------------------------------------------------------------------------------------------
 // NodeGraph :: Constructors / Destructors
@@ -48,7 +52,7 @@ unsigned long NodeGraph::nodeCount() const
  * @param iNodeIndex
  * @return node
  */
-std::shared_ptr<Node> NodeGraph::node(unsigned long lNodeIndex)
+std::shared_ptr<Node> NodeGraph::node(unsigned long lNodeIndex) const
 {
     //VertexId id = iNodeIndex;
     if (lNodeIndex >= boost::num_vertices(m_nodeGraph))
@@ -262,7 +266,7 @@ bool NodeGraph::isConnected() const
 /**
  * Graph print for debug
  */
-void NodeGraph::printGraph()
+void NodeGraph::printGraphDebug()
 {
 
     std::shared_ptr<Node> node;

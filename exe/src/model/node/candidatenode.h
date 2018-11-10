@@ -37,10 +37,10 @@ public:
     // Methods:
     virtual void setIntoCandidateState(std::shared_ptr<Node> & node) override;
     virtual void setIntoExistingState(std::shared_ptr<Node> &node) override;
-    virtual bool exists() override;
+    virtual bool exists() const override;
 
-    virtual bool isCandidate() override;
-    virtual bool isAbsent() override;
+    virtual bool isCandidate() const override;
+    virtual bool isAbsent() const override;
 
 
 

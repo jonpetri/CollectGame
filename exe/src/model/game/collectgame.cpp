@@ -210,31 +210,31 @@ void CollectGame::getConsolePrint(std::string &sStringToPrint) const
 
     sStringToPrint += "PLAYER\n";
     sStringToPrint += "======\n";
-    sStringToPrint += "  -> The player is marked @ in the map.\n";
-    sStringToPrint += "• He can hold up to a weight of " +std::to_string( m_gameParameters->playerWeightLimit())
+    sStringToPrint += "      -> The player is marked @ in the map.\n";
+    sStringToPrint += "- He can hold up to a weight of " +std::to_string( m_gameParameters->playerWeightLimit())
                             + ", within " + std::to_string(m_gameParameters->playerItemCountLimit()) + " items.\n";
 
     m_items->getItemBatchOfHolder(m_player, pickedItems);
-    sStringToPrint += "• Currently hold a total value of " + std::to_string(pickedItems.value())
+    sStringToPrint += "- Currently hold a total value of " + std::to_string(pickedItems.value())
                         + " and a total weight of " + std::to_string(pickedItems.weight())
                         + ", within " + pickedItems.consolePrint();
 
-    sStringToPrint += "• Player's location (@): X=" + std::to_string(lXCurrent+1) + " , Y= " + std::to_string(lYCurrent+1) + "\n";
+    sStringToPrint += "- Player's location (@): X=" + std::to_string(lXCurrent+1) + " , Y= " + std::to_string(lYCurrent+1) + "\n";
     m_items->getItemBatchOfHolder(m_player->currentNode(), nodeItems);
-    sStringToPrint += "• Pickable in that location: " + nodeItems.consolePrint() + "\n";
+    sStringToPrint += "- Pickable in that location: " + nodeItems.consolePrint() + "\n";
 
     //Nodes/Items
     //-----
     sStringToPrint += "ITEMS\n";
     sStringToPrint += "=====\n";
-    sStringToPrint += "  -> The nodes are identified thanks to then coordinates: [X ; Y])\n";
-    sStringToPrint += "  -> Only item holding nodes are listed here.\n\n";
+    sStringToPrint += "      -> The nodes are identified thanks to then coordinates: [X ; Y])\n";
+    sStringToPrint += "      -> Only item holding nodes are listed here.\n\n";
     lNodeCount = m_map->graph()->nodeCount();
     for (unsigned long l = 0 ; l < lNodeCount ; ++l)
     {
         m_items->getItemBatchOfHolder(m_map->graph()->node(l), nodeItems);
         if (nodeItems.count() > 0)
-            sStringToPrint += "• " +m_map->graph()->node(l)->consoleFullPrint() + " contains " + nodeItems.consolePrint() + "\n";
+            sStringToPrint += "o " +m_map->graph()->node(l)->consoleFullPrint() + " contains " + nodeItems.consolePrint() + "\n";
     }
 
 }

@@ -26,7 +26,7 @@ BOOST_AUTO_TEST_CASE(move_limits)
     std::cout << sPrint;
 
     int bMoveImpossibleCount(0);
-    for (int i = 0 ; i < g.gameParameters()->gridSideSize() ; ++i)
+    for (unsigned int i = 0 ; i < g.gameParameters()->gridSideSize() ; ++i)
     {
         if (g.movePlayer(E_MOVE::FORWARD, E_MOVE::HOLD_ON) == false )
             ++bMoveImpossibleCount;
@@ -79,7 +79,7 @@ BOOST_AUTO_TEST_CASE(pick_not_possible)
     BOOST_CHECK(g.gameParameters()->setGridSideSize(4));
     BOOST_CHECK(g.gameParameters()->setRatio_NodeCountVsGridSpotCount(1)); //make there are nodes everywhere
     BOOST_CHECK(g.gameParameters()->setRatio_EdgeCountVsGridSpotCount(10)); //make there are edges everywhere
-    BOOST_CHECK(g.gameParameters()->setRatio_ItemCountVsNodeCount(0.00000001));  //make there are no item
+    BOOST_CHECK(g.gameParameters()->setRatio_ItemCountVsNodeCount(0.0000001f));  //make there are no item
 
     g.createNewGame();
 

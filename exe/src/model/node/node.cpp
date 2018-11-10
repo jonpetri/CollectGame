@@ -98,7 +98,7 @@ void Node::setHostThePlayer(bool bStatus)
 
 /**
  * Set the node into Candidate state, is the current state allows it.
- * @param node
+ * @param [in] node
  */
 void Node::setIntoCandidateState()
 {
@@ -108,7 +108,7 @@ void Node::setIntoCandidateState()
 
 /**
  * Set the node into Existing state, is the current state allows it.
- * @param node
+ * @param [in] node
  */
 void Node::setIntoExistingState()
 {

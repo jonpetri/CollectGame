@@ -20,10 +20,10 @@ class ItemHolder;
 class GameParameters;
 
 /**
- * @typedef ItemSet
+ * @typedef ItemVector
  * Item collection (std::vector)
  */
-typedef std::vector<std::shared_ptr<Item>> ItemSet;
+typedef std::vector<std::shared_ptr<Item>> ItemVector;
 
 
 
@@ -34,12 +34,12 @@ public:
     ~Items();
 
     // Getters:
-    std::shared_ptr<Item> item(unsigned int index);
+    std::shared_ptr<Item> item(unsigned int index) const;
 
     // Setters:
 
     // Methods:
-    void getItemBatchOfHolder(const std::shared_ptr<ItemHolder> &itemHolder, Items & batch) const;
+    void getItemBatchOfHolder(const std::shared_ptr<ItemHolder> & itemHolder, Items & batch) const;
     void ceateRandomItems(const std::shared_ptr<GameParameters> & gameParameters);
 
     unsigned int count() const;
@@ -53,7 +53,7 @@ private:
     // Methods:
 
     // Members:
-    ItemSet m_items;
+    ItemVector m_items;
 };
 
 #endif // ITEMS_H

@@ -6,48 +6,50 @@
 #ifndef ARRAY2D_H
 #define ARRAY2D_H
 
-#include <string>
+// Includes:
 #include <vector>
-#include <climits>
+
 
 template  <class T>
 class Array2d
 {
-private:
-    std::vector< std::vector<T> > m_vArray2d;
-    unsigned int m_iColCount;
-
 
 public:
     Array2d();
     Array2d(unsigned int iNbColonne);
 
-    void clear();
+    // Getters:
+    T get(unsigned int iRow, unsigned int iCol) const;
+    unsigned int colNb() const{return m_iColCount;}
+    unsigned int size() const;
+
+    // Setters:
+    void set(unsigned int iRow, unsigned int iCol, const T & tVal);
+    void set(unsigned int iCol, const T &tVal);
+    void setCells(unsigned int iStartRow, unsigned int iStartCol, unsigned int iEndRow, unsigned int iEndCol, const T & tVal);
+
     void redimColSize(unsigned int iNewSize);
     void redimRowSize(unsigned int iNewSize);
 
-
+    // Methods:
+    void clear();
     void addLine();
-    unsigned int size() const;
     bool removeRow(unsigned int iRow);
-
-    unsigned int colNb() const{return m_iColCount;}
-    void set(unsigned int iRow, unsigned int iCol, const T & tVal);
-    void set(unsigned int iCol, const T &tVal);
-
-    void setCells(unsigned int iStartRow, unsigned int iStartCol, unsigned int iEndRow, unsigned int iEndCol, const T & tVal);
-
-    T get(unsigned int iRow, unsigned int iCol) const;
 
     unsigned int searchRow(unsigned int *iCol1, T * tVal1,
                        unsigned int *iCol2 = nullptr, T * tVal2  = nullptr, unsigned int *iCol3 = nullptr, T * tVal3 = nullptr) const;
     T searchValue(unsigned int iColReturn, unsigned int *iCol1, T * tVal1,
                       unsigned int *iCol2 = nullptr, T * tVal2  = nullptr, unsigned int *iCol3 = nullptr, T * tVal3 = nullptr) const;
 
+
 private:
+    //methods:
     void VerifLimit(unsigned int iCol) const;
     void VerifLimit(unsigned int iRow, unsigned int iCol) const;
 
+    // members:
+    std::vector< std::vector<T> > m_vArray2d;
+    unsigned int m_iColCount;
 };
 
 
@@ -58,6 +60,7 @@ private:
 
 
 #include <stdexcept>
+#include <climits>
 
 template <class T>
 Array2d<T>::Array2d()
@@ -85,7 +88,7 @@ void Array2d<T>::clear()
 
 /**
  * @brief redim columns
- * @param[in] iNewSize New columns count
+ * @param [in][in] iNewSize New columns count
  */
 template <class T>
 void Array2d<T>::redimColSize(unsigned int iNewSize)
@@ -97,7 +100,7 @@ void Array2d<T>::redimColSize(unsigned int iNewSize)
 
 /**
  * @brief redim rows
- * @param[in] iNewSize New row count
+ * @param [in][in] iNewSize New row count
  */
 template <class T>
 void Array2d<T>::redimRowSize(unsigned int iNewSize)
@@ -155,9 +158,9 @@ unsigned int Array2d<T>::size() const
 
 /**
  * Modify a value of the grid, at iRow, iCol
- * @param iRow
- * @param iCol
- * @param tVal new value
+ * @param [in] iRow
+ * @param [in] iCol
+ * @param [in] tVal new value
  */
 template <class T>
 void Array2d<T>::set(unsigned int iRow, unsigned int iCol, const T &tVal){
@@ -166,8 +169,8 @@ void Array2d<T>::set(unsigned int iRow, unsigned int iCol, const T &tVal){
 }
 /**
  * Modify th value at the las line of iCol
- * @param iCol
- * @param tVal new value
+ * @param [in] iCol
+ * @param [in] tVal new value
  */
 template <class T>
 void Array2d<T>::set( unsigned int iCol,const T & tVal){
@@ -176,8 +179,8 @@ void Array2d<T>::set( unsigned int iCol,const T & tVal){
 }
 /**
  * Retrieve a value from the grid
- * @param iRow
- * @param iCol
+ * @param [in] iRow
+ * @param [in] iCol
  * @return value
  */
 template <class T>
@@ -188,8 +191,8 @@ T Array2d<T>::get(unsigned int iRow, unsigned int iCol) const{
 
 /**
  * Verify that the indexes are in the limits of the grid
- * @param iRow
- * @param iCol
+ * @param [in] iRow
+ * @param [in] iCol
  */
 template <class T>
 void  Array2d<T>::VerifLimit(unsigned int iRow, unsigned int iCol) const{
@@ -202,7 +205,7 @@ void  Array2d<T>::VerifLimit(unsigned int iRow, unsigned int iCol) const{
 }
 /**
  * Verify that the indexes are in the limits of the grid
- * @param iCol
+ * @param [in] iCol
  */
 template <class T>
 void  Array2d<T>::VerifLimit(unsigned int iCol) const{
@@ -217,12 +220,12 @@ void  Array2d<T>::VerifLimit(unsigned int iCol) const{
 /**
  * Research the line having:
  * iCol1=tVal1, iCol2=tVal2, iCol3=tVal3.
- * @param iCol1
- * @param tVal1
- * @param iCol2
- * @param tVal2
- * @param iCol3
- * @param tVal3
+ * @param [in] iCol1
+ * @param [in] tVal1
+ * @param [in] iCol2
+ * @param [in] tVal2
+ * @param [in] iCol3
+ * @param [in] tVal3
  * @return Line's index, or size()  if not found
  */
 template <class T>
@@ -258,13 +261,13 @@ unsigned int Array2d<T>::searchRow(unsigned int * iCol1, T* tVal1, unsigned int 
  * Research the line having:
  * iCol1=tVal1, iCol2=tVal2, iCol3=tVal3.
  * and retrieve the value at column iColReturn
- * @param iColReturn
- * @param iCol1
- * @param tVal1
- * @param iCol2
- * @param tVal2
- * @param iCol3
- * @param tVal3
+ * @param [in] iColReturn
+ * @param [in] iCol1
+ * @param [in] tVal1
+ * @param [in] iCol2
+ * @param [in] tVal2
+ * @param [in] iCol3
+ * @param [in] tVal3
  * @return the searched value, or an empty object if not found
  */
 template <class T>
@@ -295,9 +298,6 @@ void Array2d<T>::setCells(unsigned int iStartRow, unsigned int iStartCol, unsign
         }
     }
 }
-
-
-
 
 
 #endif // ARRAY2D_H

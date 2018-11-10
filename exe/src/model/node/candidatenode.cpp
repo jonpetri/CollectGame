@@ -1,5 +1,6 @@
 #include "candidatenode.h"
 #include "existingnode.h"
+#include "node.h"
 
 //-----------------------------------------------------------------------------------------------------------------------
 // CandidateNode :: Constructors / Destructors
@@ -29,7 +30,7 @@ CandidateNode::~CandidateNode()
 
 /**
  * Since the node is already Candidate, the method does nothing.
- * @param node
+ * @param [in] node
  */
 void CandidateNode::setIntoCandidateState(std::shared_ptr<Node> &node)
 {
@@ -38,7 +39,7 @@ void CandidateNode::setIntoCandidateState(std::shared_ptr<Node> &node)
 
 /**
  * Set the node into Existing state.
- * @param node
+ * @param [in] node
  */
 void CandidateNode::setIntoExistingState(std::shared_ptr<Node> &node)
 {
@@ -52,7 +53,7 @@ void CandidateNode::setIntoExistingState(std::shared_ptr<Node> &node)
  * indicate if the node is in Existing state.
  * @return  false
  */
-bool CandidateNode::exists()
+bool CandidateNode::exists() const
 {
     return false;
 }
@@ -62,7 +63,7 @@ bool CandidateNode::exists()
  * indicate if the node is in Candidate state.
  * @return  true
  */
-bool CandidateNode::isCandidate()
+bool CandidateNode::isCandidate() const
 {
     return true;
 }
@@ -71,7 +72,7 @@ bool CandidateNode::isCandidate()
  * indicate if the node is in Absent state.
  * @return  false
  */
-bool CandidateNode::isAbsent()
+bool CandidateNode::isAbsent() const
 {
     return false;
 }

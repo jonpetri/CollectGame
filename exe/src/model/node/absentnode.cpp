@@ -1,6 +1,7 @@
 #include "absentnode.h"
 #include "existingnode.h"
 #include "candidatenode.h"
+#include "node.h"
 
 
 //-----------------------------------------------------------------------------------------------------------------------
@@ -33,7 +34,7 @@ AbsentNode::~AbsentNode()
 
 /**
  * Set the node into Candidate state.
- * @param node
+ * @param [in] node
  */
 void AbsentNode::setIntoCandidateState(std::shared_ptr<Node> &node)
 {
@@ -44,7 +45,7 @@ void AbsentNode::setIntoCandidateState(std::shared_ptr<Node> &node)
 
 /**
  * Set the node into Existing state.
- * @param node
+ * @param [in] node
  */
 void AbsentNode::setIntoExistingState(std::shared_ptr<Node> &node)
 {
@@ -57,7 +58,7 @@ void AbsentNode::setIntoExistingState(std::shared_ptr<Node> &node)
  * indicate if the node is in Existing state.
  * @return  false
  */
-bool AbsentNode::exists()
+bool AbsentNode::exists() const
 {
     return false;
 }
@@ -67,7 +68,7 @@ bool AbsentNode::exists()
  * indicate if the node is in Candidate state.
  * @return  false
  */
-bool AbsentNode::isCandidate()
+bool AbsentNode::isCandidate() const
 {
     return false;
 }
@@ -76,7 +77,7 @@ bool AbsentNode::isCandidate()
  * indicate if the node is in Absent state.
  * @return  true
  */
-bool AbsentNode::isAbsent()
+bool AbsentNode::isAbsent() const
 {
     return true;
 }

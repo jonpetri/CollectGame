@@ -25,7 +25,7 @@ Items::~Items()
 //-----------------------------------------------------------------------------------------------------------------------
 // Items :: Getters
 //-----------------------------------------------------------------------------------------------------------------------
-std::shared_ptr<Item> Items::item(unsigned int index)
+std::shared_ptr<Item> Items::item(unsigned int index) const
 {
     return this->m_items[index];
 }

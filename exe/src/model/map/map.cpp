@@ -80,6 +80,8 @@ void Map::createNewMap(const std::shared_ptr<GameParameters> & gameParameters)
         for (unsigned int y = 0 ; y < iGridSize ; ++y)
         {
             std::shared_ptr<Node> newNode = Node::create();
+
+            // Connection of nodes signals
             newNode->setAdjacentsAsCandidate.connect( boost::bind( &NodeGraph::setAdjacentsCandidate,  m_graph, _1));
             newNode->addToCandidateList.connect( boost::bind( &Map::addToCandidatesNodes, shared_from_this(), _1));
             newNode->removeFromCandidateList.connect( boost::bind( &Map::remomoveFromCandidatesNodes, shared_from_this(), _1));
@@ -178,7 +180,7 @@ std::string Map::consolePrint(bool bPrintNodeIds) const
     2 | O – O – O             //<- sNodeLine y=2  (grid)
       |     |    \            //<- sEdgeLine y=2  (grid)
     3 |     O     O           // ++y  ...
-      ▽
+      V
       Y                         */
 
     std::string sConsolePrint("");
@@ -263,7 +265,7 @@ std::string Map::consolePrint(bool bPrintNodeIds) const
     // end arrow of Y index
     // ---------------------
     sConsolePrint += sNodeLine + "\n";
-    sConsolePrint += "  ▽\n";
+    sConsolePrint += "  V\n";
     sConsolePrint += "  Y\n";
 
     return sConsolePrint;
