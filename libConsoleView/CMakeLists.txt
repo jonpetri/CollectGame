@@ -1,32 +1,22 @@
-#----------------------------------------------------------------
-# PROJECT:  CollectGame
-#----------------------------------------------------------------
-
-##
-# Project's Cmake head file
-# ====================
-# The variables have a writting convention:
-#   - UPPER CASE variables/properties are Cmake's properties
-#   - Lowes case  variables are user defined variables. They begin with an s if it's a string, t for a target
-# 
-##
 cmake_minimum_required(VERSION 3.4.3)  # for CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS
 
 ##
 # PROJECT 
 #
-    SET(sCollectGameExeTargetName "CollectGame")
-    project (${sCollectGameExeTargetName})
+
+    SET(sConsoleViewLibraryTargetName "ConsoleView")
+    #SET(sConsoleViewLibraryTargetName ${sConsoleViewLibraryTargetName} PARENT_SCOPE)
+
+    project (${sConsoleViewLibraryTargetName})
+
+
     MESSAGE(STATUS " ") #Display an empty line
+    MESSAGE("PROJECT: ${sConsoleViewLibraryTargetName}")
+
+
 
 ##
-# Which compiler do we use?
-#
-    MESSAGE(STATUS "CMAKE_C_COMPILER: ${CMAKE_C_COMPILER}")
-    MESSAGE(STATUS "CMAKE_CXX_COMPILER: ${CMAKE_CXX_COMPILER}")
-
-##
-# Build  type set up: debug or release
+# Projets's build  type set up: debug or release
 #
     if( "${CMAKE_BUILD_TYPE}" STREQUAL "" )
         set( CMAKE_BUILD_TYPE "Debug" )
@@ -38,6 +28,7 @@ cmake_minimum_required(VERSION 3.4.3)  # for CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS
         Debug Release )
 
     MESSAGE(STATUS "BUILD TYPE: ${CMAKE_BUILD_TYPE}")
+
 
 
 ##
@@ -79,34 +70,36 @@ cmake_minimum_required(VERSION 3.4.3)  # for CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS
 
     set( CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG "${sDebugBuildProductsDir}/bin" )
     set( CMAKE_LIBRARY_OUTPUT_DIRECTORY_DEBUG "${sDebugBuildProductsDir}/bin" )
+    #set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY_DEBUG "${sDebugBuildProductsDir}/bin" )
 
     set( CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE "${sReleaseBuildProductsDir}/bin" )
     set( CMAKE_LIBRARY_OUTPUT_DIRECTORY_RELEASE "${sReleaseBuildProductsDir}/bin" )
+    #set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE "${sReleaseBuildProductsDir}/bin" )
 
 ##
 # FUNCTIONS
 #
-        # groups source files according to the directory structure, usefull for visual studio only
-	function(group_files SOURCES)
-	  foreach(SOURCE_FILE ${${SOURCES}})
-		get_filename_component(GROUP "${SOURCE_FILE}" PATH)
-		string(REPLACE "${CMAKE_SOURCE_DIR}" "" GROUP "${GROUP}")
-		string(REPLACE "/" "\\" GROUP "${GROUP}")
+    # groups source files according to the directory structure, usefull for visual studio only
+    function(group_files SOURCES)
+      foreach(SOURCE_FILE ${${SOURCES}})
+        get_filename_component(GROUP "${SOURCE_FILE}" PATH)
+        string(REPLACE "${CMAKE_SOURCE_DIR}" "" GROUP "${GROUP}")
+        string(REPLACE "/" "\\" GROUP "${GROUP}")
 
-		set(GROUP "${GROUP}\\")
-		foreach(REPL ${ARGN})
-		  string(REPLACE "\\${REPL}\\" "\\" GROUP "${GROUP}")
-		endforeach()
+        set(GROUP "${GROUP}\\")
+        foreach(REPL ${ARGN})
+          string(REPLACE "\\${REPL}\\" "\\" GROUP "${GROUP}")
+        endforeach()
 
-		source_group("${GROUP}" FILES "${SOURCE_FILE}")
-	  endforeach()
-	endfunction()
+        source_group("${GROUP}" FILES "${SOURCE_FILE}")
+      endforeach()
+    endfunction()
 
 ##
-# boost find_package
+# boost::signals2  find_package
 #
     MESSAGE(STATUS " ") #Display an empty line
-    MESSAGE(STATUS "* BOOST REQUIRED for boost::signals2 and boost::graph")
+    MESSAGE(STATUS "* BOOST REQUIRED for boost::signals2")
     if (WIN32)
         #set(BOOST_ROOT "C:/DEV/TOOLS/Boost/boost")
         #set(BOOST_LIBRARYDIR "${BOOST_ROOT}/lib")
@@ -130,6 +123,5 @@ cmake_minimum_required(VERSION 3.4.3)  # for CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS
 # Sub-directories include
 #
 
-    add_subdirectory(libConsoleView)
-    add_subdirectory(exe)
-
+    add_subdirectory(src)
+    add_subdirectory(test)
