@@ -28,6 +28,15 @@ else ()
 
     if(EXE_Build_boost_Unit_Test)
 
+        ##
+        # TESTED PROJECT:
+        #
+            SET(sTestedTargetName ${sCollectGameExeTargetName})
+            MESSAGE(STATUS "UNIT TEST OF: ${sTestedTargetName}")
+
+        ##
+        # BOOST CONFIGURATION:
+        #
         message(STATUS "Boost Include: ${Boost_INCLUDE_DIR}")
         message(STATUS "Boost Library dirs: ${Boost_LIBRARY_DIRS}")
         message(STATUS "Boost Libraries: ${Boost_LIBRARIES}")
@@ -39,10 +48,6 @@ else ()
 
         enable_testing()
 
-    ##
-    # TESTED PROJECT:
-    #
-        SET(sTestedTargetName ${sCollectGameExeTargetName})
     ##
     # Sources files path variables declaration
     #
@@ -88,7 +93,7 @@ else ()
 
 
         # Definition of exe files output directory
-        MESSAGE(STATUS  "sTestedTargetName = ${sTestedTargetName}")
+
         #get_target_property(sTestDebugBinDir ${sTestedTargetName} LIBRARY_OUTPUT_DIRECTORY_DEBUG)       # Doesn't work with Cmake version 3.5.2, which I use for cross compiling (MXE)
         #get_target_property(sTestRealeaseBinDir ${sTestedTargetName} LIBRARY_OUTPUT_DIRECTORY_REALEASE)  # Doesn't work with Cmake version 3.5.2, which I use for cross compiling (MXE)
 

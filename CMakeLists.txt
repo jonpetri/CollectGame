@@ -18,6 +18,7 @@ cmake_minimum_required(VERSION 3.4.3)  # for CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS
     SET(sCollectGameExeTargetName "CollectGame")
     project (${sCollectGameExeTargetName})
     MESSAGE(STATUS " ") #Display an empty line
+    MESSAGE("PROJECT: ${sCollectGameExeTargetName}")
 
 ##
 # Which compiler do we use?

@@ -1,13 +1,14 @@
 cmake_minimum_required(VERSION 3.4.3)  # for CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS
 
+MESSAGE(STATUS " ") #Display an empty line
 MESSAGE(STATUS "* Shared library")
 ##
 # Sources files path variables declaration
 #
-	set( sConsoleViewLibraryIncludeDir "${CMAKE_CURRENT_SOURCE_DIR}" )
-	MESSAGE(STATUS "INCLUDE_DIR: ${sConsoleViewLibraryIncludeDir}")
+    set( sConsoleViewLibraryIncludeDir "${CMAKE_CURRENT_SOURCE_DIR}" )
+    MESSAGE(STATUS "INCLUDE_DIR: ${sConsoleViewLibraryIncludeDir}")
 
-	set( sConsoleViewLibrarySourceDir "${CMAKE_CURRENT_SOURCE_DIR}" )
+    set( sConsoleViewLibrarySourceDir "${CMAKE_CURRENT_SOURCE_DIR}" )
     MESSAGE(STATUS "SOURCE_DIR: ${sConsoleViewLibrarySourceDir}")
 
 

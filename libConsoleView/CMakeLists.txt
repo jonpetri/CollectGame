@@ -5,7 +5,7 @@ cmake_minimum_required(VERSION 3.4.3)  # for CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS
 #
 
     SET(sConsoleViewLibraryTargetName "ConsoleView")
-    #SET(sConsoleViewLibraryTargetName ${sConsoleViewLibraryTargetName} PARENT_SCOPE)
+    SET(sConsoleViewLibraryTargetName ${sConsoleViewLibraryTargetName} PARENT_SCOPE)
 
     project (${sConsoleViewLibraryTargetName})
 
