@@ -42,13 +42,13 @@ public:
     virtual ~ConsoleCommandBase();
 
     // Getters:
-    std::string commandTermsString();
-    std::string description();
-    std::string commandsParameter(int iIndex);
+    std::string commandTermsString() const;
+    std::string description() const;
+    std::string commandsParameter(unsigned int iIndex) const;
 
     // Setters:
     void setDescription(const std::string &sDescription);
-    void setExpectedParameterCount(int iExpectedParameterCount);
+    void setExpectedParameterCount(unsigned int iExpectedParameterCount);
 
     // Signals
     boost::signals2::signal<void ()> modelModified;
@@ -72,7 +72,7 @@ private:
     // Members:
     std::string m_sDescription;                     ///< Command's purpose description text, displayed in the menu
     std::vector<std::string> m_commandTerms;        ///< list of strings usable by the user to call the command
-    int m_iExpectedParameterCount;                  ///< The number of parameter the command should receive, in addition to the first term
+    unsigned int m_iExpectedParameterCount;         ///< The number of parameter the command should receive, in addition to the first term
     std::vector<std::string> m_parameters;          ///< Last User's entry's parameters, if any
 };
 

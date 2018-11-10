@@ -41,20 +41,23 @@
 #include <vector>
 #include <memory>
 
-#include "consolecommandbase.h"
+class ConsoleCommandBase;
 
 class ConsoleView : public std::enable_shared_from_this<ConsoleView>
 {
-
-
-public:
+private:
+    // The class has enable_shared_from_this,
+    // so we have to make sure the class will always be stored in a std::shared_ptr<Node>.
+    // Use ConsoleView::create() instead of the constructor.
     ConsoleView();
     ~ConsoleView();
+
+public:
     static std::shared_ptr<ConsoleView> create();
 
     // Getters:
-    std::shared_ptr<ConsoleCommandBase> quitCommand();
-    std::shared_ptr<ConsoleCommandBase> displayMenuCommand();
+    std::shared_ptr<ConsoleCommandBase> quitCommand() const;
+    std::shared_ptr<ConsoleCommandBase> displayMenuCommand() const;
 
     // Setters:
     void setQuitCommand(const std::shared_ptr<ConsoleCommandBase> & quitCommand);
@@ -67,13 +70,13 @@ public:
     static void displayAppName(const std::string & sName);
     void addCommand(const std::shared_ptr<ConsoleCommandBase> & newCommand);
     void removeCommand(const std::shared_ptr<ConsoleCommandBase> & cmd);
-    void run();
-    void executeCommand(std::string sUserEntry);
+    void run() const;
+    void executeCommand(std::string sUserEntry) const;
 
     // Slots:
-    void displayMenu();
-    void printText(const std::string & sText);
-    void displayModelView();
+    void displayMenu() const;
+    void printText(const std::string & sText) const;
+    void displayModelView() const;
     void quit();
 
 private:

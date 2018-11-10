@@ -16,7 +16,7 @@
  * @param argv Not Used
  * @return 0 if success
  */
-int main(int argc, char *argv[])
+int main()
 {
     // Model
     std::shared_ptr<ModelMockup> m = std::make_shared<ModelMockup>();

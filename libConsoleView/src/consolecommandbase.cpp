@@ -33,7 +33,7 @@ ConsoleCommandBase::~ConsoleCommandBase()
  * Retrieve the list of the command's terms, separated by a '-', plus a <arg> for each needed argument
  * @return The list of the command's terms.
  */
-std::string ConsoleCommandBase::commandTermsString()
+std::string ConsoleCommandBase::commandTermsString() const
 {
     std::string sRet("");
 
@@ -54,7 +54,7 @@ std::string ConsoleCommandBase::commandTermsString()
     // Add of an <arg> for each parameter
     if (m_iExpectedParameterCount != 0)
     {
-        for (int i = 0 ; i < m_iExpectedParameterCount ; ++i)
+        for (unsigned int i = 0 ; i < m_iExpectedParameterCount ; ++i)
             sRet += " <arg>";
     }
 
@@ -66,7 +66,7 @@ std::string ConsoleCommandBase::commandTermsString()
  * Retrieve command's description
  * @return Command's description
  */
-std::string ConsoleCommandBase::description()
+std::string ConsoleCommandBase::description() const
 {
     return m_sDescription;
 }
@@ -76,7 +76,7 @@ std::string ConsoleCommandBase::description()
  * @param iIndex Index from 0
  * @return The parameter par of the command line.
  */
-std::string ConsoleCommandBase::commandsParameter(int iIndex)
+std::string ConsoleCommandBase::commandsParameter(unsigned int iIndex) const
 {
     if (iIndex < m_parameters.size())
         return m_parameters[iIndex];
@@ -98,7 +98,7 @@ void ConsoleCommandBase::setDescription(const std::string &sDescription)
     m_sDescription = sDescription;
 }
 
-void ConsoleCommandBase::setExpectedParameterCount(int iExpectedParameterCount)
+void ConsoleCommandBase::setExpectedParameterCount(unsigned int iExpectedParameterCount)
 {
     m_iExpectedParameterCount = iExpectedParameterCount;
 }
@@ -147,11 +147,11 @@ bool ConsoleCommandBase::isMatchingUserEntry(const std::string &sUserEntry)
 }
 
 /**
+ * (private)
  * Test if users input / entry entirely match with this command.
  * @param [in] sUserEntry Entry to be tested.
  * @return True if matches
  */
-//private
 bool ConsoleCommandBase::isMatchingUserEntryWithoutParam(std::string sUserEntry)
 {
     transform(sUserEntry.begin(), sUserEntry.end(),sUserEntry.begin(), ::toupper);
@@ -169,11 +169,11 @@ bool ConsoleCommandBase::isMatchingUserEntryWithoutParam(std::string sUserEntry)
 }
 
 /**
+ * (private)
  * Test if users input / entry's first argument match with this command.
  * @param [in] sUserEntry Entry to be tested.
  * @return True if matches
  */
-//private
 bool ConsoleCommandBase::isMatchingUserEntryWithParam(const std::string &sUserEntry)
 {
     std::string sCommandTermPlusSpace;

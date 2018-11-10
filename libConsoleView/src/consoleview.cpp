@@ -6,6 +6,7 @@
 
 #include "commanddisplaymenudefault.h"
 #include "commandquitdefault.h"
+//#include "consolecommandbase.h"
 
 //-----------------------------------------------------------------------------------------------------------------------
 // ConsoleView :: Constructors / Destructors
@@ -21,36 +22,38 @@ ConsoleView::ConsoleView()
     m_sMenuDescrition = "Main menu:";
 }
 
+ConsoleView::~ConsoleView()
+{
+
+}
+
 /**
- * The class has enable_shared_from_this, and it is not possible to call shared_from_this() within the constructor.
- * So use this method to construct a ConsoleView.
- * @return properly build ConsoleView
+ * The class has enable_shared_from_this,
+ * so we have to make sure the class will always be stored in a std::shared_ptr<ConsoleView>.
+ * The constructor is private, must use that method instead.
+ * @return properly build Class
  */
 std::shared_ptr<ConsoleView> ConsoleView::create()
 {
-    std::shared_ptr<ConsoleView> v =std::make_shared<ConsoleView>();
+    struct make_shared_enabler : public ConsoleView {};
+    std::shared_ptr<ConsoleView> v =std::make_shared<make_shared_enabler>();
     v->setDisplayMenuCommand(std::make_shared<CommandDisplayMenuDefault>());
     v->setQuitCommand(std::make_shared<CommandQuitDefault>());
     return v;
 }
 
 
-ConsoleView::~ConsoleView()
-{
-
-}
-
 
 //-----------------------------------------------------------------------------------------------------------------------
 // ConsoleView :: Getters
 //-----------------------------------------------------------------------------------------------------------------------
 
-std::shared_ptr<ConsoleCommandBase> ConsoleView::quitCommand()
+std::shared_ptr<ConsoleCommandBase> ConsoleView::quitCommand() const
 {
     return m_commandQuit;
 }
 
-std::shared_ptr<ConsoleCommandBase> ConsoleView::displayMenuCommand()
+std::shared_ptr<ConsoleCommandBase> ConsoleView::displayMenuCommand() const
 {
    return m_commandDisplayMenu;
 }
@@ -140,7 +143,7 @@ void ConsoleView::removeCommand(const std::shared_ptr<ConsoleCommandBase> &cmd)
  * The entry catch is trigered when the user type enter (and not at each space).
  * So sUserEntry can contain spaces.
  */
-void ConsoleView::run()
+void ConsoleView::run() const
 {
     std::string sUserEntry;
     do
@@ -182,7 +185,7 @@ void ConsoleView::run()
  * Execute the command corresponding to user's entry.
  * @param [in] sUserEntry
  */
-void ConsoleView::executeCommand(std::string sUserEntry)
+void ConsoleView::executeCommand(std::string sUserEntry) const
 {
     // research of a command matching completely with sUserEntry
     for (auto&& command : m_commands)
@@ -201,7 +204,7 @@ void ConsoleView::executeCommand(std::string sUserEntry)
 /**
  * Display all the commands term list with associated description
  */
-void ConsoleView::displayMenu()
+void ConsoleView::displayMenu() const
 {
     std::string sTabulation;
     std::string sCmdTermsString;
@@ -239,7 +242,7 @@ void ConsoleView::displayMenu()
  * Print sText in the console
  * @param [in] sText
  */
-void ConsoleView::printText(const std::string &sText)
+void ConsoleView::printText(const std::string &sText) const
 {
     std::cout << sText ;
 }
@@ -248,7 +251,7 @@ void ConsoleView::printText(const std::string &sText)
  * Print model's view int the console.
  * m_commandDisplayModelView has to be set in order to make this work.
  */
-void ConsoleView::displayModelView()
+void ConsoleView::displayModelView() const
 {
     if (m_commandDisplayModelView != nullptr)
         m_commandDisplayModelView->execute();
