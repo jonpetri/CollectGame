@@ -11,7 +11,7 @@ GameParameters::GameParameters()
     , m_iItemMaxWeight(10)
     , m_iItemMaxValue(10)
     , m_iPlayerWeightLimit(15)
-    , m_iPlayerItemCountLimit(3)
+    , m_iPlayerItemCountLimit(5)
 {
 
 }
@@ -29,9 +29,23 @@ int GameParameters::itemMaxWeight() const
     return m_iItemMaxWeight;
 }
 
-void GameParameters::setItemMaxWeight(int value)
+int GameParameters::itemMinValue() const
 {
+    return m_iItemMinValue;
+}
+
+int GameParameters::itemMinWeight() const
+{
+    return m_iItemMinWeight;
+}
+
+bool GameParameters::setItemMaxWeight(int value)
+{
+    if (value <= m_iItemMinWeight)
+        return false;
+
     m_iItemMaxWeight = value;
+    return true;
 }
 
 int GameParameters::itemMaxValue() const
@@ -40,9 +54,13 @@ int GameParameters::itemMaxValue() const
 }
 
 
-void GameParameters::setItemMaxValue(int value)
+bool GameParameters::setItemMaxValue(int value)
 {
+    if (value <= m_iItemMinValue)
+        return false;
+
     m_iItemMaxValue = value;
+    return true;
 }
 
 int GameParameters::playerWeightLimit() const

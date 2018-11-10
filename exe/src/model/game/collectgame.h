@@ -3,7 +3,11 @@
 /*----------------------------------------------------------------*/
 /**
  * CLASS: CollectGame
+ * CollectGame is the head class of the model.
+ * Its features are: create a new game, move the player, pick items,
+ * and get a string-view of the model, to be print in the console.
  *
+ * It gives access to the other main classes (Map, player, items, gameProperties) and them own features.
  */
 #ifndef COLLECTGAME_H
 #define COLLECTGAME_H
@@ -53,7 +57,7 @@ private:
     // Methods:
 
     // Members:
-    std::shared_ptr<GameParameters> m_grameParameters;
+    std::shared_ptr<GameParameters> m_gameParameters;
     std::shared_ptr<Player> m_player;
     std::shared_ptr<Map> m_map;
     std::shared_ptr<Items> m_items;

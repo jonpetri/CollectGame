@@ -45,9 +45,9 @@ BOOST_AUTO_TEST_CASE(createNewMapDefault)
     // BOOST_CHECK(m->graph()->edgeCount() >= p->edgeTargetCount());  --> this not verifiable, as the graph can be constructed with less edge than the target
     BOOST_CHECK(m->graph()->isConnected());
 
-    std::cout << "edge count= " << m->graph()->edgeCount() << std::endl;
-    m->graph()->printGraph();
-    std::cout << m->consolePrint();
+//    std::cout << "edge count= " << m->graph()->edgeCount() << std::endl;
+//    m->graph()->printGraph();
+//    std::cout << m->consolePrint();
 
 }
 

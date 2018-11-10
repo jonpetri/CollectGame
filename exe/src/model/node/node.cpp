@@ -168,7 +168,9 @@ std::string Node::consolePrintCharacter() const
  */
 std::string Node::consoleFullPrint() const
 {
-    return "Node (X=" + std::to_string(m_iX) + ", Y= " + std::to_string(m_iY) + ")";
+    // The return print is:
+    // Node[4 ; 2]
+    return "Node[" + std::to_string(m_iX+1) + " ; " + std::to_string(m_iY+1) +"]";
 }
 
 /**

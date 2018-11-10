@@ -12,7 +12,7 @@
 // CollectGame :: Constructors / Destructors
 //-----------------------------------------------------------------------------------------------------------------------
 CollectGame::CollectGame()
-    : m_grameParameters (std::make_shared<GameParameters>())
+    : m_gameParameters (std::make_shared<GameParameters>())
     , m_player         (std::make_shared<Player>())
     , m_map            (std::make_shared<Map>())
     , m_items          (std::make_shared<Items>())
@@ -35,7 +35,7 @@ CollectGame::~CollectGame()
 
 std::shared_ptr<GameParameters> CollectGame::gameParameters() const
 {
-    return m_grameParameters;
+    return m_gameParameters;
 }
 
 std::shared_ptr<Player> CollectGame::player() const
@@ -74,11 +74,11 @@ void CollectGame::createNewGame()
 
     // Map creation
     // ------------
-    this->m_map->createNewMap(m_grameParameters);
+    this->m_map->createNewMap(m_gameParameters);
 
     // Items creation
     // --------------
-    this->m_items->ceateRandomItems(m_grameParameters);
+    this->m_items->ceateRandomItems(m_gameParameters);
 
 
     // Items random spread in the map
@@ -87,7 +87,7 @@ void CollectGame::createNewGame()
     iItemCount = this->m_items->count();
     std::random_device rd;  //Will be used to obtain a seed for the random number engine
     std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
-    std::uniform_int_distribution<unsigned int> nodeRandomDistribution(0, iCreatedNodeCount);
+    std::uniform_int_distribution<unsigned int> nodeRandomDistribution(0, iCreatedNodeCount - 1);
     for (unsigned int i = 0 ; i < iItemCount ; ++i)
     {
         iNode = nodeRandomDistribution(gen);
@@ -154,19 +154,33 @@ bool CollectGame::movePlayer(E_MOVE xMove, E_MOVE yMove)
 
 /**
  * Ask the player to pick the item number iItem from the current node.
- * @param [in] iItem Number of the item
+ * Verify if teh item is within the player's weight / item count limits.
+ * @param [in] iItem Number of the item (from 1)
  * @return True if achieved
  */
 bool CollectGame::playerPickItem(unsigned int iItem)
 {
-    Items pickableItems;
+    Items pickableItems, pickedItems;
+    if (iItem < 1)
+        return false;
+
+    --iItem;
+
     m_items->getItemBatchOfHolder(m_player->currentNode(), pickableItems);
 
     if (iItem >= pickableItems.count())
         return false;
 
-    pickableItems.item(iItem)->setHolder(m_player);
+    // Verify if the item is within the player's weight / item count limits.
+    m_items->getItemBatchOfHolder(m_player, pickedItems);
 
+    if (m_gameParameters->playerItemCountLimit() < pickedItems.count() + 1)
+        return false;
+    if (m_gameParameters->playerWeightLimit() < pickedItems.weight() + pickableItems.item(iItem)->weight())
+        return false;
+
+
+    pickableItems.item(iItem)->setHolder(m_player);
     return true;
 }
 
@@ -183,8 +197,9 @@ void CollectGame::getConsolePrint(std::string &sStringToPrint) const
 
     //Map
     //---
-    sStringToPrint += "MAP";
-    sStringToPrint += "===";
+    sStringToPrint += "MAP\n";
+    sStringToPrint += "===\n";
+    sStringToPrint += "  -> Nodes (O) are in a X;Y grid. The player is at the '@' node.\n";
     sStringToPrint += m_map->consolePrint();
     sStringToPrint += "\n";
 
@@ -193,23 +208,33 @@ void CollectGame::getConsolePrint(std::string &sStringToPrint) const
     iXCurrent = m_player->currentNode()->x();
     iYCurrent = m_player->currentNode()->y();
 
-    sStringToPrint += "PLAYER";
-    sStringToPrint += "======";
-    m_items->getItemBatchOfHolder(m_player, pickedItems);
-    sStringToPrint += "• Hold: " + pickedItems.consolePrint() + "\n";
-    sStringToPrint += "• location: X=" + std::to_string(iXCurrent) + " , Y= " + std::to_string(iYCurrent) + " (marked @ in the map)\n";
-    m_items->getItemBatchOfHolder(m_player->currentNode(), nodeItems);
-    sStringToPrint += "• Pickable in that location: " + pickedItems.consolePrint() + "\n";
+    sStringToPrint += "PLAYER\n";
+    sStringToPrint += "======\n";
+    sStringToPrint += "  -> The player is marked @ in the map.\n";
+    sStringToPrint += "• He can hold up to a weight of " +std::to_string( m_gameParameters->playerWeightLimit())
+                            + ", within " + std::to_string(m_gameParameters->playerItemCountLimit()) + " items.\n";
 
-    //Nodes
+    m_items->getItemBatchOfHolder(m_player, pickedItems);
+    sStringToPrint += "• Currently hold a total value of " + std::to_string(pickedItems.value())
+                        + " and a total weight of " + std::to_string(pickedItems.weight())
+                        + ", within " + pickedItems.consolePrint();
+
+    sStringToPrint += "• Player's location (@): X=" + std::to_string(iXCurrent+1) + " , Y= " + std::to_string(iYCurrent+1) + "\n";
+    m_items->getItemBatchOfHolder(m_player->currentNode(), nodeItems);
+    sStringToPrint += "• Pickable in that location: " + nodeItems.consolePrint() + "\n";
+
+    //Nodes/Items
     //-----
-    sStringToPrint += "NODES";
-    sStringToPrint += "=====";
+    sStringToPrint += "ITEMS\n";
+    sStringToPrint += "=====\n";
+    sStringToPrint += "  -> The nodes are identified thanks to then coordinates: [X ; Y])\n";
+    sStringToPrint += "  -> Only item holding nodes are listed here.\n\n";
     iNodeCount = m_map->graph()->nodeCount();
     for (unsigned long i = 0 ; i < iNodeCount ; ++i)
     {
         m_items->getItemBatchOfHolder(m_map->graph()->node(i), nodeItems);
-        sStringToPrint += "• " +m_map->graph()->node(i)->consoleFullPrint() + ": " + nodeItems.consolePrint();
+        if (nodeItems.count() > 0)
+            sStringToPrint += "• " +m_map->graph()->node(i)->consoleFullPrint() + " contains " + nodeItems.consolePrint() + "\n";
     }
 
 }

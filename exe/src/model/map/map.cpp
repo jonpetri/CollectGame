@@ -196,7 +196,7 @@ std::string Map::consolePrint(bool bPrintNodeIds) const
         sXindex += getNumberInTwoChar(x+1) + "  ";
         sXLine += "----";
     }
-    sXLine  += ">";
+    sXLine  += "> X";
 
     sConsolePrint += sXindex + "\n";
     sConsolePrint += sXLine + "\n";
@@ -260,7 +260,8 @@ std::string Map::consolePrint(bool bPrintNodeIds) const
     // end arrow of Y index
     // ---------------------
     sConsolePrint += sNodeLine + "\n";
-    sConsolePrint += "  ▽";
+    sConsolePrint += "  ▽\n";
+    sConsolePrint += "  Y\n";
 
     return sConsolePrint;
 }

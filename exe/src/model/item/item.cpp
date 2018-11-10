@@ -69,8 +69,8 @@ void Item::setRandomWeightAndValue(const std::shared_ptr<GameParameters> &gamePa
 {
     std::random_device rd;  //Will be used to obtain a seed for the random number engine
     std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
-    std::uniform_int_distribution<> randomDistributionWeight(0, gameParameters->itemMaxWeight());
-    std::uniform_int_distribution<> randomDistributionValue(0, gameParameters->itemMaxValue());
+    std::uniform_int_distribution<int> randomDistributionWeight(gameParameters->itemMinWeight(), gameParameters->itemMaxWeight());
+    std::uniform_int_distribution<int> randomDistributionValue(gameParameters->itemMinValue(), gameParameters->itemMaxValue());
 
     m_iWeight =  randomDistributionWeight(gen);
     m_iValue =  randomDistributionValue(gen);
@@ -82,5 +82,7 @@ void Item::setRandomWeightAndValue(const std::shared_ptr<GameParameters> &gamePa
  */
 std::string Item::consolePrint() const
 {
+    // The return print is:
+    // weight = 5 , value = 10
     return "weight = " + std::to_string(m_iWeight) + " , value = " + std::to_string(m_iValue);
 }

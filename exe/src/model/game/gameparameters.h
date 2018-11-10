@@ -26,6 +26,8 @@ public:
     int gridSideSize() const;
     int itemMaxValue() const;
     int itemMaxWeight() const;
+    int itemMinValue() const;
+    int itemMinWeight() const;
     int playerWeightLimit() const;
     int playerItemCountLimit() const;
     double ratio_NodeCountVsGridSpotCount() const;
@@ -35,8 +37,8 @@ public:
 
     // Setters:
     bool setGridSideSize(int value);
-    void setItemMaxWeight(int value);
-    void setItemMaxValue(int value);
+    bool setItemMaxWeight(int value);
+    bool setItemMaxValue(int value);
     bool setPlayerWeightLimit(int value);
     bool setPlayerItemCountLimit(int value);
     bool setRatio_NodeCountVsGridSpotCount(double value);
@@ -59,6 +61,8 @@ private:
     double m_dRatio_ItemCountVsNodeCount;
     int m_iItemMaxWeight;
     int m_iItemMaxValue;
+    const int m_iItemMinWeight = 1;
+    const int m_iItemMinValue = 1;
     int m_iPlayerWeightLimit;
     int m_iPlayerItemCountLimit;
 
