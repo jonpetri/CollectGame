@@ -14,6 +14,8 @@
 #define GameParameters_H
 
 // Includes:
+#include <string>
+
 
 class GameParameters
 {
@@ -50,6 +52,7 @@ public:
     unsigned long nodeCount() const;
     unsigned long edgeTargetCount() const;
     unsigned int itemCount() const;
+    std::string getConsolePrint () const;
 
 private:
     // Methods:

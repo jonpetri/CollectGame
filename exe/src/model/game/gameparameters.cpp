@@ -226,3 +226,24 @@ unsigned int GameParameters::itemCount() const
 
     return static_cast<unsigned int>(std::round(fRet));
 }
+
+/**
+ * Retrieves the string about parameters to be displayed in the console.
+ * @return string to be print
+ */
+std::string GameParameters::getConsolePrint() const
+{
+    std::string sConsolePrint("");
+    sConsolePrint += "GAME PARAMETERS\n";
+    sConsolePrint += "===============\n";
+    sConsolePrint += "Grid size:                            " + std::to_string(m_iGridSize) + "\n";
+    sConsolePrint += "Node count / grid spot count (ratio): " + std::to_string(m_dRatio_NodeCountVsGridSpotCount) + "\n";
+    sConsolePrint += "Edge count / grid spot count (ratio): " + std::to_string(m_dRatio_EdgeCountVsGridSpotCount) + "\n";
+    sConsolePrint += "item count / node count (ratio):      " + std::to_string(m_dRatio_ItemCountVsNodeCount) + "\n";
+    sConsolePrint += "Item max weight:                      " + std::to_string(m_iItemMaxWeight) + "\n";
+    sConsolePrint += "Item max value:                       " + std::to_string(m_iItemMaxValue) + "\n";
+    sConsolePrint += "Player Weight limit:                  " + std::to_string(m_iPlayerWeightLimit) + "\n";
+    sConsolePrint += "Player item count limit:              " + std::to_string(m_iPlayerItemCountLimit) + "\n";
+
+    return sConsolePrint;
+}
