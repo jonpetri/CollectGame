@@ -25,13 +25,13 @@ public:
     ~Item();
 
     // Getters:
-    int weight() const;
-    int value() const;
+    unsigned int weight() const;
+    unsigned int value() const;
     std::shared_ptr<ItemHolder> holder() const;
 
     // Setters:
-    void setWeight(int value);
-    void setValue(int value);
+    void setWeight(unsigned int value);
+    void setValue(unsigned int value);
     void setHolder(const std::shared_ptr<ItemHolder> &holder);
 
     // Methods:
@@ -44,8 +44,8 @@ private:
 
     // Members:
     std::shared_ptr<ItemHolder> m_holder;
-    int m_iWeight;
-    int m_iValue;
+    unsigned int m_iWeight;
+    unsigned int m_iValue;
 };
 
 #endif // ITEM_H

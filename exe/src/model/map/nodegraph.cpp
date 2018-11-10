@@ -27,9 +27,9 @@ NodeGraph::~NodeGraph()
  * This method Should be used for unit testing only.
  * @return edge count
  */
-unsigned int NodeGraph::edgeCount() const
+unsigned long NodeGraph::edgeCount() const
 {
-    return static_cast<unsigned int>(num_edges(m_nodeGraph));
+    return num_edges(m_nodeGraph);
 }
 
 /**
@@ -37,9 +37,9 @@ unsigned int NodeGraph::edgeCount() const
  * This method Should be used for unit testing only.
  * @return node count
  */
-unsigned int NodeGraph::nodeCount() const
+unsigned long NodeGraph::nodeCount() const
 {
-    return static_cast<unsigned int>(num_vertices(m_nodeGraph));
+    return num_vertices(m_nodeGraph);
 }
 
 /**
@@ -48,15 +48,15 @@ unsigned int NodeGraph::nodeCount() const
  * @param iNodeIndex
  * @return node
  */
-std::shared_ptr<Node> NodeGraph::node(unsigned int iNodeIndex)
+std::shared_ptr<Node> NodeGraph::node(unsigned long lNodeIndex)
 {
     //VertexId id = iNodeIndex;
-    if (iNodeIndex >= boost::num_vertices(m_nodeGraph))
+    if (lNodeIndex >= boost::num_vertices(m_nodeGraph))
     {
         throw std::out_of_range( "In NodeGraph::node(iNodeIndex)" );
     }
 
-    return m_nodeGraph[iNodeIndex] ;
+    return m_nodeGraph[lNodeIndex] ;
 }
 
 
@@ -151,15 +151,14 @@ void NodeGraph::removeAbsentNodesAndEdges()
  * The algo remove as much edge as possible, to reach the target count.
  * @param [in] iRemainingTargetCount The quantity target of edge.
  */
-void NodeGraph::removeNonBridgeEdges(int iRemainingTargetCount)
+void NodeGraph::removeNonBridgeEdges(unsigned long lRemainingTargetCount)
 {
     std::random_device rd;  //Will be used to obtain a seed for the random number engine
     std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
 
     boost::graph_traits<BoostNodeGraph>::edges_size_type edgeCount;
     std::vector<EdgeDescription> nonBridgeEdgeList;
-    unsigned int iRemovedEdge;
-    unsigned long lRemainingTargetCount = static_cast<unsigned long>(iRemainingTargetCount);
+    unsigned long lRemovedEdge;
 
     edgeCount = num_edges(m_nodeGraph);
     this->selectNonBridges(nonBridgeEdgeList);
@@ -167,10 +166,10 @@ void NodeGraph::removeNonBridgeEdges(int iRemainingTargetCount)
     while((lRemainingTargetCount < edgeCount) and (nonBridgeEdgeList.size() > 0))
     {
         // remove a random edge within that edges
-        std::uniform_int_distribution<> randomDistribution(0, static_cast<int>(nonBridgeEdgeList.size()-1));
-        iRemovedEdge =  static_cast<unsigned int>(randomDistribution(gen));
+        std::uniform_int_distribution<unsigned long> randomDistribution(0, nonBridgeEdgeList.size()-1);
+        lRemovedEdge =  randomDistribution(gen);
 
-        remove_edge(nonBridgeEdgeList[iRemovedEdge], m_nodeGraph);
+        remove_edge(nonBridgeEdgeList[lRemovedEdge], m_nodeGraph);
 
         --edgeCount;
         this->selectNonBridges(nonBridgeEdgeList);
@@ -250,10 +249,10 @@ void NodeGraph::setAdjacentsCandidate(const std::shared_ptr<Node> &node)
  */
 bool NodeGraph::isConnected() const
 {
-    std::vector<int> verticesComponent(num_vertices(m_nodeGraph));
-    int iCompoponentCount = boost::connected_components(m_nodeGraph, &verticesComponent[0]);
+    std::vector<unsigned long> verticesComponent(num_vertices(m_nodeGraph));
+    unsigned long lCompoponentCount = boost::connected_components(m_nodeGraph, &verticesComponent[0]);
 
-    if (iCompoponentCount == 1)
+    if (lCompoponentCount == 1)
         return true;
     else
         return false;
@@ -308,7 +307,7 @@ void NodeGraph::selectNonBridges(std::vector<EdgeDescription> &edgeList)
 
     Edge edge;
     EdgeDescription edgeDescription;
-    unsigned long componentTag;
+    unsigned long lComponentTag;
 
     std::vector<unsigned long> componentsEdgeQty;
     std::map<EdgeDescription, unsigned long> edgeComponentTag;  //ULONG_MAX
@@ -328,9 +327,9 @@ void NodeGraph::selectNonBridges(std::vector<EdgeDescription> &edgeList)
     graph_traits < BoostNodeGraph >::edge_iterator edgeIt, edgeItEnd;
     for (boost::tie(edgeIt, edgeItEnd) = edges(m_nodeGraph); edgeIt != edgeItEnd; ++edgeIt)
     {
-        componentTag = component[*edgeIt];
-        ++componentsEdgeQty[componentTag];
-        edgeComponentTag[*edgeIt] = componentTag;
+        lComponentTag = component[*edgeIt];
+        ++componentsEdgeQty[lComponentTag];
+        edgeComponentTag[*edgeIt] = lComponentTag;
     }
 
     // if an edge's tag has a "components Edge Qty" superior to 1, it is not a bridge --> we add it to edgeList

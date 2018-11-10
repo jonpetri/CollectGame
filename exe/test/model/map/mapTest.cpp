@@ -15,13 +15,13 @@
 BOOST_AUTO_TEST_SUITE( map_suite )
 
 
-int existingNodeCount(const std::shared_ptr<NodeGrid> & g)
+unsigned long existingNodeCount(const std::shared_ptr<NodeGrid> & g)
 {
-    int iNodeCount(0);
-    int iGridSize = static_cast<int>(g->size());
-    for (int x = 0 ; x < iGridSize ; ++x)
+    unsigned long iNodeCount(0);
+    unsigned int iGridSize = g->size();
+    for (unsigned int x = 0 ; x < iGridSize ; ++x)
     {
-        for (int y = 0 ; y < iGridSize ; ++y)
+        for (unsigned int y = 0 ; y < iGridSize ; ++y)
         {
             if (g->get(x, y)->exists() == true)
                 ++iNodeCount;

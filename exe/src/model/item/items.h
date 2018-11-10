@@ -43,8 +43,8 @@ public:
     void ceateRandomItems(const std::shared_ptr<GameParameters> & gameParameters);
 
     unsigned int count() const;
-    int weight() const;
-    int value() const;
+    unsigned int weight() const;
+    unsigned int value() const;
     void clear();
     void addItem(std::shared_ptr<Item> item);
     std::string consolePrint() const;

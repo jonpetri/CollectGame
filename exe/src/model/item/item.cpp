@@ -28,12 +28,12 @@ std::shared_ptr<ItemHolder> Item::holder() const
     return m_holder;
 }
 
-int Item::weight() const
+unsigned int Item::weight() const
 {
     return m_iWeight;
 }
 
-int Item::value() const
+unsigned int Item::value() const
 {
     return m_iValue;
 }
@@ -48,12 +48,12 @@ void Item::setHolder(const std::shared_ptr<ItemHolder> &holder)
     m_holder = holder;
 }
 
-void Item::setWeight(int value)
+void Item::setWeight(unsigned int value)
 {
     m_iWeight = value;
 }
 
-void Item::setValue(int value)
+void Item::setValue(unsigned int value)
 {
     m_iValue = value;
 }
@@ -69,8 +69,8 @@ void Item::setRandomWeightAndValue(const std::shared_ptr<GameParameters> &gamePa
 {
     std::random_device rd;  //Will be used to obtain a seed for the random number engine
     std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
-    std::uniform_int_distribution<int> randomDistributionWeight(gameParameters->itemMinWeight(), gameParameters->itemMaxWeight());
-    std::uniform_int_distribution<int> randomDistributionValue(gameParameters->itemMinValue(), gameParameters->itemMaxValue());
+    std::uniform_int_distribution<unsigned int> randomDistributionWeight(gameParameters->itemMinWeight(), gameParameters->itemMaxWeight());
+    std::uniform_int_distribution<unsigned int> randomDistributionValue(gameParameters->itemMinValue(), gameParameters->itemMaxValue());
 
     m_iWeight =  randomDistributionWeight(gen);
     m_iValue =  randomDistributionValue(gen);

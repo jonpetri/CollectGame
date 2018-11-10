@@ -22,12 +22,12 @@ BOOST_AUTO_TEST_CASE(nodeCount)
 
     BOOST_CHECK(p.setGridSideSize(5));
     BOOST_CHECK(p.setRatio_NodeCountVsGridSpotCount(0.5));
-    BOOST_CHECK_EQUAL(p.nodeCount(),12);
+    BOOST_CHECK_EQUAL(p.nodeCount(),13);
 
     BOOST_CHECK(p.setGridSideSize(150) == false);
     BOOST_CHECK(p.setRatio_NodeCountVsGridSpotCount(2) == false);
     BOOST_CHECK(p.setRatio_NodeCountVsGridSpotCount(0) == false);
-    BOOST_CHECK_EQUAL(p.nodeCount(),12);
+    BOOST_CHECK_EQUAL(p.nodeCount(),13);
 }
 BOOST_AUTO_TEST_CASE(edgeTargetCount)
 {
@@ -40,10 +40,10 @@ BOOST_AUTO_TEST_CASE(edgeTargetCount)
 
     BOOST_CHECK(p.setGridSideSize(5));
     BOOST_CHECK(p.setRatio_EdgeCountVsGridSpotCount(0.5));
-    BOOST_CHECK_EQUAL(p.edgeTargetCount(),12);
+    BOOST_CHECK_EQUAL(p.edgeTargetCount(),13);
 
     BOOST_CHECK(p.setRatio_EdgeCountVsGridSpotCount(0) == false);
-    BOOST_CHECK_EQUAL(p.edgeTargetCount(),12);
+    BOOST_CHECK_EQUAL(p.edgeTargetCount(),13);
 }
 BOOST_AUTO_TEST_CASE(itemCount)
 {

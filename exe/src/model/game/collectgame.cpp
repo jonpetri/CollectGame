@@ -68,8 +68,8 @@ std::shared_ptr<Items> CollectGame::items() const
  */
 void CollectGame::createNewGame()
 {
-    unsigned int iCreatedNodeCount(0);
-    unsigned int iNode(0);
+    unsigned long lCreatedNodeCount(0);
+    unsigned long lNode(0);
     unsigned int iItemCount(0);
 
     // Map creation
@@ -83,21 +83,21 @@ void CollectGame::createNewGame()
 
     // Items random spread in the map
     // ------------------------------
-    iCreatedNodeCount = this->m_map->graph()->nodeCount();
+    lCreatedNodeCount = this->m_map->graph()->nodeCount();
     iItemCount = this->m_items->count();
     std::random_device rd;  //Will be used to obtain a seed for the random number engine
     std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
-    std::uniform_int_distribution<unsigned int> nodeRandomDistribution(0, iCreatedNodeCount - 1);
+    std::uniform_int_distribution<unsigned long> nodeRandomDistribution(0, lCreatedNodeCount - 1);
     for (unsigned int i = 0 ; i < iItemCount ; ++i)
     {
-        iNode = nodeRandomDistribution(gen);
-        m_items->item(i)->setHolder(m_map->graph()->node(iNode));
+        lNode = nodeRandomDistribution(gen);
+        m_items->item(i)->setHolder(m_map->graph()->node(lNode));
     }
 
     // Player random positioning  in the map
     // ------------------------------------
-    iNode = nodeRandomDistribution(gen);
-    this->m_player->setCurrentNode(m_map->graph()->node(iNode));
+    lNode = nodeRandomDistribution(gen);
+    this->m_player->setCurrentNode(m_map->graph()->node(lNode));
 
 }
 
@@ -109,7 +109,7 @@ void CollectGame::createNewGame()
  */
 bool CollectGame::movePlayer(E_MOVE xMove, E_MOVE yMove)
 {
-    unsigned long iXCurrent, iYCurrent, iXTarget, iYTarget, iGridSize ;
+    unsigned int iXCurrent, iYCurrent, iXTarget, iYTarget, iGridSize ;
     std::shared_ptr<Node> targetNode;
 
     // Player's current location
@@ -191,7 +191,7 @@ bool CollectGame::playerPickItem(unsigned int iItem)
 void CollectGame::getConsolePrint(std::string &sStringToPrint) const
 {
 
-    unsigned long iXCurrent, iYCurrent, iNodeCount;
+    unsigned long lXCurrent, lYCurrent, lNodeCount;
     Items pickedItems, nodeItems;
     sStringToPrint.clear();
 
@@ -205,8 +205,8 @@ void CollectGame::getConsolePrint(std::string &sStringToPrint) const
 
     //Player
     //------
-    iXCurrent = m_player->currentNode()->x();
-    iYCurrent = m_player->currentNode()->y();
+    lXCurrent = m_player->currentNode()->x();
+    lYCurrent = m_player->currentNode()->y();
 
     sStringToPrint += "PLAYER\n";
     sStringToPrint += "======\n";
@@ -219,7 +219,7 @@ void CollectGame::getConsolePrint(std::string &sStringToPrint) const
                         + " and a total weight of " + std::to_string(pickedItems.weight())
                         + ", within " + pickedItems.consolePrint();
 
-    sStringToPrint += "• Player's location (@): X=" + std::to_string(iXCurrent+1) + " , Y= " + std::to_string(iYCurrent+1) + "\n";
+    sStringToPrint += "• Player's location (@): X=" + std::to_string(lXCurrent+1) + " , Y= " + std::to_string(lYCurrent+1) + "\n";
     m_items->getItemBatchOfHolder(m_player->currentNode(), nodeItems);
     sStringToPrint += "• Pickable in that location: " + nodeItems.consolePrint() + "\n";
 
@@ -229,12 +229,12 @@ void CollectGame::getConsolePrint(std::string &sStringToPrint) const
     sStringToPrint += "=====\n";
     sStringToPrint += "  -> The nodes are identified thanks to then coordinates: [X ; Y])\n";
     sStringToPrint += "  -> Only item holding nodes are listed here.\n\n";
-    iNodeCount = m_map->graph()->nodeCount();
-    for (unsigned long i = 0 ; i < iNodeCount ; ++i)
+    lNodeCount = m_map->graph()->nodeCount();
+    for (unsigned long l = 0 ; l < lNodeCount ; ++l)
     {
-        m_items->getItemBatchOfHolder(m_map->graph()->node(i), nodeItems);
+        m_items->getItemBatchOfHolder(m_map->graph()->node(l), nodeItems);
         if (nodeItems.count() > 0)
-            sStringToPrint += "• " +m_map->graph()->node(i)->consoleFullPrint() + " contains " + nodeItems.consolePrint() + "\n";
+            sStringToPrint += "• " +m_map->graph()->node(l)->consoleFullPrint() + " contains " + nodeItems.consolePrint() + "\n";
     }
 
 }

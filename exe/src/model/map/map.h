@@ -61,7 +61,7 @@ private:
     std::string edgeCharacterRightOfNode(const std::shared_ptr<Node> & n) const;
     std::string edgeCharacterBelowOfNode(const std::shared_ptr<Node> & n) const;
     std::string edgeCharacterDiagonaleOfNode(const std::shared_ptr<Node> & n) const;
-    static std::string getNumberInTwoChar(int iNumber);
+    static std::string getNumberInTwoChar(unsigned long lNumber);
     // Members:
     std::shared_ptr<NodeGrid> m_grid;
     std::shared_ptr<NodeGraph> m_graph;

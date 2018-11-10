@@ -23,48 +23,53 @@ public:
     ~GameParameters();
 
     // Getters:
-    int gridSideSize() const;
-    int itemMaxValue() const;
-    int itemMaxWeight() const;
-    int itemMinValue() const;
-    int itemMinWeight() const;
-    int playerWeightLimit() const;
-    int playerItemCountLimit() const;
-    double ratio_NodeCountVsGridSpotCount() const;
-    double ratio_EdgeCountVsGridSpotCount() const;
-    double ratio_ItemCountVsNodeCount() const;
+    unsigned int gridSideSize() const;
+    unsigned int itemMaxValue() const;
+    unsigned int itemMaxWeight() const;
+    unsigned int itemMinValue() const;
+    unsigned int itemMinWeight() const;
+    unsigned int playerWeightLimit() const;
+    unsigned int playerItemCountLimit() const;
+    float ratio_NodeCountVsGridSpotCount() const;
+    float ratio_EdgeCountVsGridSpotCount() const;
+    float ratio_ItemCountVsNodeCount() const;
 
 
     // Setters:
-    bool setGridSideSize(int value);
-    bool setItemMaxWeight(int value);
-    bool setItemMaxValue(int value);
-    bool setPlayerWeightLimit(int value);
-    bool setPlayerItemCountLimit(int value);
-    bool setRatio_NodeCountVsGridSpotCount(double value);
-    bool setRatio_EdgeCountVsGridSpotCount(double value);
-    bool setRatio_ItemCountVsNodeCount(double value);
+    bool setGridSideSize(unsigned int value);
+    bool setItemMaxWeight(unsigned int value);
+    bool setItemMaxValue(unsigned int value);
+    bool setPlayerWeightLimit(unsigned int value);
+    bool setPlayerItemCountLimit(unsigned int value);
+    bool setRatio_NodeCountVsGridSpotCount(float value);
+    bool setRatio_EdgeCountVsGridSpotCount(float value);
+    bool setRatio_ItemCountVsNodeCount(float value);
 
     // Methods:
 
-    int nodeCount() const;
-    int edgeTargetCount() const;
-    int itemCount() const;
+    unsigned long nodeCount() const;
+    unsigned long edgeTargetCount() const;
+    unsigned int itemCount() const;
 
 private:
     // Methods:
 
     // Members:
-    int m_iGridSize;
-    double m_dRatio_NodeCountVsGridSpotCount;
-    double m_dRatio_EdgeCountVsGridSpotCount;
-    double m_dRatio_ItemCountVsNodeCount;
-    int m_iItemMaxWeight;
-    int m_iItemMaxValue;
-    const int m_iItemMinWeight = 1;
-    const int m_iItemMinValue = 1;
-    int m_iPlayerWeightLimit;
-    int m_iPlayerItemCountLimit;
+    unsigned int m_iGridSize;
+    float m_dRatio_NodeCountVsGridSpotCount;
+    float m_dRatio_EdgeCountVsGridSpotCount;
+    float m_dRatio_ItemCountVsNodeCount;
+    unsigned int m_iItemMaxWeight;
+    unsigned int m_iItemMaxValue;
+
+    unsigned int m_iPlayerWeightLimit;
+    unsigned int m_iPlayerItemCountLimit;
+
+    const unsigned int m_iItemMinWeight = 1;
+    const unsigned int m_iItemMinValue = 1;
+    const float m_floatLimit = 9999.0;
+    const unsigned int m_intLimit = 9999;
+    const unsigned long m_longLimit = 9999;
 
 };
 

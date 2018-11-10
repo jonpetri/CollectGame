@@ -11,8 +11,8 @@ Node::Node()
     : addToCandidateList()
     , removeFromCandidateList()
     , setAdjacentsAsCandidate()
-    , m_iX(-1)
-    , m_iY(-1)
+    , m_iX(UINT_MAX)
+    , m_iY(UINT_MAX)
     , m_lGraphIndex(ULONG_MAX)
     , m_bHostThePlayer(false)
     , m_state(std::unique_ptr<NodeState>(new AbsentNode))
@@ -44,12 +44,12 @@ std::shared_ptr<Node> Node::create()
 // Node :: Getters
 //-----------------------------------------------------------------------------------------------------------------------
 
-int Node::x() const
+unsigned int Node::x() const
 {
     return m_iX;
 }
 
-int Node::y() const
+unsigned int Node::y() const
 {
     return m_iY;
 }
@@ -68,12 +68,12 @@ bool Node::hostThePlayer() const
 // Node :: Setters
 //-----------------------------------------------------------------------------------------------------------------------
 
-void Node::setX(int iX)
+void Node::setX(unsigned int iX)
 {
     m_iX = iX;
 }
 
-void Node::setY(int iY)
+void Node::setY(unsigned int iY)
 {
     m_iY = iY;
 }

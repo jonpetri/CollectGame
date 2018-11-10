@@ -43,15 +43,15 @@ public:
     static std::shared_ptr<Node> create();
 
     // Getters:
-    int x() const;
-    int y() const;
+    unsigned int x() const;
+    unsigned int y() const;
     unsigned long graphIndex() const;
     bool hostThePlayer() const;
 
 
     // Setters:
-    void setX(int iX);
-    void setY(int iY);
+    void setX(unsigned int iX);
+    void setY(unsigned int iY);
     void setGraphIndex(unsigned long value);
     void setHostThePlayer(bool bStatus);
 
@@ -75,8 +75,8 @@ private:
     // Methods:
 
     // Members:
-    int m_iX;
-    int m_iY;
+    unsigned int m_iX;
+    unsigned int m_iY;
     unsigned long m_lGraphIndex;
     bool m_bHostThePlayer;
 

@@ -8,44 +8,45 @@
 
 #include <string>
 #include <vector>
+#include <climits>
 
 template  <class T>
 class Array2d
 {
 private:
     std::vector< std::vector<T> > m_vArray2d;
-    long m_iColCount;
+    unsigned int m_iColCount;
 
 
 public:
     Array2d();
-    Array2d(long iNbColonne);
+    Array2d(unsigned int iNbColonne);
 
     void clear();
-    void redimColSize(long iNewSize);
-    void redimRowSize(long iNewSize);
+    void redimColSize(unsigned int iNewSize);
+    void redimRowSize(unsigned int iNewSize);
 
 
     void addLine();
-    long size() const;
-	bool removeRow(long iRow);
+    unsigned int size() const;
+    bool removeRow(unsigned int iRow);
 
-    long colNb() const{return m_iColCount;}
-    void set(long iRow, long iCol, const T & tVal);
-    void set(long iCol, const T &tVal);
+    unsigned int colNb() const{return m_iColCount;}
+    void set(unsigned int iRow, unsigned int iCol, const T & tVal);
+    void set(unsigned int iCol, const T &tVal);
 
-    void setCells(long iStartRow, long iStartCol, long iEndRow, long iEndCol, const T & tVal);
+    void setCells(unsigned int iStartRow, unsigned int iStartCol, unsigned int iEndRow, unsigned int iEndCol, const T & tVal);
 
-    T get(long iRow, long iCol) const;
+    T get(unsigned int iRow, unsigned int iCol) const;
 
-    long searchRow(long *iCol1, T * tVal1,
-                       long *iCol2 = nullptr, T * tVal2  = nullptr, long *iCol3 = nullptr, T * tVal3 = nullptr) const;
-    T searchValue(long iColReturn, long *iCol1, T * tVal1,
-                      long *iCol2 = nullptr, T * tVal2  = nullptr, long *iCol3 = nullptr, T * tVal3 = nullptr) const;
+    unsigned int searchRow(unsigned int *iCol1, T * tVal1,
+                       unsigned int *iCol2 = nullptr, T * tVal2  = nullptr, unsigned int *iCol3 = nullptr, T * tVal3 = nullptr) const;
+    T searchValue(unsigned int iColReturn, unsigned int *iCol1, T * tVal1,
+                      unsigned int *iCol2 = nullptr, T * tVal2  = nullptr, unsigned int *iCol3 = nullptr, T * tVal3 = nullptr) const;
 
 private:
-    void VerifLimit(long iCol) const;
-    void VerifLimit(long iRow, long iCol) const;
+    void VerifLimit(unsigned int iCol) const;
+    void VerifLimit(unsigned int iRow, unsigned int iCol) const;
 
 };
 
@@ -66,7 +67,7 @@ Array2d<T>::Array2d()
 
 }
 template <class T>
-Array2d<T>::Array2d(long iNbColonne)
+Array2d<T>::Array2d(unsigned int iNbColonne)
 {
     m_iColCount = iNbColonne;
 }
@@ -75,7 +76,7 @@ Array2d<T>::Array2d(long iNbColonne)
 template <class T>
 void Array2d<T>::clear()
 {
-    for (unsigned long i = 0 ; i < m_vArray2d.size(); i++)
+    for (unsigned int i = 0 ; i < m_vArray2d.size(); i++)
         m_vArray2d[i].clear();
 
     m_vArray2d.clear();
@@ -87,10 +88,10 @@ void Array2d<T>::clear()
  * @param[in] iNewSize New columns count
  */
 template <class T>
-void Array2d<T>::redimColSize(long iNewSize)
+void Array2d<T>::redimColSize(unsigned int iNewSize)
 {
     m_iColCount = iNewSize;
-    for (unsigned long i = 0 ; i < m_vArray2d.size(); i++)
+    for (unsigned int i = 0 ; i < m_vArray2d.size(); i++)
         m_vArray2d[i].resize(iNewSize);
 }
 
@@ -99,10 +100,10 @@ void Array2d<T>::redimColSize(long iNewSize)
  * @param[in] iNewSize New row count
  */
 template <class T>
-void Array2d<T>::redimRowSize(long iNewSize)
+void Array2d<T>::redimRowSize(unsigned int iNewSize)
 {
     m_vArray2d.resize(iNewSize);
-    for (unsigned long i = 0 ; i < m_vArray2d.size(); i++)
+    for (unsigned int i = 0 ; i < m_vArray2d.size(); i++)
         m_vArray2d[i].resize(m_iColCount);
 }
 
@@ -112,7 +113,7 @@ void Array2d<T>::redimRowSize(long iNewSize)
 template <class T>
 void Array2d<T>::addLine(){
     m_vArray2d.push_back( std::vector<T>(m_iColCount));//m_iNbCol));
-    //for (long i=0; i<m_iNbCol; i++)
+    //for (unsigned int i=0; i<m_iNbCol; i++)
         //m_vArray2d[m_vArray2d.size()-1][i] = L"";
 
 }
@@ -123,7 +124,7 @@ void Array2d<T>::addLine(){
  * Remove a line
  */
 template <class T>
-bool Array2d<T>::removeRow(long iRow)
+bool Array2d<T>::removeRow(unsigned int iRow)
 {
     if (iRow < 0 || iRow >= this->size() )
 	{
@@ -142,8 +143,12 @@ bool Array2d<T>::removeRow(long iRow)
  * @return column count
  */
 template <class T>
-long Array2d<T>::size() const{
-    return m_vArray2d.size();
+unsigned int Array2d<T>::size() const
+{
+    if (m_vArray2d.size() > UINT_MAX)
+        throw std::out_of_range( "in Array2d::size()" );
+
+    return static_cast<unsigned int>(m_vArray2d.size());
 }
 
 
@@ -155,7 +160,7 @@ long Array2d<T>::size() const{
  * @param tVal new value
  */
 template <class T>
-void Array2d<T>::set(long iRow, long iCol, const T &tVal){
+void Array2d<T>::set(unsigned int iRow, unsigned int iCol, const T &tVal){
     this->VerifLimit(iRow, iCol);
     m_vArray2d[iRow][iCol] = tVal;
 }
@@ -165,7 +170,7 @@ void Array2d<T>::set(long iRow, long iCol, const T &tVal){
  * @param tVal new value
  */
 template <class T>
-void Array2d<T>::set( long iCol,const T & tVal){
+void Array2d<T>::set( unsigned int iCol,const T & tVal){
     this->VerifLimit( iCol);
     m_vArray2d[this->size()-1][iCol] = tVal;
 }
@@ -176,7 +181,7 @@ void Array2d<T>::set( long iCol,const T & tVal){
  * @return value
  */
 template <class T>
-T Array2d<T>::get(long iRow, long iCol) const{
+T Array2d<T>::get(unsigned int iRow, unsigned int iCol) const{
     this->VerifLimit(iRow, iCol);
     return m_vArray2d[iRow][iCol];
 }
@@ -187,11 +192,11 @@ T Array2d<T>::get(long iRow, long iCol) const{
  * @param iCol
  */
 template <class T>
-void  Array2d<T>::VerifLimit(long iRow, long iCol) const{
+void  Array2d<T>::VerifLimit(unsigned int iRow, unsigned int iCol) const{
     if (iRow < 0 || iRow >= this->size() )
     {
         // Error throw: Array2d::VerifLimite ligne
-        throw std::out_of_range( "in Array2d::VerifLimit(long iRow, long iCol)" );
+        throw std::out_of_range( "in Array2d::VerifLimit(unsigned int iRow, unsigned int iCol)" );
     }
     this->VerifLimit(iCol);
 }
@@ -200,13 +205,15 @@ void  Array2d<T>::VerifLimit(long iRow, long iCol) const{
  * @param iCol
  */
 template <class T>
-void  Array2d<T>::VerifLimit(long iCol) const{
+void  Array2d<T>::VerifLimit(unsigned int iCol) const{
     if (iCol < 0 || iCol >= m_iColCount )
     {
         // Error throw: Array2d::VerifLimite colonne
-        throw std::out_of_range( "in Array2d::VerifLimit(long iCol)" );
+        throw std::out_of_range( "in Array2d::VerifLimit(unsigned int iCol)" );
     }
 }
+
+
 /**
  * Research the line having:
  * iCol1=tVal1, iCol2=tVal2, iCol3=tVal3.
@@ -216,14 +223,14 @@ void  Array2d<T>::VerifLimit(long iCol) const{
  * @param tVal2
  * @param iCol3
  * @param tVal3
- * @return Line's index, or -1 if not found
+ * @return Line's index, or size()  if not found
  */
 template <class T>
-long Array2d<T>::searchRow(long * iCol1, T* tVal1, long * iCol2,
-        T* tVal2, long * iCol3, T* tVal3 ) const{
+unsigned int Array2d<T>::searchRow(unsigned int * iCol1, T* tVal1, unsigned int * iCol2,
+        T* tVal2, unsigned int * iCol3, T* tVal3 ) const{
 
-    long iSizeTab = this->size();
-    long i;
+    unsigned int iSizeTab = this->size();
+    unsigned int i;
 
     if (iCol2 == nullptr && iCol3 == nullptr){
         for (i = 0; i<iSizeTab; i++){
@@ -244,7 +251,7 @@ long Array2d<T>::searchRow(long * iCol1, T* tVal1, long * iCol2,
         }
     }
     //dans le cas ou il n'y a pas de correspondances:
-    return -1;
+    return this->size() ;
 
 }
 /**
@@ -261,11 +268,11 @@ long Array2d<T>::searchRow(long * iCol1, T* tVal1, long * iCol2,
  * @return the searched value, or an empty object if not found
  */
 template <class T>
-T Array2d<T>::searchValue(long iColReturn, long *iCol1, T* tVal1, long *iCol2,
-        T* tVal2, long *iCol3, T* tVal3 ) const{
+T Array2d<T>::searchValue(unsigned int iColReturn, unsigned int *iCol1, T* tVal1, unsigned int *iCol2,
+        T* tVal2, unsigned int *iCol3, T* tVal3 ) const{
 
-    long iRow = this->searchRow(iCol1, tVal1, iCol2, tVal2, iCol3, tVal3);
-    if (iRow != -1)
+    unsigned int iRow = this->searchRow(iCol1, tVal1, iCol2, tVal2, iCol3, tVal3);
+    if (iRow != size() )
         return this->get(iRow, iColReturn);
     else
         return T();
@@ -275,14 +282,14 @@ T Array2d<T>::searchValue(long iColReturn, long *iCol1, T* tVal1, long *iCol2,
 
 
 template <class T>
-void Array2d<T>::setCells(long iStartRow, long iStartCol, long iEndRow, long iEndCol, const T &tVal)
+void Array2d<T>::setCells(unsigned int iStartRow, unsigned int iStartCol, unsigned int iEndRow, unsigned int iEndCol, const T &tVal)
 {
     if (iStartRow > iStartCol || iEndRow > iEndCol)
         return ;
 
-    for (long iRow = iStartRow ; iRow <= iEndRow ; iRow++)
+    for (unsigned int iRow = iStartRow ; iRow <= iEndRow ; iRow++)
     {
-        for (long iCol = iStartCol ; iCol <= iEndCol ; iCol++)
+        for (unsigned int iCol = iStartCol ; iCol <= iEndCol ; iCol++)
         {
             this->set(iRow, iCol, tVal);
         }

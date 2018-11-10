@@ -61,7 +61,7 @@ const std::shared_ptr<NodeGraph> Map::graph() const
  */
 void Map::createNewMap(const std::shared_ptr<GameParameters> & gameParameters)
 {
-    int iGridSize =  gameParameters->gridSideSize();
+    unsigned int iGridSize =  gameParameters->gridSideSize();
 
     // clean of former game
     // -------------
@@ -75,9 +75,9 @@ void Map::createNewMap(const std::shared_ptr<GameParameters> & gameParameters)
 
     m_grid->redimColSize(iGridSize);
     m_grid->redimRowSize(iGridSize);
-    for (int x = 0 ; x < iGridSize ; ++x)
+    for (unsigned int x = 0 ; x < iGridSize ; ++x)
     {
-        for (int y = 0 ; y < iGridSize ; ++y)
+        for (unsigned int y = 0 ; y < iGridSize ; ++y)
         {
             std::shared_ptr<Node> newNode = Node::create();
             newNode->setAdjacentsAsCandidate.connect( boost::bind( &NodeGraph::setAdjacentsCandidate,  m_graph, _1));
@@ -96,9 +96,9 @@ void Map::createNewMap(const std::shared_ptr<GameParameters> & gameParameters)
     // The adjacent nodes in the grid are linked in the graph
     // e.g. (x=0, y=0) with (x=1, y=0)
 
-    for (int x = 0 ; x < iGridSize ; ++x)
+    for (unsigned int x = 0 ; x < iGridSize ; ++x)
     {
-        for (int y = 0 ; y < iGridSize ; ++y)
+        for (unsigned int y = 0 ; y < iGridSize ; ++y)
         {
             if (y > 0)
                 m_graph->connectNodes(m_grid->get(x, y), m_grid->get(x, y - 1));
@@ -126,9 +126,9 @@ void Map::createNewMap(const std::shared_ptr<GameParameters> & gameParameters)
     // ------------------------------------------------------
     std::random_device rd;  //Will be used to obtain a seed for the random number engine
     std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
-    std::uniform_int_distribution<> randomDistributionXY(0, iGridSize-1);
-    int iXFirstNode =  randomDistributionXY(gen);
-    int iYFirstNode =  randomDistributionXY(gen);
+    std::uniform_int_distribution<unsigned int> randomDistributionXY(0, iGridSize-1);
+    unsigned int iXFirstNode =  randomDistributionXY(gen);
+    unsigned int iYFirstNode =  randomDistributionXY(gen);
     m_grid->get(iXFirstNode, iYFirstNode)->setIntoExistingState(); // this changes the adjacent nodes into the 'Candidate' state, thought node's signal
 
     // Creation of X existing nodes
@@ -136,10 +136,13 @@ void Map::createNewMap(const std::shared_ptr<GameParameters> & gameParameters)
     // In order to make sure that all the created nodes can be connected (neighbour from each other)
     // the nodes to be created are chosen among the candidate nodes.
     // The candidate nodes are the nodes at the cliff / limit between created nodes and absent nodes.
-    for (int i = 0 ; i < gameParameters->nodeCount() - 1 ; ++i)
+    for (unsigned long l = 0 ; l < gameParameters->nodeCount() - 1 ; ++l)
     {
-        std::uniform_int_distribution<> randomDistributionCandidates(0, static_cast<int>(m_candidateNodes.size()) - 1);
-        m_candidateNodes[static_cast<unsigned int>(randomDistributionCandidates(gen))]->setIntoExistingState();
+        if (m_candidateNodes.size() == 0)
+            throw std::out_of_range( "in Map::createNewMap()" );
+
+        std::uniform_int_distribution<unsigned long> candidatesRandomDistribution(0, m_candidateNodes.size() - 1);
+        m_candidateNodes[candidatesRandomDistribution(gen)]->setIntoExistingState();
             // -> this changes the adjacent nodes into the 'Candidate' state, thought node's signal
     }
 
@@ -191,7 +194,7 @@ std::string Map::consolePrint(bool bPrintNodeIds) const
     // ----------
     sXindex += "  X ";
     sXLine  += "Y  -";
-    for (int x = 0 ; x < m_grid->size() ; ++x)
+    for (unsigned int x = 0 ; x < m_grid->size() ; ++x)
     {
         sXindex += getNumberInTwoChar(x+1) + "  ";
         sXLine += "----";
@@ -205,18 +208,18 @@ std::string Map::consolePrint(bool bPrintNodeIds) const
     // ----------
     std::shared_ptr<Node> node;
 
-    for (int y = 0 ; y < m_grid->size() - 1 ; ++y)
+    for (unsigned int y = 0 ; y < m_grid->size() - 1 ; ++y)
     {
         sNodeLine.clear();
         sEdgeLine.clear();
         sNodeLine += getNumberInTwoChar(y+1) + "| ";
         sEdgeLine  += "  | ";
-        for (int x = 0 ; x < m_grid->size() -1 ; ++x)
+        for (unsigned int x = 0 ; x < m_grid->size() -1 ; ++x)
         {
             node = m_grid->get(x,y);
 
             if (bPrintNodeIds)
-                sNodeLine += getNumberInTwoChar(static_cast<int>(node->graphIndex()))  + edgeCharacterRightOfNode(node);
+                sNodeLine += getNumberInTwoChar(node->graphIndex())  + edgeCharacterRightOfNode(node);
             else
                 sNodeLine += node->consolePrintCharacter()  + edgeCharacterRightOfNode(node);
 
@@ -225,7 +228,7 @@ std::string Map::consolePrint(bool bPrintNodeIds) const
         node = m_grid->get(m_grid->size() - 1 , y);
 
         if (bPrintNodeIds)
-            sNodeLine += getNumberInTwoChar(static_cast<int>(node->graphIndex())) ;
+            sNodeLine += getNumberInTwoChar(node->graphIndex()) ;
         else
             sNodeLine += node->consolePrintCharacter() ;
 
@@ -237,23 +240,23 @@ std::string Map::consolePrint(bool bPrintNodeIds) const
 
     // last row of node
     // -----------------
-    int y = static_cast<int>(m_grid->size() - 1);
+    unsigned int y =m_grid->size() - 1;
     sNodeLine.clear();
     sNodeLine += getNumberInTwoChar(y + 1) + "| ";
 
-    for (int x = 0 ; x < m_grid->size() -1 ; ++x)
+    for (unsigned int x = 0 ; x < m_grid->size() -1 ; ++x)
     {
         node = m_grid->get(x,y);
 
         if (bPrintNodeIds)
-            sNodeLine += getNumberInTwoChar(static_cast<int>(node->graphIndex()))  + edgeCharacterRightOfNode(node);
+            sNodeLine += getNumberInTwoChar(node->graphIndex())  + edgeCharacterRightOfNode(node);
         else
             sNodeLine += node->consolePrintCharacter()  + edgeCharacterRightOfNode(node);
     }
     node = m_grid->get(m_grid->size() - 1 , y);
 
     if (bPrintNodeIds)
-        sNodeLine +=getNumberInTwoChar(static_cast<int>(node->graphIndex())) ;
+        sNodeLine +=getNumberInTwoChar(node->graphIndex()) ;
     else
         sNodeLine += node->consolePrintCharacter() ;
 
@@ -352,10 +355,10 @@ std::string Map::edgeCharacterDiagonaleOfNode(const std::shared_ptr<Node> &n) co
  * @param [in] iNumber
  * @return string
  */
-std::string Map::getNumberInTwoChar(int iNumber)
+std::string Map::getNumberInTwoChar(unsigned long lNumber)
 {
     std::string sResult;
-    sResult = std::to_string(iNumber);
+    sResult = std::to_string(lNumber);
     while (sResult.length() < 2)
     {
         sResult= sResult + " " ;

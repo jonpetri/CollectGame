@@ -1,5 +1,9 @@
 #include "gameparameters.h"
 
+#include <cmath>
+#include <climits>
+#include <stdexcept>
+
 //-----------------------------------------------------------------------------------------------------------------------
 // GameParameters :: Constructors / Destructors
 //-----------------------------------------------------------------------------------------------------------------------
@@ -24,46 +28,46 @@ GameParameters::~GameParameters()
 // GameParameters :: Getters / Setters
 //-----------------------------------------------------------------------------------------------------------------------
 
-int GameParameters::itemMaxWeight() const
+unsigned int GameParameters::itemMaxWeight() const
 {
     return m_iItemMaxWeight;
 }
 
-int GameParameters::itemMinValue() const
+unsigned int GameParameters::itemMinValue() const
 {
     return m_iItemMinValue;
 }
 
-int GameParameters::itemMinWeight() const
+unsigned int GameParameters::itemMinWeight() const
 {
     return m_iItemMinWeight;
 }
 
-bool GameParameters::setItemMaxWeight(int value)
+bool GameParameters::setItemMaxWeight(unsigned int value)
 {
-    if (value <= m_iItemMinWeight)
+    if (value <= m_iItemMinWeight  || value > m_intLimit)
         return false;
 
     m_iItemMaxWeight = value;
     return true;
 }
 
-int GameParameters::itemMaxValue() const
+unsigned int GameParameters::itemMaxValue() const
 {
     return m_iItemMaxValue;
 }
 
 
-bool GameParameters::setItemMaxValue(int value)
+bool GameParameters::setItemMaxValue(unsigned int value)
 {
-    if (value <= m_iItemMinValue)
+    if (value <= m_iItemMinValue || value > m_intLimit)
         return false;
 
     m_iItemMaxValue = value;
     return true;
 }
 
-int GameParameters::playerWeightLimit() const
+unsigned int GameParameters::playerWeightLimit() const
 {
     return m_iPlayerWeightLimit;
 }
@@ -72,7 +76,7 @@ int GameParameters::playerWeightLimit() const
  * @param value
  * @return false if the value is not coherent
  */
-bool GameParameters::setPlayerWeightLimit(int value)
+bool GameParameters::setPlayerWeightLimit(unsigned int value)
 {
     if (value >= this->itemCount() * this->m_iItemMaxWeight)
         return false;
@@ -81,7 +85,7 @@ bool GameParameters::setPlayerWeightLimit(int value)
     return true;
 }
 
-int GameParameters::playerItemCountLimit() const
+unsigned int GameParameters::playerItemCountLimit() const
 {
     return m_iPlayerItemCountLimit;
 }
@@ -91,7 +95,7 @@ int GameParameters::playerItemCountLimit() const
  * @param value
  * @return false if the value is not coherent
  */
-bool GameParameters::setPlayerItemCountLimit(int value)
+bool GameParameters::setPlayerItemCountLimit(unsigned int value)
 {
     if (value > this->itemCount())
         return false;
@@ -100,7 +104,7 @@ bool GameParameters::setPlayerItemCountLimit(int value)
     return true;
 }
 
-double GameParameters::ratio_NodeCountVsGridSpotCount() const
+float GameParameters::ratio_NodeCountVsGridSpotCount() const
 {
     return m_dRatio_NodeCountVsGridSpotCount;
 }
@@ -110,7 +114,7 @@ double GameParameters::ratio_NodeCountVsGridSpotCount() const
  * @param value
  * @return false if the value is not coherent
  */
-bool GameParameters::setRatio_NodeCountVsGridSpotCount(double value)
+bool GameParameters::setRatio_NodeCountVsGridSpotCount(float value)
 {
     if ((value<=0) || (value > 1))
         return false;
@@ -119,7 +123,7 @@ bool GameParameters::setRatio_NodeCountVsGridSpotCount(double value)
 }
 
 
-double GameParameters::ratio_EdgeCountVsGridSpotCount() const
+float GameParameters::ratio_EdgeCountVsGridSpotCount() const
 {
     return m_dRatio_EdgeCountVsGridSpotCount;
 }
@@ -129,15 +133,16 @@ double GameParameters::ratio_EdgeCountVsGridSpotCount() const
  * @param value
  * @return false if the value is not coherent
  */
-bool GameParameters::setRatio_EdgeCountVsGridSpotCount(double value)
+bool GameParameters::setRatio_EdgeCountVsGridSpotCount(float value)
 {
-    if (value<=0)
+    if (value<=0 || value > m_floatLimit)
         return false;
+
     m_dRatio_EdgeCountVsGridSpotCount = value;
     return true;
 }
 
-double GameParameters::ratio_ItemCountVsNodeCount() const
+float GameParameters::ratio_ItemCountVsNodeCount() const
 {
     return m_dRatio_ItemCountVsNodeCount;
 }
@@ -147,9 +152,9 @@ double GameParameters::ratio_ItemCountVsNodeCount() const
  * @param value
  * @return false if the value is not coherent
  */
-bool GameParameters::setRatio_ItemCountVsNodeCount(double value)
+bool GameParameters::setRatio_ItemCountVsNodeCount(float value)
 {
-    if (value<=0)
+    if (value<=0 || value > m_floatLimit)
         return false;
     m_dRatio_ItemCountVsNodeCount = value;
     return true;
@@ -157,7 +162,7 @@ bool GameParameters::setRatio_ItemCountVsNodeCount(double value)
 
 
 
-int GameParameters::gridSideSize() const
+unsigned int GameParameters::gridSideSize() const
 {
     return m_iGridSize;
 }
@@ -167,7 +172,7 @@ int GameParameters::gridSideSize() const
  * @param value
  * @return false if the value is not coherent
  */
-bool GameParameters::setGridSideSize(int value)
+bool GameParameters::setGridSideSize(unsigned int value)
 {
     if (value<3 || value>40) // The algo start to be slow beyond 40, in my computer at least ;-)
         return false;
@@ -183,18 +188,41 @@ bool GameParameters::setGridSideSize(int value)
 //-----------------------------------------------------------------------------------------------------------------------
 // GameParameters :: Methods
 //-----------------------------------------------------------------------------------------------------------------------
-int GameParameters::nodeCount() const
+unsigned long GameParameters::nodeCount() const
 {
-    return static_cast<int>((m_iGridSize * m_iGridSize) * m_dRatio_NodeCountVsGridSpotCount);
+    float fRet = static_cast<float>(m_iGridSize * m_iGridSize) * m_dRatio_NodeCountVsGridSpotCount;
+
+    // cast float -> int :
+    // float could exceed int, but values are limited by GameParameters class getters so the throw shouldn't happen.
+    // Just in case anyway:
+    if (fRet > UINT_MAX)
+        throw std::out_of_range("in GameParameters::nodeCount()");
+
+    return static_cast<unsigned int>(std::round(fRet));
 }
 
-int GameParameters::edgeTargetCount() const
+unsigned long GameParameters::edgeTargetCount() const
 {
-    return static_cast<int>( (m_iGridSize * m_iGridSize) * m_dRatio_EdgeCountVsGridSpotCount);
+    float fRet = static_cast<float>(m_iGridSize * m_iGridSize) * m_dRatio_EdgeCountVsGridSpotCount;
 
+    // cast float -> int :
+    // float could exceed int, but values are limited by GameParameters class getters so the throw shouldn't happen.
+    // Just in case anyway:
+    if (fRet > UINT_MAX)
+        throw std::out_of_range("in GameParameters::edgeTargetCount()");
+
+    return static_cast<unsigned int>(std::round(fRet));
 }
 
-int GameParameters::itemCount() const
+unsigned int GameParameters::itemCount() const
 {
-   return static_cast<int>(m_dRatio_ItemCountVsNodeCount * this->nodeCount());
+    float fRet = m_dRatio_ItemCountVsNodeCount * static_cast<float>(this->nodeCount());
+
+    // cast float -> int :
+    // float could exceed int, but values are limited by GameParameters class getters so the throw shouldn't happen.
+    // Just in case anyway:
+    if (fRet > UINT_MAX)
+        throw std::out_of_range("in GameParameters::itemCount()");
+
+    return static_cast<unsigned int>(std::round(fRet));
 }
