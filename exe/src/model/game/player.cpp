@@ -7,6 +7,7 @@
 //-----------------------------------------------------------------------------------------------------------------------
 Player::Player()
     : m_currentNode(nullptr)
+    , m_startNode(nullptr)
 {
 
 }
@@ -45,7 +46,26 @@ void Player::setCurrentNode(const std::shared_ptr<Node> & node)
     m_currentNode->setHostThePlayer(true);
 }
 
+std::shared_ptr<Node> Player::startNode() const
+{
+    return m_startNode;
+}
+
+void Player::setStartNode(const std::shared_ptr<Node> &startNode)
+{
+    m_startNode = startNode;
+}
+
+
+
 //-----------------------------------------------------------------------------------------------------------------------
 // Player :: Methods
 //-----------------------------------------------------------------------------------------------------------------------
-
+/**
+ * Indicate if the player is at the start point
+ * @return True if at start point
+ */
+bool Player::isAtStartNode() const
+{
+    return m_currentNode == m_startNode;
+}

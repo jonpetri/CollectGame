@@ -98,6 +98,7 @@ void CollectGame::createNewGame()
     // ------------------------------------
     lNode = nodeRandomDistribution(gen);
     this->m_player->setCurrentNode(m_map->graph()->node(lNode));
+    this->m_player->setStartNode(m_map->graph()->node(lNode));
 
 }
 
@@ -149,6 +150,7 @@ bool CollectGame::movePlayer(E_MOVE xMove, E_MOVE yMove)
     // Player move
     // ------------
     m_player->setCurrentNode(targetNode);
+
     return true;
 }
 

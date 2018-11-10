@@ -24,11 +24,14 @@ public:
 
     // Getters:
     std::shared_ptr<Node> currentNode() const;
+    std::shared_ptr<Node> startNode() const;
 
     // Setters:
     void setCurrentNode(const std::shared_ptr<Node> &value);
+    void setStartNode(const std::shared_ptr<Node> &startNode);
 
     // Methods:
+    bool isAtStartNode() const;
 
 
 private:
@@ -36,6 +39,7 @@ private:
 
     // Members:
     std::shared_ptr<Node> m_currentNode;
+    std::shared_ptr<Node> m_startNode;
 
 };
 
