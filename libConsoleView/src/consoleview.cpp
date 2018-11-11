@@ -76,7 +76,7 @@ void ConsoleView::setDisplayMenuCommand(const std::shared_ptr<ConsoleCommandBase
     this->addCommand(displayMenuCommand);
 }
 
-void ConsoleView::setDisplayModelViewCommand(const std::shared_ptr<ConsoleCommandBase> &displayModelViewCommand)
+void ConsoleView::setDisplayModelViewCommand(const std::shared_ptr<ConsoleCommandBase> displayModelViewCommand)
 {
     this->removeCommand(m_commandDisplayModelView);
     m_commandDisplayModelView = displayModelViewCommand;
@@ -175,7 +175,11 @@ void ConsoleView::run() const
         }
 
         // Entry success, sUserEntry contain the entire command line, even with spaces in.
-        this->executeCommand(sUserEntry);
+        try {
+            this->executeCommand(sUserEntry);
+        }catch(...){
+            std::cerr << "ERROR: the command failed, sorry." << std::endl;
+        }
 
     } while (m_bQuit == false);
 
@@ -190,7 +194,7 @@ void ConsoleView::executeCommand(std::string sUserEntry) const
     // research of a command matching completely with sUserEntry
     for (auto&& command : m_commands)
     {
-        if(command->isMatchingUserEntry(sUserEntry))
+        if(command->setUserEntry(sUserEntry))
         {
             command->execute();
             return;
@@ -254,7 +258,13 @@ void ConsoleView::printText(const std::string &sText) const
 void ConsoleView::displayModelView() const
 {
     if (m_commandDisplayModelView != nullptr)
-        m_commandDisplayModelView->execute();
+    {
+        try {
+            m_commandDisplayModelView->execute();
+        }catch(...){
+            std::cerr << "ERROR: Display failed, sorry." << std::endl;
+        }
+    }
 }
 
 /**

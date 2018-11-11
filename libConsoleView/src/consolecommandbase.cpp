@@ -130,11 +130,11 @@ void ConsoleCommandBase::clearCommandTermList()
 }
 
 /**
- * Test if users input / entry match with this command.
+ * Test if users input / entry match with this command, and save it.
  * @param [in] sUserEntry Entry to be tested.
  * @return True if matches
  */
-bool ConsoleCommandBase::isMatchingUserEntry(const std::string &sUserEntry)
+bool ConsoleCommandBase::setUserEntry(const std::string &sUserEntry)
 {
     if (m_iExpectedParameterCount == 0)
     {
@@ -144,6 +144,59 @@ bool ConsoleCommandBase::isMatchingUserEntry(const std::string &sUserEntry)
     {
         return this->isMatchingUserEntryWithParam(sUserEntry);
     }
+}
+
+/**
+ * Check if the user entry is an Unsigned Int
+ * @param [in] iPara Number of para to check
+ * @param [out] iRet Parameter in Unsigned Int if success
+ * @return True if success
+ */
+bool ConsoleCommandBase::checkParameterIsUnsignedInt(unsigned int iParaIndex, unsigned int & uiValuePara) const
+{
+    int iValuePara;
+
+    try {
+       iValuePara = std::stoi(commandsParameter(iParaIndex));  // throw error is the entry is a string, or above integer limit
+    }catch(...){
+       this->sendMessageToUser("Incorrect entry, must be a number.");
+       return false;
+    }
+
+    if (iValuePara < 0)
+    {
+        this->sendMessageToUser("Incorrect entry, must be a positive number.");
+        return false;
+    }
+
+    uiValuePara = static_cast<unsigned int>(iValuePara); // safe cast as iValuePara > 0
+
+    return true;
+}
+
+/**
+ * Check if the user entry is a positive float
+ * @param [in] iPara Number of para to check
+ * @param [out] iRet Parameter in float if success
+ * @return True if success
+ */
+bool ConsoleCommandBase::checkParameterIsPositiveFloat(unsigned int iParaIndex, float & fValuePara) const
+{
+
+    try {
+       fValuePara = std::stof(commandsParameter(iParaIndex));  // throw error is the entry is a string, or above float limit
+    }catch(...){
+       this->sendMessageToUser("Incorrect entry, must be a number.");
+       return false;
+    }
+
+    if (fValuePara < 0)
+    {
+        this->sendMessageToUser("Incorrect entry, must be a positive number.");
+        return false;
+    }
+
+    return true;
 }
 
 /**

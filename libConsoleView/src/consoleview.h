@@ -62,7 +62,7 @@ public:
     // Setters:
     void setQuitCommand(const std::shared_ptr<ConsoleCommandBase> & quitCommand);
     void setDisplayMenuCommand(const std::shared_ptr<ConsoleCommandBase> & displayMenuCommand);
-    void setDisplayModelViewCommand(const std::shared_ptr<ConsoleCommandBase> & displayModelViewCommand);
+    void setDisplayModelViewCommand(const std::shared_ptr<ConsoleCommandBase> displayModelViewCommand);
     void setMenuDescrition(const std::string & m_sMenuDescrition);
 
 
