@@ -18,6 +18,7 @@ GameParameters::GameParameters()
     , m_iPlayerWeightLimit(0)
     , m_iPlayerItemCountLimit(0)
 {
+    // Default values, which has to be coherent
     if (!this->setGridSideSize(4)) throw std::out_of_range("in GameParameters::GameParameters()");
     if (!this->setRatio_NodeCountVsGridSpotCount(0.5)) throw std::out_of_range("in GameParameters::GameParameters()");
     if (!this->setRatio_EdgeCountVsGridSpotCount(0.5)) throw std::out_of_range("in GameParameters::GameParameters()");
@@ -260,8 +261,8 @@ std::string GameParameters::getConsolePrint() const
 
     sConsolePrint += "Item max weight during random generation:  " + std::to_string(m_iItemMaxWeight) + "\n";
     sConsolePrint += "Item max value during random generation:   " + std::to_string(m_iItemMaxValue) + "\n";
-    sConsolePrint += "Player total Weight limit:  (<max weight)  " + std::to_string(m_iPlayerWeightLimit) + "\n";
-    sConsolePrint += "Player item count limit: (<items)          " + std::to_string(m_iPlayerItemCountLimit) + "\n";
+    sConsolePrint += "Player total Weight limit  (<max weight):  " + std::to_string(m_iPlayerWeightLimit) + "\n";
+    sConsolePrint += "Player item count limit (<item count):     " + std::to_string(m_iPlayerItemCountLimit) + "\n";
 
     return sConsolePrint;
 }

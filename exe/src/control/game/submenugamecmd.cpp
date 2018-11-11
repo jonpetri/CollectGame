@@ -78,7 +78,7 @@ void SubMenuGameCmd::execute()
     }
 
     // View set up
-    subMenu->setMenuDescrition("Game");
+    subMenu->setMenuDescrition("GAME: Pick a maximum of valuable item, and return to your start point");
 
     // quit command becomes return to main menu:
     std::shared_ptr<ConsoleCommandBase> quitCmd = subMenu->quitCommand();

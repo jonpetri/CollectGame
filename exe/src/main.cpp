@@ -1,12 +1,12 @@
 /*----------------------------------------------------------------*/
-/*  PROJECT:    Collect Game                                       */
+/*  PROJECT:    Collect Game                                      */
 /*----------------------------------------------------------------*/
 
 
 #include  <memory>
 #include "consoleview.h"
 #include "model/game/collectgame.h"
-#include "control/parametersModification/submenuparameterscmd.h"
+#include "control/parameters/submenuparameterscmd.h"
 #include "control/game/submenugamecmd.h"
 
 
@@ -22,7 +22,7 @@ int main()
     // View
     std::shared_ptr<ConsoleView> mainMenu = ConsoleView::create();
 
-    // Commands
+    // Commands: 2 submenus :  Game and parameters
     std::shared_ptr<Command> cmdGame= std::make_shared<SubMenuGameCmd>();
     cmdGame->setModel(gameModel);
     mainMenu->addCommand(cmdGame);

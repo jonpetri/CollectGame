@@ -146,7 +146,7 @@ std::string Items::consolePrint() const
         sStringToPrint = "nothing  :'-(\n";
     for (unsigned int i = 0 ; i < m_items.size() ; ++i)
     {
-         sStringToPrint += "     - Item " + std::to_string(i+1) + ":       " + m_items[i]->consolePrint() + "\n";
+         sStringToPrint += "         - Item " + std::to_string(i+1) + ":   " + m_items[i]->consolePrint() + "\n";
     }
     return sStringToPrint;
 }

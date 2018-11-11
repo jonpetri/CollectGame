@@ -10,7 +10,7 @@ MoveUpLeftCmd::MoveUpLeftCmd()
 {
     // Command's terms/arguments definition
     this->addCommandTerm("UP LEFT");
-    this->setDescription("Move the player up left");
+    this->setDescription("Move the player up-left");
     this->setExpectedParameterCount(0);
 }
 MoveUpLeftCmd::~MoveUpLeftCmd()
