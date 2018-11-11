@@ -73,7 +73,10 @@ else ()
         add_executable(${sBoostUnitTestTargetName} ${sUnitTestSourceFiles} )
         ADD_TEST(${sBoostUnitTestTargetName} ${sBoostUnitTestTargetName})
 
-
+        set_target_properties(${sBoostUnitTestTargetName} PROPERTIES
+                CXX_STANDARD 11
+                CXX_STANDARD_REQUIRED ON
+                )
     ##
     # INCLUDES:
     #
@@ -145,6 +148,8 @@ else ()
         set_target_properties(${sDemoExeTarget} PROPERTIES
             RUNTIME_OUTPUT_DIRECTORY_DEBUG ${sTestDebugBinDir}
             RUNTIME_OUTPUT_DIRECTORY_REALEASE ${sTestRealeaseBinDir}
+            CXX_STANDARD 11
+            CXX_STANDARD_REQUIRED ON
             )
 
         # Library link

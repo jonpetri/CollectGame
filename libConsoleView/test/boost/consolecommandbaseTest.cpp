@@ -20,8 +20,8 @@ BOOST_AUTO_TEST_CASE(constructor)
     ConsoleCommandBaseInheritance c;
     BOOST_CHECK_EQUAL(c.commandTermsString(),"");
     BOOST_CHECK_EQUAL(c.description(),"");
-    BOOST_CHECK_EQUAL(c.isMatchingUserEntry(""),false);
-    BOOST_CHECK_EQUAL(c.isMatchingUserEntry("test"),false);
+    BOOST_CHECK_EQUAL(c.setUserEntry(""),false);
+    BOOST_CHECK_EQUAL(c.setUserEntry("test"),false);
 }
 
 BOOST_AUTO_TEST_CASE(term_set)
@@ -106,26 +106,26 @@ BOOST_AUTO_TEST_CASE(signal_quitAssociatedViews)
 BOOST_AUTO_TEST_CASE(isMatchingUserEntryTotally)
 {
     ConsoleCommandBaseInheritance c;
-    BOOST_CHECK_EQUAL(c.isMatchingUserEntry("TE"), false);
-    BOOST_CHECK_EQUAL(c.isMatchingUserEntry(""), false);
-    BOOST_CHECK_EQUAL(c.isMatchingUserEntry("TEST"), false);
+    BOOST_CHECK_EQUAL(c.setUserEntry("TE"), false);
+    BOOST_CHECK_EQUAL(c.setUserEntry(""), false);
+    BOOST_CHECK_EQUAL(c.setUserEntry("TEST"), false);
 
     c.addCommandTerm("");
-    BOOST_CHECK_EQUAL(c.isMatchingUserEntry("TE"), false);
-    BOOST_CHECK_EQUAL(c.isMatchingUserEntry(""), false);
-    BOOST_CHECK_EQUAL(c.isMatchingUserEntry("TEST"), false);
+    BOOST_CHECK_EQUAL(c.setUserEntry("TE"), false);
+    BOOST_CHECK_EQUAL(c.setUserEntry(""), false);
+    BOOST_CHECK_EQUAL(c.setUserEntry("TEST"), false);
 
     c.addCommandTerm("TEST");
-    BOOST_CHECK_EQUAL(c.isMatchingUserEntry("TE"), false);
-    BOOST_CHECK_EQUAL(c.isMatchingUserEntry(""), false);
-    BOOST_CHECK_EQUAL(c.isMatchingUserEntry("TEST"), true);
-    BOOST_CHECK_EQUAL(c.isMatchingUserEntry("TESTTROP"), false);
+    BOOST_CHECK_EQUAL(c.setUserEntry("TE"), false);
+    BOOST_CHECK_EQUAL(c.setUserEntry(""), false);
+    BOOST_CHECK_EQUAL(c.setUserEntry("TEST"), true);
+    BOOST_CHECK_EQUAL(c.setUserEntry("TESTTROP"), false);
 
     c.addCommandTerm("TEST2");
-    BOOST_CHECK_EQUAL(c.isMatchingUserEntry("TE"), false);
-    BOOST_CHECK_EQUAL(c.isMatchingUserEntry(""), false);
-    BOOST_CHECK_EQUAL(c.isMatchingUserEntry("TEST"), true);
-    BOOST_CHECK_EQUAL(c.isMatchingUserEntry("TEST2"), true);
+    BOOST_CHECK_EQUAL(c.setUserEntry("TE"), false);
+    BOOST_CHECK_EQUAL(c.setUserEntry(""), false);
+    BOOST_CHECK_EQUAL(c.setUserEntry("TEST"), true);
+    BOOST_CHECK_EQUAL(c.setUserEntry("TEST2"), true);
     BOOST_CHECK_EQUAL(c.commandsParameter(0), "");
 }
 
@@ -134,43 +134,43 @@ BOOST_AUTO_TEST_CASE(isMatchingUserEntryFirstArgument_Parameters)
     ConsoleCommandBaseInheritance c;
     c.setExpectedParameterCount(1);
 
-    BOOST_CHECK_EQUAL(c.isMatchingUserEntry("TE"), false);
-    BOOST_CHECK_EQUAL(c.isMatchingUserEntry(""), false);
-    BOOST_CHECK_EQUAL(c.isMatchingUserEntry("TEST"), false);
+    BOOST_CHECK_EQUAL(c.setUserEntry("TE"), false);
+    BOOST_CHECK_EQUAL(c.setUserEntry(""), false);
+    BOOST_CHECK_EQUAL(c.setUserEntry("TEST"), false);
 
     c.addCommandTerm("");
-    BOOST_CHECK_EQUAL(c.isMatchingUserEntry("TE"), false);
-    BOOST_CHECK_EQUAL(c.isMatchingUserEntry(""), false);
-    BOOST_CHECK_EQUAL(c.isMatchingUserEntry("TEST"), false);
+    BOOST_CHECK_EQUAL(c.setUserEntry("TE"), false);
+    BOOST_CHECK_EQUAL(c.setUserEntry(""), false);
+    BOOST_CHECK_EQUAL(c.setUserEntry("TEST"), false);
 
     c.addCommandTerm("TEST");
-    BOOST_CHECK_EQUAL(c.isMatchingUserEntry("TE"), false);
-    BOOST_CHECK_EQUAL(c.isMatchingUserEntry(""), false);
-    BOOST_CHECK_EQUAL(c.isMatchingUserEntry("TEST"), false);
-    BOOST_CHECK_EQUAL(c.isMatchingUserEntry("TESTTROP"), false);
-    BOOST_CHECK_EQUAL(c.isMatchingUserEntry("TEST OK"), true);
+    BOOST_CHECK_EQUAL(c.setUserEntry("TE"), false);
+    BOOST_CHECK_EQUAL(c.setUserEntry(""), false);
+    BOOST_CHECK_EQUAL(c.setUserEntry("TEST"), false);
+    BOOST_CHECK_EQUAL(c.setUserEntry("TESTTROP"), false);
+    BOOST_CHECK_EQUAL(c.setUserEntry("TEST OK"), true);
     BOOST_CHECK_EQUAL(c.commandsParameter(0), "OK");
-    BOOST_CHECK_EQUAL(c.isMatchingUserEntry("INV TEST OK"), false);
+    BOOST_CHECK_EQUAL(c.setUserEntry("INV TEST OK"), false);
     BOOST_CHECK_EQUAL(c.commandsParameter(0), "");
 
     c.addCommandTerm("TEST 2");
-    BOOST_CHECK_EQUAL(c.isMatchingUserEntry("TE"), false);
-    BOOST_CHECK_EQUAL(c.isMatchingUserEntry(""), false);
-    BOOST_CHECK_EQUAL(c.isMatchingUserEntry("TESTTROP"), false);
-    BOOST_CHECK_EQUAL(c.isMatchingUserEntry("TEST"), false);
-    BOOST_CHECK_EQUAL(c.isMatchingUserEntry("TEST 2"), true);
-    BOOST_CHECK_EQUAL(c.isMatchingUserEntry("TEST OK"), true);
+    BOOST_CHECK_EQUAL(c.setUserEntry("TE"), false);
+    BOOST_CHECK_EQUAL(c.setUserEntry(""), false);
+    BOOST_CHECK_EQUAL(c.setUserEntry("TESTTROP"), false);
+    BOOST_CHECK_EQUAL(c.setUserEntry("TEST"), false);
+    BOOST_CHECK_EQUAL(c.setUserEntry("TEST 2"), true);
+    BOOST_CHECK_EQUAL(c.setUserEntry("TEST OK"), true);
     BOOST_CHECK_EQUAL(c.commandsParameter(0), "OK");
 
 
-    BOOST_CHECK_EQUAL(c.isMatchingUserEntry("INV TEST OK"), false);
+    BOOST_CHECK_EQUAL(c.setUserEntry("INV TEST OK"), false);
     BOOST_CHECK_EQUAL(c.commandsParameter(0), "");
-    BOOST_CHECK_EQUAL(c.isMatchingUserEntry("INV TEST 2 OK"), false);
+    BOOST_CHECK_EQUAL(c.setUserEntry("INV TEST 2 OK"), false);
 
     c.setExpectedParameterCount(2);
-    BOOST_CHECK_EQUAL(c.isMatchingUserEntry("INV TEST 2 OK"), false);
+    BOOST_CHECK_EQUAL(c.setUserEntry("INV TEST 2 OK"), false);
     BOOST_CHECK_EQUAL(c.commandsParameter(0), "");
-    BOOST_CHECK_EQUAL(c.isMatchingUserEntry("TEST 2 1 2"), true);
+    BOOST_CHECK_EQUAL(c.setUserEntry("TEST 2 1 2"), true);
     BOOST_CHECK_EQUAL(c.commandsParameter(0), "1");
     BOOST_CHECK_EQUAL(c.commandsParameter(1), "2");
     BOOST_CHECK_EQUAL(c.commandsParameter(2), "");

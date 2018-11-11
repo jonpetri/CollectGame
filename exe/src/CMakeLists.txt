@@ -27,6 +27,10 @@ MESSAGE(STATUS "* EXECUTABLE")
 #
     add_executable(${sCollectGameExeTargetName} ${sExeSourceFiles} )
 
+    set_target_properties(${sCollectGameExeTargetName} PROPERTIES
+            CXX_STANDARD 11
+            CXX_STANDARD_REQUIRED ON
+            )
 ##
 # INCLUDES:
 #

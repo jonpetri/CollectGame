@@ -28,6 +28,8 @@ MESSAGE(STATUS "* Shared library")
 
     set_target_properties(${sConsoleViewLibraryTargetName} PROPERTIES
             WINDOWS_EXPORT_ALL_SYMBOLS WIN32
+            CXX_STANDARD 11
+            CXX_STANDARD_REQUIRED ON
             )
 
 
