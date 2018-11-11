@@ -35,7 +35,8 @@ SubMenuParametersCmd::~SubMenuParametersCmd()
 //-----------------------------------------------------------------------------------------------------------------------
 
 /**
- *
+ * Run a new ConsoleView with all the commands to modify game parameters.
+ * The new ConsoleView act like a submenu about game parameters.
  */
 void SubMenuParametersCmd::execute()
 {
@@ -82,6 +83,5 @@ void SubMenuParametersCmd::execute()
     subMenu->run();
 
     this->sendMessageToUser("\n");
-    this->sendMessageToUser("Return to main menu.\n");
-
+    this->sendMessageToUser("You are back in the main menu.\n");
 }

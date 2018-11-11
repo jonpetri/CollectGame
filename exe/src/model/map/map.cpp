@@ -189,6 +189,9 @@ std::string Map::consolePrint(bool bPrintNodeIds) const
     std::string sNodeLine("");
     std::string sEdgeLine("");
 
+    if (m_grid->size() == 0)
+        throw std::logic_error( "Generate the map before operating." );
+
     if (bPrintNodeIds)
         m_graph->updateNodeIds();
 

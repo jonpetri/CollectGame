@@ -33,7 +33,7 @@ void SetRatioItemCountVsNodeCountCmd::execute()
 
     if (this->m_model->gameParameters()->setRatio_ItemCountVsNodeCount(fParaValue) == false)
     {
-        this->sendMessageToUser("Incorrect entry");
+        this->sendMessageToUser("Incorrect entry\n");
         return;
     }
 

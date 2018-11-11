@@ -3,7 +3,8 @@
 /*----------------------------------------------------------------*/
 /**
  * CLASS: SubMenuParametersCmd
- *
+ * Command: Run a new ConsoleView with all the commands to modify game parameters.
+ * The new ConsoleView act like a submenu about game parameters.
  */
 #ifndef SubMenuParametersCmd_H
 #define SubMenuParametersCmd_H

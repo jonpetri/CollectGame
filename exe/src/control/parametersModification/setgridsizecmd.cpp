@@ -35,7 +35,7 @@ void SetGridSizeCmd::execute()
 
     if (this->m_model->gameParameters()->setGridSideSize(iPara) == false)
     {
-        this->sendMessageToUser("Incorrect entry");
+        this->sendMessageToUser("Incorrect entry\n");
         return;
     }
 

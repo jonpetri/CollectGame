@@ -22,12 +22,6 @@ public:
 
     // Methods:
     virtual void execute() override;
-
-private:
-    // Methods:
-
-    // Members:
-
 };
 
 #endif // SETRATIOITEMCOUNTVSNODECOUNTCMD_H

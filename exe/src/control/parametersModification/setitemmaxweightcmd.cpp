@@ -33,7 +33,7 @@ void SetItemMaxWeightCmd::execute()
 
     if (this->m_model->gameParameters()->setItemMaxWeight(iPara) == false)
     {
-        this->sendMessageToUser("Incorrect entry");
+        this->sendMessageToUser("Incorrect entry\n");
         return;
     }
 

@@ -158,11 +158,16 @@ bool CollectGame::movePlayer(E_MOVE xMove, E_MOVE yMove)
  * Ask the player to pick the item number iItem from the current node.
  * Verify if teh item is within the player's weight / item count limits.
  * @param [in] iItem Number of the item (from 1)
+ * @param [out] bWeightLimitReached Trigger to true if pick fail and weight Limit is Reached
+ * @param [out] bItemCountLimitReached Trigger to true if pick fail and item count limit is Reached
  * @return True if achieved
  */
-bool CollectGame::playerPickItem(unsigned int iItem)
+bool CollectGame::playerPickItem(unsigned int iItem, bool & bWeightLimitReached, bool & bItemCountLimitReached)
 {
     Items pickableItems, pickedItems;
+    bool bRet = true;
+    bWeightLimitReached = false;
+    bItemCountLimitReached = false;
     if (iItem < 1)
         return false;
 
@@ -177,10 +182,18 @@ bool CollectGame::playerPickItem(unsigned int iItem)
     m_items->getItemBatchOfHolder(m_player, pickedItems);
 
     if (m_gameParameters->playerItemCountLimit() < pickedItems.count() + 1)
-        return false;
+    {
+        bItemCountLimitReached = true;
+        bRet = false;
+    }
     if (m_gameParameters->playerWeightLimit() < pickedItems.weight() + pickableItems.item(iItem)->weight())
-        return false;
+    {
+        bWeightLimitReached = true;
+        bRet = false;
+    }
 
+    if (bRet == false)
+        return false;
 
     pickableItems.item(iItem)->setHolder(m_player);
     return true;
@@ -202,6 +215,7 @@ void CollectGame::getConsolePrint(std::string &sStringToPrint) const
     sStringToPrint += "MAP\n";
     sStringToPrint += "===\n";
     sStringToPrint += "  -> Nodes (O) are in a X;Y grid. The player is at the '@' node.\n";
+    sStringToPrint += "\n";
     sStringToPrint += m_map->consolePrint();
     sStringToPrint += "\n";
 
@@ -212,31 +226,38 @@ void CollectGame::getConsolePrint(std::string &sStringToPrint) const
 
     sStringToPrint += "PLAYER\n";
     sStringToPrint += "======\n";
-    sStringToPrint += "      -> The player is marked @ in the map.\n";
-    sStringToPrint += "- He can hold up to a weight of " +std::to_string( m_gameParameters->playerWeightLimit())
-                            + ", within " + std::to_string(m_gameParameters->playerItemCountLimit()) + " items.\n";
+    sStringToPrint += "      -> You are marked @ in the map.\n";
+    sStringToPrint += "\n";
 
     m_items->getItemBatchOfHolder(m_player, pickedItems);
-    sStringToPrint += "- Currently hold a total value of " + std::to_string(pickedItems.value())
-                        + " and a total weight of " + std::to_string(pickedItems.weight())
-                        + ", within " + pickedItems.consolePrint();
-
-    sStringToPrint += "- Player's location (@): X=" + std::to_string(lXCurrent+1) + " , Y= " + std::to_string(lYCurrent+1) + "\n";
+    sStringToPrint += "- You hold: " + std::to_string(pickedItems.count()) + " items, weight = " + std::to_string(pickedItems.weight())
+                                + ", value = " +   std::to_string(pickedItems.value()) + "\n";
+    sStringToPrint += "-------------------------------------------\n";
+    sStringToPrint += pickedItems.consolePrint();
+    sStringToPrint += "\n";
+    sStringToPrint += "- You can hold: up to " + std::to_string(m_gameParameters->playerItemCountLimit())
+            + " items and a weight of " +std::to_string( m_gameParameters->playerWeightLimit()) + "\n";
+    sStringToPrint += "\n";
     m_items->getItemBatchOfHolder(m_player->currentNode(), nodeItems);
-    sStringToPrint += "- Pickable in that location: " + nodeItems.consolePrint() + "\n";
+    sStringToPrint += "- At your location [" + std::to_string(lXCurrent+1) + " ; " + std::to_string(lYCurrent+1)
+                            + "], you can pick:\n" + nodeItems.consolePrint() + "\n";
 
     //Nodes/Items
-    //-----
+    //----------
     sStringToPrint += "ITEMS\n";
     sStringToPrint += "=====\n";
     sStringToPrint += "      -> The nodes are identified thanks to then coordinates: [X ; Y])\n";
-    sStringToPrint += "      -> Only item holding nodes are listed here.\n\n";
+    sStringToPrint += "      -> Only item holding nodes are listed here.\n";
+    sStringToPrint += "\n";
     lNodeCount = m_map->graph()->nodeCount();
     for (unsigned long l = 0 ; l < lNodeCount ; ++l)
     {
         m_items->getItemBatchOfHolder(m_map->graph()->node(l), nodeItems);
         if (nodeItems.count() > 0)
-            sStringToPrint += "o " +m_map->graph()->node(l)->consoleFullPrint() + " contains " + nodeItems.consolePrint() + "\n";
+        {
+            sStringToPrint += "o " +m_map->graph()->node(l)->consoleFullPrint() + " contains:\n";
+            sStringToPrint += nodeItems.consolePrint() + "\n";
+        }
     }
 
 }

@@ -33,7 +33,7 @@ void SetPlayerWeightLimitCmd::execute()
 
     if (this->m_model->gameParameters()->setPlayerWeightLimit(iPara) == false)
     {
-        this->sendMessageToUser("Incorrect entry");
+        this->sendMessageToUser("Incorrect entry\n");
         return;
     }
 

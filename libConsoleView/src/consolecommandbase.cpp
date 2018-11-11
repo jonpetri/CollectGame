@@ -159,13 +159,13 @@ bool ConsoleCommandBase::checkParameterIsUnsignedInt(unsigned int iParaIndex, un
     try {
        iValuePara = std::stoi(commandsParameter(iParaIndex));  // throw error is the entry is a string, or above integer limit
     }catch(...){
-       this->sendMessageToUser("Incorrect entry, must be a number.");
+       this->sendMessageToUser("Incorrect entry, must be a number.\n");
        return false;
     }
 
     if (iValuePara < 0)
     {
-        this->sendMessageToUser("Incorrect entry, must be a positive number.");
+        this->sendMessageToUser("Incorrect entry, must be a positive number.\n");
         return false;
     }
 
@@ -186,13 +186,13 @@ bool ConsoleCommandBase::checkParameterIsPositiveFloat(unsigned int iParaIndex, 
     try {
        fValuePara = std::stof(commandsParameter(iParaIndex));  // throw error is the entry is a string, or above float limit
     }catch(...){
-       this->sendMessageToUser("Incorrect entry, must be a number.");
+       this->sendMessageToUser("Incorrect entry, must be a number.\n");
        return false;
     }
 
     if (fValuePara < 0)
     {
-        this->sendMessageToUser("Incorrect entry, must be a positive number.");
+        this->sendMessageToUser("Incorrect entry, must be a positive number.\n");
         return false;
     }
 
