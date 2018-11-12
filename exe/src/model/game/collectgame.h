@@ -51,6 +51,7 @@ public:
     bool movePlayer (E_MOVE xMove, E_MOVE yMove);
     bool playerPickItem(unsigned int iItem, bool & bWeightLimitReached, bool & bItemCountLimitReached);
     void getConsolePrint(std::string & sStringToPrint) const;
+    void clear();
 
 
 private:

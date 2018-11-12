@@ -65,9 +65,7 @@ void Map::createNewMap(const std::shared_ptr<GameParameters> & gameParameters)
 
     // clean of former game
     // -------------
-    m_candidateNodes.clear();
-    m_graph->clear();
-    m_grid->clear();
+    this->clear();
 
     // Grid creation + Insertion off all the node in the graph
     // ------------------------------------------------------
@@ -272,6 +270,16 @@ std::string Map::consolePrint(bool bPrintNodeIds) const
     sConsolePrint += "  Y\n";
 
     return sConsolePrint;
+}
+
+/**
+ * Empty all the containers of node
+ */
+void Map::clear()
+{
+    m_candidateNodes.clear();
+    m_grid->clear();
+    m_graph->clear();
 }
 
 /**

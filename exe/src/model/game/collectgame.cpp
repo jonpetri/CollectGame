@@ -65,6 +65,7 @@ std::shared_ptr<Items> CollectGame::items() const
 
 /**
  * Map creation, items creation, items random spread in the map, player random positioning  in the map.
+ * Components are emptied first.
  */
 void CollectGame::createNewGame()
 {
@@ -72,13 +73,15 @@ void CollectGame::createNewGame()
     unsigned long lNode(0);
     unsigned int iItemCount(0);
 
+    this->clear();
+
     // Map creation
-    // ------------
+    // ----------------------
     this->m_map->createNewMap(m_gameParameters);
 
     // Items creation
-    // --------------
-    this->m_items->ceateRandomItems(m_gameParameters);
+    // ------------------------
+    this->m_items->createRandomItems(m_gameParameters);
 
 
     // Items random spread in the map
@@ -231,7 +234,7 @@ void CollectGame::getConsolePrint(std::string &sStringToPrint) const
 
     m_items->getItemBatchOfHolder(m_player, pickedItems);
     sStringToPrint += "- You hold: " + std::to_string(pickedItems.count()) + " items, " + std::to_string(pickedItems.weight())
-                                + " Kg,  " +   std::to_string(pickedItems.value()) + " € \n";
+                                + " Kg,  " +   std::to_string(pickedItems.value()) + " $ \n";
     sStringToPrint += "-------------------------------------------\n";
     sStringToPrint += pickedItems.consolePrint();
     sStringToPrint += "\n";
@@ -246,8 +249,8 @@ void CollectGame::getConsolePrint(std::string &sStringToPrint) const
     //----------
     sStringToPrint += "ITEMS\n";
     sStringToPrint += "=====\n";
-    sStringToPrint += "      -> The nodes are identified thanks to them coordinates: [X ; Y])\n";
-    sStringToPrint += "      -> Only nodes with item are listed here.\n";
+    sStringToPrint += "      -> The nodes are identified thanks to their coordinates: [X ; Y])\n";
+    sStringToPrint += "      -> Only nodes with item(s) are listed here.\n";
     sStringToPrint += "\n";
     lNodeCount = m_map->graph()->nodeCount();
     for (unsigned long l = 0 ; l < lNodeCount ; ++l)
@@ -260,6 +263,17 @@ void CollectGame::getConsolePrint(std::string &sStringToPrint) const
         }
     }
 
+}
+
+/**
+ * Empty all the containers of node and items
+ */
+void CollectGame::clear()
+{
+    m_player->setStartNode(nullptr);
+    m_player->setCurrentNode(nullptr);
+    m_items->clear();
+    m_map->clear();
 }
 
 
