@@ -22,9 +22,12 @@ if (NOT Boost_UNIT_TEST_FRAMEWORK_FOUND)
 
 
 else ()
+    # There is an issue with those unit tests, (see root README file)
+    # So we deativate it.
 
     # unit test building is optional:
-    option(EXE_Build_boost_Unit_Test "Build the Boost Unit Test for the executable" ${Boost_UNIT_TEST_FRAMEWORK_FOUND})
+    option(EXE_Build_boost_Unit_Test "Exe Unit Test: There is an issue with those unit tests (see root README file)" OFF)
+    #option(EXE_Build_boost_Unit_Test "Build the Boost Unit Test for the executable" ${Boost_UNIT_TEST_FRAMEWORK_FOUND})
 
     if(EXE_Build_boost_Unit_Test)
 
@@ -61,18 +64,18 @@ else ()
         file(GLOB_RECURSE sUnitTestSourceFiles  ${sUnitTestIncludeDir}/*.h ${sUnitTestIncludeDir}/*.cpp)
         group_files(sDemoSourceFiles ${sUnitTestSourceFiles})
         list(REMOVE_ITEM sUnitTestSourceFiles "${sUnitTestIncludeDir}/mockup/demo.cpp")
-        #target_sources(${sBoostUnitTestTargetName} PUBLIC ${sUnitTestSourceFiles})  # Doesn't work with Cmake version 3.5.2, which I use for cross compiling (MXE)
+        #target_sources(${sEXEBoostUnitTestTargetName} PUBLIC ${sUnitTestSourceFiles})  # Doesn't work with Cmake version 3.5.2, which I use for cross compiling (MXE)
 
 
     ##
     # TEST PROJECT:
     #
-        SET(sBoostUnitTestTargetName "${sTestedTargetName}_UnitTest")
+        SET(sEXEBoostUnitTestTargetName "${sTestedTargetName}_UnitTest")
 
-        add_executable(${sBoostUnitTestTargetName} ${sUnitTestSourceFiles} )
-        ADD_TEST(${sBoostUnitTestTargetName} ${sBoostUnitTestTargetName})
+        add_executable(${sEXEBoostUnitTestTargetName} ${sUnitTestSourceFiles} )
+        ADD_TEST(${sEXEBoostUnitTestTargetName} ${sEXEBoostUnitTestTargetName})
 
-        set_target_properties(${sBoostUnitTestTargetName} PROPERTIES
+        set_target_properties(${sEXEBoostUnitTestTargetName} PROPERTIES
                 CXX_STANDARD 11
                 CXX_STANDARD_REQUIRED ON
                 )
@@ -80,7 +83,7 @@ else ()
     ##
     # INCLUDES:
     #
-        target_include_directories(${sBoostUnitTestTargetName} PUBLIC ${sUnitTestIncludeDir})
+        target_include_directories(${sEXEBoostUnitTestTargetName} PUBLIC ${sUnitTestIncludeDir})
 
 
     ##
@@ -88,12 +91,12 @@ else ()
     #
         get_target_property(sTestedIncludes ${sTestedTargetName} INCLUDE_DIRECTORIES)
         MESSAGE(STATUS  "sTestedIncludes = ${sTestedIncludes}")
-        target_include_directories(${sBoostUnitTestTargetName} PUBLIC ${sTestedIncludes})
+        target_include_directories(${sEXEBoostUnitTestTargetName} PUBLIC ${sTestedIncludes})
 
         get_target_property(sTestedSources ${sTestedTargetName} SOURCES)
         list(GET sTestedIncludes 0 sTestedFirstInclude)
         list(REMOVE_ITEM sTestedSources "${sTestedFirstInclude}/main.cpp")
-        target_sources(${sBoostUnitTestTargetName} PUBLIC ${sTestedSources})
+        target_sources(${sEXEBoostUnitTestTargetName} PUBLIC ${sTestedSources})
 
 
         # Definition of exe files output directory
@@ -105,7 +108,7 @@ else ()
         set(sTestRealeaseBinDir "${CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE}/../test")
 
         #file(MAKE_DIRECTORY ${sTestBinDir})
-        set_target_properties(${sBoostUnitTestTargetName} PROPERTIES
+        set_target_properties(${sEXEBoostUnitTestTargetName} PROPERTIES
             RUNTIME_OUTPUT_DIRECTORY_DEBUG ${sTestDebugBinDir}
             RUNTIME_OUTPUT_DIRECTORY_REALEASE ${sTestRealeaseBinDir}
             RUNTIME_OUTPUT_DIRECTORY ${sTestDebugBinDir}
@@ -115,8 +118,8 @@ else ()
     ##
     # BOOST
     #
-        target_include_directories(${sBoostUnitTestTargetName} PUBLIC "${Boost_INCLUDE_DIR}")
-        target_link_libraries(${sBoostUnitTestTargetName} ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY})
+        target_include_directories(${sEXEBoostUnitTestTargetName} PUBLIC "${Boost_INCLUDE_DIR}")
+        target_link_libraries(${sEXEBoostUnitTestTargetName} ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY})
 
 
     ##
@@ -132,9 +135,9 @@ else ()
     #
         SET(GCC_COVERAGE_COMPILE_FLAGS "-fprofile-arcs -ftest-coverage")
         SET(GCC_COVERAGE_LINK_FLAGS    "-lgcov --coverage")
-        set_target_properties(${sBoostUnitTestTargetName} PROPERTIES COMPILE_FLAGS ${GCC_COVERAGE_COMPILE_FLAGS})
-        #target_compile_options(${sBoostUnitTestTargetName} PUBLIC ${GCC_COVERAGE_COMPILE_FLAGS})
-        set_target_properties(${sBoostUnitTestTargetName} PROPERTIES LINK_FLAGS ${GCC_COVERAGE_LINK_FLAGS})
+        set_target_properties(${sEXEBoostUnitTestTargetName} PROPERTIES COMPILE_FLAGS ${GCC_COVERAGE_COMPILE_FLAGS})
+        #target_compile_options(${sEXEBoostUnitTestTargetName} PUBLIC ${GCC_COVERAGE_COMPILE_FLAGS})
+        set_target_properties(${sEXEBoostUnitTestTargetName} PROPERTIES LINK_FLAGS ${GCC_COVERAGE_LINK_FLAGS})
 
   
     endif()
