@@ -18,6 +18,7 @@ cmake_minimum_required(VERSION 3.4.3)  # for CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS
     SET(sCollectGameExeTargetName "CollectGame")
     project (${sCollectGameExeTargetName})
     MESSAGE(STATUS " ") #Display an empty line
+    MESSAGE("PROJECT: ${sCollectGameExeTargetName}")
 
 ##
 # Which compiler do we use?
@@ -43,8 +44,8 @@ cmake_minimum_required(VERSION 3.4.3)  # for CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS
 ##
 # Compiler configuration according build type
 #
-    set(CMAKE_CXX_STANDARD 11)      # setting the language standard, same as add_definitions(-std=c++11)
-
+    #set(CMAKE_CXX_STANDARD 11)      # setting the language standard, same as add_definitions(-std=c++11)
+    list( APPEND CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS}")
     if (CMAKE_CXX_COMPILER_ID MATCHES GNU)
       # using GCC
 

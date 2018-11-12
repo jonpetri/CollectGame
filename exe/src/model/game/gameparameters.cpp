@@ -3,21 +3,30 @@
 #include <cmath>
 #include <climits>
 #include <stdexcept>
-
+#include <iomanip> // setprecision
+#include <sstream> // stringstream
 //-----------------------------------------------------------------------------------------------------------------------
 // GameParameters :: Constructors / Destructors
 //-----------------------------------------------------------------------------------------------------------------------
 GameParameters::GameParameters()
-    : m_iGridSize(4)
-    , m_dRatio_NodeCountVsGridSpotCount(0.5)
-    , m_dRatio_EdgeCountVsGridSpotCount(0.5)
-    , m_dRatio_ItemCountVsNodeCount(1.0)
-    , m_iItemMaxWeight(10)
-    , m_iItemMaxValue(10)
-    , m_iPlayerWeightLimit(15)
-    , m_iPlayerItemCountLimit(5)
+    : m_iGridSize(0)
+    , m_dRatio_NodeCountVsGridSpotCount(0)
+    , m_dRatio_EdgeCountVsGridSpotCount(0)
+    , m_dRatio_ItemCountVsNodeCount(0)
+    , m_iItemMaxWeight(0)
+    , m_iItemMaxValue(0)
+    , m_iPlayerWeightLimit(0)
+    , m_iPlayerItemCountLimit(0)
 {
-
+    // Default values, which has to be coherent
+    if (!this->setGridSideSize(4)) throw std::out_of_range("in GameParameters::GameParameters()");
+    if (!this->setRatio_NodeCountVsGridSpotCount(0.5)) throw std::out_of_range("in GameParameters::GameParameters()");
+    if (!this->setRatio_EdgeCountVsGridSpotCount(0.5)) throw std::out_of_range("in GameParameters::GameParameters()");
+    if (!this->setRatio_ItemCountVsNodeCount(1.0)) throw std::out_of_range("in GameParameters::GameParameters()");
+    if (!this->setItemMaxWeight(10)) throw std::out_of_range("in GameParameters::GameParameters()");
+    if (!this->setItemMaxValue(10)) throw std::out_of_range("in GameParameters::GameParameters()");
+    if (!this->setPlayerWeightLimit(15)) throw std::out_of_range("in GameParameters::GameParameters()");
+    if (!this->setPlayerItemCountLimit(5)) throw std::out_of_range("in GameParameters::GameParameters()");
 }
 GameParameters::~GameParameters()
 {
@@ -78,7 +87,7 @@ unsigned int GameParameters::playerWeightLimit() const
  */
 bool GameParameters::setPlayerWeightLimit(unsigned int value)
 {
-    if (value >= this->itemCount() * this->m_iItemMaxWeight)
+    if (value >= (this->itemCount() * this->m_iItemMaxWeight))
         return false;
 
     m_iPlayerWeightLimit = value;
@@ -195,7 +204,7 @@ unsigned long GameParameters::nodeCount() const
     // cast float -> int :
     // float could exceed int, but values are limited by GameParameters class getters so the throw shouldn't happen.
     // Just in case anyway:
-    if (fRet > UINT_MAX)
+    if (fRet > static_cast<float>(UINT_MAX))
         throw std::out_of_range("in GameParameters::nodeCount()");
 
     return static_cast<unsigned int>(std::round(fRet));
@@ -208,7 +217,7 @@ unsigned long GameParameters::edgeTargetCount() const
     // cast float -> int :
     // float could exceed int, but values are limited by GameParameters class getters so the throw shouldn't happen.
     // Just in case anyway:
-    if (fRet > UINT_MAX)
+    if (fRet > static_cast<float>(UINT_MAX))
         throw std::out_of_range("in GameParameters::edgeTargetCount()");
 
     return static_cast<unsigned int>(std::round(fRet));
@@ -221,8 +230,39 @@ unsigned int GameParameters::itemCount() const
     // cast float -> int :
     // float could exceed int, but values are limited by GameParameters class getters so the throw shouldn't happen.
     // Just in case anyway:
-    if (fRet > UINT_MAX)
+    if (fRet > static_cast<float>(UINT_MAX))
         throw std::out_of_range("in GameParameters::itemCount()");
 
     return static_cast<unsigned int>(std::round(fRet));
+}
+
+/**
+ * Retrieves the string about parameters to be displayed in the console.
+ * @return string to be print
+ */
+std::string GameParameters::getConsolePrint() const
+{
+    std::stringstream stream;
+
+    std::string sConsolePrint("");
+    sConsolePrint += "Grid width(the grid is a square) [3->40]:  " + std::to_string(m_iGridSize) + "\n";
+
+    stream << std::fixed << std::setprecision(2) << m_dRatio_NodeCountVsGridSpotCount;
+    sConsolePrint += "Node qty / grid spot qty ratio [0->1]:     " +  stream.str() + "\n";
+    stream.str("");
+
+    stream << std::fixed << std::setprecision(2) << m_dRatio_EdgeCountVsGridSpotCount;
+    sConsolePrint += "Edge qty / grid spot qty  ratio :          " + stream.str() + "\n";
+    stream.str("");
+
+    stream << std::fixed << std::setprecision(2) << m_dRatio_ItemCountVsNodeCount;
+    sConsolePrint += "item qty / node qty  ratio:                " + stream.str() + "\n";
+    stream.str("");
+
+    sConsolePrint += "Item max weight during random generation:  " + std::to_string(m_iItemMaxWeight) + "\n";
+    sConsolePrint += "Item max value during random generation:   " + std::to_string(m_iItemMaxValue) + "\n";
+    sConsolePrint += "Player's total weight limit (<max weight): " + std::to_string(m_iPlayerWeightLimit) + "\n";
+    sConsolePrint += "Player's item qty limit (<item qty):       " + std::to_string(m_iPlayerItemCountLimit) + "\n";
+
+    return sConsolePrint;
 }

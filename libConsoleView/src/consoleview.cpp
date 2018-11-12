@@ -76,7 +76,7 @@ void ConsoleView::setDisplayMenuCommand(const std::shared_ptr<ConsoleCommandBase
     this->addCommand(displayMenuCommand);
 }
 
-void ConsoleView::setDisplayModelViewCommand(const std::shared_ptr<ConsoleCommandBase> &displayModelViewCommand)
+void ConsoleView::setDisplayModelViewCommand(const std::shared_ptr<ConsoleCommandBase> displayModelViewCommand)
 {
     this->removeCommand(m_commandDisplayModelView);
     m_commandDisplayModelView = displayModelViewCommand;
@@ -161,21 +161,25 @@ void ConsoleView::run() const
                 }
                 else if ( std::cin.fail() )
                 {
-                    std::cerr << "Incorrect entry (std::cin.fail()), retry." << std::endl;
+                    std::cerr << "Incorrect entry (std::cin.fail())." << std::endl;
                     std::cin.clear();
                     std::cin.ignore( std::numeric_limits<std::streamsize>::max(), '\n' );
                 }
                 else
                 {
-                    std::cerr << "Incorrect entry, retry." << std::endl;
+                    std::cerr << "Incorrect entry." << std::endl;
                 }
             }
         }catch(...){
-            std::cerr << "Incorrect entry, retry." << std::endl;
+            std::cerr << "Incorrect entry." << std::endl;
         }
 
         // Entry success, sUserEntry contain the entire command line, even with spaces in.
-        this->executeCommand(sUserEntry);
+        try {
+            this->executeCommand(sUserEntry);
+        }catch(...){
+            std::cerr << "ERROR: the command failed, sorry." << std::endl;
+        }
 
     } while (m_bQuit == false);
 
@@ -190,7 +194,7 @@ void ConsoleView::executeCommand(std::string sUserEntry) const
     // research of a command matching completely with sUserEntry
     for (auto&& command : m_commands)
     {
-        if(command->isMatchingUserEntry(sUserEntry))
+        if(command->setUserEntry(sUserEntry))
         {
             command->execute();
             return;
@@ -198,7 +202,7 @@ void ConsoleView::executeCommand(std::string sUserEntry) const
     }
 
     // Any command corresponding
-    std::cerr << "The entry doesn't correspond to a command, retry." << std::endl;
+    std::cerr << "The entry doesn't correspond to a command." << std::endl;
 }
 
 /**
@@ -234,7 +238,7 @@ void ConsoleView::displayMenu() const
 
     std::cout << std::endl; // empty line
     std::cout <<                                      "-> Slash separated commands are equivalent." << std::endl;
-    std::cout <<                                      "-> The commands can be written lower case as well." << std::endl;
+    std::cout <<                                      "-> The commands can be written in lower case as well." << std::endl;
 
 }
 
@@ -254,7 +258,13 @@ void ConsoleView::printText(const std::string &sText) const
 void ConsoleView::displayModelView() const
 {
     if (m_commandDisplayModelView != nullptr)
-        m_commandDisplayModelView->execute();
+    {
+        try {
+            m_commandDisplayModelView->execute();
+        }catch(...){
+            std::cerr << "ERROR: Display failed, sorry." << std::endl;
+        }
+    }
 }
 
 /**

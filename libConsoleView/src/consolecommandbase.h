@@ -60,7 +60,10 @@ public:
     virtual void execute() = 0;
     void addCommandTerm(std::string sTerm);
     void clearCommandTermList();
-    bool isMatchingUserEntry(const std::string &sUserEntry);
+    bool setUserEntry(const std::string &sUserEntry);
+
+    bool checkParameterIsUnsignedInt(unsigned int iParaIndex, unsigned int &uiValuePara) const;
+    bool checkParameterIsPositiveFloat(unsigned int iParaIndex, float & fValuePara) const;
 
 protected:
 

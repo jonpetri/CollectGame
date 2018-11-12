@@ -31,8 +31,6 @@
  * The menu is shown, and the user can enter commands.
  * The run method will end when the user enter the quit command.
  *
- * Note: To create a new instance use the static method .create(), and not the constructor. Otherwise it will crash.
- * (I didn't manage to make private the constructor...)
  */
 #ifndef CONSOLEVIEW_H
 #define CONSOLEVIEW_H
@@ -62,7 +60,7 @@ public:
     // Setters:
     void setQuitCommand(const std::shared_ptr<ConsoleCommandBase> & quitCommand);
     void setDisplayMenuCommand(const std::shared_ptr<ConsoleCommandBase> & displayMenuCommand);
-    void setDisplayModelViewCommand(const std::shared_ptr<ConsoleCommandBase> & displayModelViewCommand);
+    void setDisplayModelViewCommand(const std::shared_ptr<ConsoleCommandBase> displayModelViewCommand);
     void setMenuDescrition(const std::string & m_sMenuDescrition);
 
 

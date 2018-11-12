@@ -23,11 +23,24 @@ if (NOT Boost_UNIT_TEST_FRAMEWORK_FOUND)
 
 else ()
 
+    # BUG: This unit tests cause problems during the building/link steps of other packages.
+    # So it's disabled. See the main readme file fore more details.
+
     # unit test building is optional:
-    option(EXE_Build_boost_Unit_Test "Build the Boost Unit Test for the executable" ${Boost_UNIT_TEST_FRAMEWORK_FOUND})
+    option(EXE_Build_boost_Unit_Test "Build the Boost Unit Test for the executable" OFF)
+    #option(EXE_Build_boost_Unit_Test "Build the Boost Unit Test for the executable" ${Boost_UNIT_TEST_FRAMEWORK_FOUND})
 
     if(EXE_Build_boost_Unit_Test)
 
+        ##
+        # TESTED PROJECT:
+        #
+            SET(sTestedTargetName ${sCollectGameExeTargetName})
+            MESSAGE(STATUS "UNIT TEST OF: ${sTestedTargetName}")
+
+        ##
+        # BOOST CONFIGURATION:
+        #
         message(STATUS "Boost Include: ${Boost_INCLUDE_DIR}")
         message(STATUS "Boost Library dirs: ${Boost_LIBRARY_DIRS}")
         message(STATUS "Boost Libraries: ${Boost_LIBRARIES}")
@@ -39,10 +52,6 @@ else ()
 
         enable_testing()
 
-    ##
-    # TESTED PROJECT:
-    #
-        SET(sTestedTargetName ${sCollectGameExeTargetName})
     ##
     # Sources files path variables declaration
     #
@@ -67,6 +76,10 @@ else ()
         add_executable(${sBoostUnitTestTargetName} ${sUnitTestSourceFiles} )
         ADD_TEST(${sBoostUnitTestTargetName} ${sBoostUnitTestTargetName})
 
+        set_target_properties(${sBoostUnitTestTargetName} PROPERTIES
+                CXX_STANDARD 11
+                CXX_STANDARD_REQUIRED ON
+                )
 
     ##
     # INCLUDES:
@@ -88,7 +101,7 @@ else ()
 
 
         # Definition of exe files output directory
-        MESSAGE(STATUS  "sTestedTargetName = ${sTestedTargetName}")
+
         #get_target_property(sTestDebugBinDir ${sTestedTargetName} LIBRARY_OUTPUT_DIRECTORY_DEBUG)       # Doesn't work with Cmake version 3.5.2, which I use for cross compiling (MXE)
         #get_target_property(sTestRealeaseBinDir ${sTestedTargetName} LIBRARY_OUTPUT_DIRECTORY_REALEASE)  # Doesn't work with Cmake version 3.5.2, which I use for cross compiling (MXE)
 

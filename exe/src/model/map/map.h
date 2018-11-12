@@ -52,6 +52,7 @@ public:
     // Methods:
     void createNewMap(const std::shared_ptr<GameParameters> & gameParameters);
     std::string consolePrint(bool bPrintNodeIds = false) const;
+    void clear();
 
     // slots
     void addToCandidatesNodes(const std::shared_ptr<Node> & n);

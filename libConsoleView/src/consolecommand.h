@@ -50,6 +50,7 @@ ConsoleCommand<M>::ConsoleCommand()
 {
 
 }
+
 template<class M>
 ConsoleCommand<M>::~ConsoleCommand()
 {

@@ -39,6 +39,7 @@ BOOST_AUTO_TEST_CASE(move_and_pick_possible)
 {
     CollectGame g;
     std::string sPrint;
+    bool  bWeightLimitReached, bItemCountLimitReached;
     BOOST_CHECK(g.gameParameters()->setGridSideSize(4));
     BOOST_CHECK(g.gameParameters()->setRatio_NodeCountVsGridSpotCount(1)); //make there are nodes everywhere
     BOOST_CHECK(g.gameParameters()->setRatio_EdgeCountVsGridSpotCount(10)); //make there are edges everywhere
@@ -50,12 +51,12 @@ BOOST_AUTO_TEST_CASE(move_and_pick_possible)
 //    g.getConsolePrint(sPrint);
 //    std::cout << sPrint;
 
-    BOOST_CHECK_EQUAL(g.playerPickItem(0), false);
+    BOOST_CHECK_EQUAL(g.playerPickItem(0, bWeightLimitReached, bItemCountLimitReached), false);
 
     for (unsigned int i = 1 ; i <= g.gameParameters()->playerItemCountLimit() ; ++i)
-        BOOST_CHECK(g.playerPickItem(1));
+        BOOST_CHECK(g.playerPickItem(1, bWeightLimitReached, bItemCountLimitReached));
 
-    BOOST_CHECK_EQUAL(g.playerPickItem(1), false);
+    BOOST_CHECK_EQUAL(g.playerPickItem(1, bWeightLimitReached, bItemCountLimitReached), false);
 
     // number of item picked
     Items pickedItems;
@@ -76,6 +77,7 @@ BOOST_AUTO_TEST_CASE(pick_not_possible)
 {
     CollectGame g;
     std::string sPrint;
+    bool  bWeightLimitReached, bItemCountLimitReached;
     BOOST_CHECK(g.gameParameters()->setGridSideSize(4));
     BOOST_CHECK(g.gameParameters()->setRatio_NodeCountVsGridSpotCount(1)); //make there are nodes everywhere
     BOOST_CHECK(g.gameParameters()->setRatio_EdgeCountVsGridSpotCount(10)); //make there are edges everywhere
@@ -83,7 +85,7 @@ BOOST_AUTO_TEST_CASE(pick_not_possible)
 
     g.createNewGame();
 
-    BOOST_CHECK_EQUAL(g.playerPickItem(1), false);
+    BOOST_CHECK_EQUAL(g.playerPickItem(1, bWeightLimitReached, bItemCountLimitReached), false);
 
 }
 

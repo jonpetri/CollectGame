@@ -40,7 +40,7 @@ public:
 
     // Methods:
     void getItemBatchOfHolder(const std::shared_ptr<ItemHolder> & itemHolder, Items & batch) const;
-    void ceateRandomItems(const std::shared_ptr<GameParameters> & gameParameters);
+    void createRandomItems(const std::shared_ptr<GameParameters> & gameParameters);
 
     unsigned int count() const;
     unsigned int weight() const;

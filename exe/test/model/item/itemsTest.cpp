@@ -22,7 +22,7 @@ BOOST_AUTO_TEST_CASE(ceateRandomItems)
     std::shared_ptr<GameParameters> p = std::make_shared<GameParameters>();
     p->setGridSideSize(10);
     p->setRatio_ItemCountVsNodeCount(1);
-    is.ceateRandomItems(p);
+    is.createRandomItems(p);
 
     BOOST_CHECK_EQUAL(is.count(), p->itemCount());
 
@@ -36,7 +36,7 @@ BOOST_AUTO_TEST_CASE(total_weight_value)
     std::shared_ptr<GameParameters> p = std::make_shared<GameParameters>();
     p->setGridSideSize(10);
     p->setRatio_ItemCountVsNodeCount(1);
-    is.ceateRandomItems(p);
+    is.createRandomItems(p);
 
     int iTotalWeight = 0;
     int iTotalValue = 0;
@@ -67,7 +67,7 @@ std::shared_ptr<Node> n2 = Node::create();
 
 p->setGridSideSize(10);
 p->setRatio_ItemCountVsNodeCount(1);
-is.ceateRandomItems(p);
+is.createRandomItems(p);
 
   for (unsigned int i = 0 ; i < is.count()/2 ; ++i)
   {

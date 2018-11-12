@@ -43,7 +43,9 @@ void Player::setCurrentNode(const std::shared_ptr<Node> & node)
         m_currentNode->setHostThePlayer(false);
 
     m_currentNode = node;
-    m_currentNode->setHostThePlayer(true);
+
+    if (m_currentNode != nullptr)
+        m_currentNode->setHostThePlayer(true);
 }
 
 std::shared_ptr<Node> Player::startNode() const
