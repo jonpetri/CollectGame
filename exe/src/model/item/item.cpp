@@ -1,7 +1,6 @@
 #include "item.h"
 
 #include <random>
-
 #include "model/item/itemholder.h"
 #include "model/game/gameparameters.h"
 //-----------------------------------------------------------------------------------------------------------------------
@@ -84,5 +83,5 @@ std::string Item::consolePrint() const
 {
     // The return print is:
     // weight = 5 , value = 10
-    return  std::to_string(m_iWeight) + " kg,  " + std::to_string(m_iValue) + " €";
+    return  std::to_string(m_iWeight) + " kg,  " + std::to_string(m_iValue) + " $";
 }

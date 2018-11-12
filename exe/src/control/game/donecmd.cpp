@@ -35,18 +35,18 @@ void DoneCmd::execute()
     {
         m_model->items()->getItemBatchOfHolder(m_model->player(), pickedItems);
         this->sendMessageToUser("\n");
-        this->sendMessageToUser("   CONGRATULATION!\n");
-        this->sendMessageToUser("   ===============\n");
-        this->sendMessageToUser(":o)  8D  :D  :'-)  *:o\n");
-        this->sendMessageToUser("   :^)  :-))   ;-)\n");
-        this->sendMessageToUser("       *<:-} \n");
-
-        this->sendMessageToUser("You finish with :\n");
+        this->sendMessageToUser("CONGRATULATION!\n");
+        this->sendMessageToUser("===============\n");
+        this->sendMessageToUser(";-)\n");
+        this->sendMessageToUser("\n");
+        this->sendMessageToUser("You have finish with :\n");
         this->sendMessageToUser("   - a total value of " + std::to_string(pickedItems.value()) + "\n");
         this->sendMessageToUser("   - and a total weight of " + std::to_string(pickedItems.weight()) + "\n");
         this->sendMessageToUser("   - within " + std::to_string(pickedItems.count())  + " items\n");
         this->sendMessageToUser("\n");
+
         this->quitAssociatedViews();
+        // The game is cleared when the game submenu and
     }
     else
     {

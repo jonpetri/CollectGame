@@ -58,10 +58,13 @@ void Items::getItemBatchOfHolder(const std::shared_ptr<ItemHolder> &itemHolder, 
  * Create random items, following gameParameters limits.
  * @param [in] gameParameters Contain random distribution limits
  */
-void Items::ceateRandomItems(const std::shared_ptr<GameParameters> &gameParameters)
+void Items::createRandomItems(const std::shared_ptr<GameParameters> &gameParameters)
 {
     unsigned int iItemCount = gameParameters->itemCount();
     std::shared_ptr<Item> newItem;
+
+    //empty the items
+    m_items.clear();
 
     for (unsigned int i = 0 ; i < iItemCount ; ++i)
     {

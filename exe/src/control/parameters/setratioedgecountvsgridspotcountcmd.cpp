@@ -33,7 +33,7 @@ void SetRatioEdgeCountVsGridSpotCountCmd::execute()
 
     if (this->m_model->gameParameters()->setRatio_EdgeCountVsGridSpotCount(fParaValue) == false)
     {
-        this->sendMessageToUser("Incorrect entry\n");
+        this->sendMessageToUser("Incorrect entry.\n");
         return;
     }
 

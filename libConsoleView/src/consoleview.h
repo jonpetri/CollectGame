@@ -31,8 +31,6 @@
  * The menu is shown, and the user can enter commands.
  * The run method will end when the user enter the quit command.
  *
- * Note: To create a new instance use the static method .create(), and not the constructor. Otherwise it will crash.
- * (I didn't manage to make private the constructor...)
  */
 #ifndef CONSOLEVIEW_H
 #define CONSOLEVIEW_H

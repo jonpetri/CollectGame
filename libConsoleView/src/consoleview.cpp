@@ -161,17 +161,17 @@ void ConsoleView::run() const
                 }
                 else if ( std::cin.fail() )
                 {
-                    std::cerr << "Incorrect entry (std::cin.fail()), retry." << std::endl;
+                    std::cerr << "Incorrect entry (std::cin.fail())." << std::endl;
                     std::cin.clear();
                     std::cin.ignore( std::numeric_limits<std::streamsize>::max(), '\n' );
                 }
                 else
                 {
-                    std::cerr << "Incorrect entry, retry." << std::endl;
+                    std::cerr << "Incorrect entry." << std::endl;
                 }
             }
         }catch(...){
-            std::cerr << "Incorrect entry, retry." << std::endl;
+            std::cerr << "Incorrect entry." << std::endl;
         }
 
         // Entry success, sUserEntry contain the entire command line, even with spaces in.
@@ -202,7 +202,7 @@ void ConsoleView::executeCommand(std::string sUserEntry) const
     }
 
     // Any command corresponding
-    std::cerr << "The entry doesn't correspond to a command, retry." << std::endl;
+    std::cerr << "The entry doesn't correspond to a command." << std::endl;
 }
 
 /**
@@ -238,7 +238,7 @@ void ConsoleView::displayMenu() const
 
     std::cout << std::endl; // empty line
     std::cout <<                                      "-> Slash separated commands are equivalent." << std::endl;
-    std::cout <<                                      "-> The commands can be written lower case as well." << std::endl;
+    std::cout <<                                      "-> The commands can be written in lower case as well." << std::endl;
 
 }
 

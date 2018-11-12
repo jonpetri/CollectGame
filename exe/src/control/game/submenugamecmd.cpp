@@ -78,7 +78,7 @@ void SubMenuGameCmd::execute()
     }
 
     // View set up
-    subMenu->setMenuDescrition("GAME: Pick a maximum of valuable item, and return to your start point");
+    subMenu->setMenuDescrition("GAME: Pick a maximum of valuable items, and return to your start point");
 
     // quit command becomes return to main menu:
     std::shared_ptr<ConsoleCommandBase> quitCmd = subMenu->quitCommand();
@@ -97,6 +97,8 @@ void SubMenuGameCmd::execute()
     // run the view
     subMenu->run();
 
+    // back to the main menu when submenu is closed
     this->sendMessageToUser("\n");
     this->sendMessageToUser("You are back in the main menu.\n");
+    m_model->clear(); // for memory release
 }

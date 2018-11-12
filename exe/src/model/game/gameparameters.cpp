@@ -248,21 +248,21 @@ std::string GameParameters::getConsolePrint() const
     sConsolePrint += "Grid width(the grid is a square) [3->40]:  " + std::to_string(m_iGridSize) + "\n";
 
     stream << std::fixed << std::setprecision(2) << m_dRatio_NodeCountVsGridSpotCount;
-    sConsolePrint += "Node count / grid spot count ratio [0->1]: " +  stream.str() + "\n";
+    sConsolePrint += "Node qty / grid spot qty ratio [0->1]:     " +  stream.str() + "\n";
     stream.str("");
 
     stream << std::fixed << std::setprecision(2) << m_dRatio_EdgeCountVsGridSpotCount;
-    sConsolePrint += "Edge count / grid spot count  ratio :      " + stream.str() + "\n";
+    sConsolePrint += "Edge qty / grid spot qty  ratio :          " + stream.str() + "\n";
     stream.str("");
 
     stream << std::fixed << std::setprecision(2) << m_dRatio_ItemCountVsNodeCount;
-    sConsolePrint += "item count / node count  ratio:            " + stream.str() + "\n";
+    sConsolePrint += "item qty / node qty  ratio:                " + stream.str() + "\n";
     stream.str("");
 
     sConsolePrint += "Item max weight during random generation:  " + std::to_string(m_iItemMaxWeight) + "\n";
     sConsolePrint += "Item max value during random generation:   " + std::to_string(m_iItemMaxValue) + "\n";
-    sConsolePrint += "Player total Weight limit  (<max weight):  " + std::to_string(m_iPlayerWeightLimit) + "\n";
-    sConsolePrint += "Player item count limit (<item count):     " + std::to_string(m_iPlayerItemCountLimit) + "\n";
+    sConsolePrint += "Player's total weight limit (<max weight): " + std::to_string(m_iPlayerWeightLimit) + "\n";
+    sConsolePrint += "Player's item qty limit (<item qty):       " + std::to_string(m_iPlayerItemCountLimit) + "\n";
 
     return sConsolePrint;
 }

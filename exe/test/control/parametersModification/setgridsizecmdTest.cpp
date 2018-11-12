@@ -2,7 +2,7 @@
 #include <boost/test/unit_test.hpp>
 
 
-#include "control/parametersModification/setgridsizecmd.h"
+#include "control/parameters/setgridsizecmd.h"
 #include "model/game/collectgame.h"
 #include "model/game/gameparameters.h"
 

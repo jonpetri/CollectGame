@@ -82,6 +82,7 @@ void SubMenuParametersCmd::execute()
     // run the view
     subMenu->run();
 
+    // back to the main menu when submenu is closed
     this->sendMessageToUser("\n");
     this->sendMessageToUser("You are back in the main menu.\n");
 }
