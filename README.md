@@ -56,13 +56,18 @@ It is accompanied by an other cmake targets/package: boost unit tests.
 # Tools
 Useful information about used tools (version...)
 - **Cmake**
+
 version 3.12.0 for linux building, and version 3.5.2 for windows building (cross compilation with MXE). 
 -> So I cant use the command: add_executable(TargetName) , and had to do it with add_executable(TargetName, sources), in the old way.
 You can run cmake from a sub folder called "build*", as git ignore them.
 
 - **Boost**
+
 version 1.58 for linux building, and version 1.60 for windows building 
 
+- **OS**
+
+I built everything (including windows binaries) on Linux (Cross compilation with MXE). The project should be compilable natively on Windows, but I never tried. The unit tests pass on windows as well.
 
 <br><a name="p5"></a> 
 # Issues
